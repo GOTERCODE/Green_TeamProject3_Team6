@@ -6,7 +6,13 @@ import org.zerock.guestbook.dto.PageResultDTO;
 import org.zerock.guestbook.entity.Guestbook;
 
 public interface GuestbookService {
+    GuestbookDTO read(Long gno);
+
     Long register(GuestbookDTO dto);
+
+    void remove(Long gno);
+
+    void modify(GuestbookDTO dto);
 
     PageResultDTO<GuestbookDTO, Guestbook> getList(PageRequestDTO requestDTO);
 
@@ -35,4 +41,6 @@ public interface GuestbookService {
 
 
     }
+
+
 }
