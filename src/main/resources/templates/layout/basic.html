@@ -36,6 +36,7 @@
             <a href="#" class="list-group-item list-group-item-action bg-light">Events</a>
             <a href="#" class="list-group-item list-group-item-action bg-light">Profile</a>
             <a href="#" class="list-group-item list-group-item-action bg-light">Status</a>
+            <a href="#" class="list-group-item list-group-item-action bg-light listBtn">List</a>
         </div>
     </div>
     <!-- /#sidebar-wrapper -->
@@ -91,6 +92,15 @@
     $("#menu-toggle").click(function(e) {
       e.preventDefault();
       $("#wrapper").toggleClass("toggled");
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    $(document).ready(function() {
+      $(".listBtn").click(function() {
+        window.location.href = "/guestbook/list";  // JavaScript에서 페이지 이동
+      });
     });
 </script>
 
