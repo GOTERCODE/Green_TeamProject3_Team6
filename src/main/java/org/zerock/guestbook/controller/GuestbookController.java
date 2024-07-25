@@ -23,7 +23,14 @@ public class GuestbookController {
 
     @GetMapping("/")
     public String index() {
-        return "redirect:/guestbook/list";
+        return "redirect:/guestbook/newindex";
+    }
+
+    @GetMapping("/newindex")
+    public void newIndex(PageRequestDTO pageRequestDTO, Model model) {
+        log.info("newindex............." + pageRequestDTO);
+
+        model.addAttribute("result", service.getList(pageRequestDTO));
     }
 
     @GetMapping("/list")
