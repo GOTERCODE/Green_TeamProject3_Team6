@@ -6,17 +6,18 @@ import org.zerock.guestbook.dto.PageResultDTO;
 import org.zerock.guestbook.entity.Guestbook;
 
 public interface GuestbookService {
-    GuestbookDTO read(Long gno);
 
     Long register(GuestbookDTO dto);
 
-    void remove(Long gno);
+    PageResultDTO<GuestbookDTO, Guestbook> getList(PageRequestDTO requestDTO);
+
+    GuestbookDTO read(Long gno);
 
     void modify(GuestbookDTO dto);
 
-    PageResultDTO<GuestbookDTO, Guestbook> getList(PageRequestDTO requestDTO);
+    void remove(Long gno);
 
-    default Guestbook dtoToEntity(GuestbookDTO dto){
+    default Guestbook dtoToEntity(GuestbookDTO dto) {
         Guestbook entity = Guestbook.builder()
                 .gno(dto.getGno())
                 .title(dto.getTitle())
@@ -26,21 +27,17 @@ public interface GuestbookService {
         return entity;
     }
 
-    default GuestbookDTO entityToDto(Guestbook entity) {
+    default GuestbookDTO entityToDto(Guestbook entity){
 
-    GuestbookDTO dto = GuestbookDTO.builder()
-            .gno(entity.getGno())
-            .title(entity.getTitle())
-            .content(entity.getContent())
-            .writer(entity.getWriter())
-            .regDate(entity.getRegDate())
-            .modDate(entity.getModDate())
-            .build();
+        GuestbookDTO dto  = GuestbookDTO.builder()
+                .gno(entity.getGno())
+                .title(entity.getTitle())
+                .content(entity.getContent())
+                .writer(entity.getWriter())
+                .regDate(entity.getRegDate())
+                .modDate(entity.getModDate())
+                .build();
 
-    return dto;
-
-
+        return dto;
     }
-
-
 }
