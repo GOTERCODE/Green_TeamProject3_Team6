@@ -2,153 +2,257 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/simple-sidebar.css}" rel="stylesheet">
+    <title>Simple Sidebar - Start Bootstrap Template</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/simple-sidebar.css" rel="stylesheet">
+
+    <!-- 슬라이드 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/css/swiper.min.css">
+    <style type="text/css">
+
+        /* Swiper Container */
+        .swiper-container {
+            width: 95%;
+            height: 420px;
+            border-radius: 7px;
+            background-color: black;
+            margin: 0 auto; /* Center the container */
+        }
+        /* Swiper Slide */
+        .swiper-slide {
+            text-align: center;
+            display: flex; /* Use flex for centering content */
+            align-items: center; /* Vertical centering */
+            justify-content: center; /* Horizontal centering */
+            background-color: black; /* Add background color for slide */
+        }
+        /* Swiper Slide Image */
+        .swiper-slide img {
+            max-width: 100%; /* Limit the image width */
+        }
+
+        .swiper-button-next {
+        color: white;
+        }
 
 
-  <!-- Bootstrap core CSS -->
-  <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+        .swiper-button-prev {
+        color: white;
+        }
 
-  <!-- Custom styles for this template -->
-  <link th:href="@{/css/simple-sidebar.css}" rel="stylesheet">
+        .swiper-pagination {
 
-  <title>Simple Sidebar - Start Bootstrap Template</title>
-
-  <!-- Bootstrap core CSS -->
-  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        }
 
 
-  <!-- Custom styles for this template -->
-  <link href="css/simple-sidebar.css" rel="stylesheet">
+
+
+        /* Body */
+        body {
+            background-color: black;
+            color: white;
+            margin: 0; /* Remove default margin */
+            font-family: Arial, sans-serif; /* Set a default font */
+        }
+
+        /* Heading */
+        h1 {
+            color: white;
+            text-align: center; /* Center align heading */
+        }
+
+        /* Paragraph */
+        p {
+            color: white;
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: black; /* Darker background for card */
+            border: 1px solid #444; /* Slightly lighter border */
+        }
+        .card-body {
+            color: white; /* Text color in card body */
+            background-color: black;
+        }
+
+        /* Container Fluid */
+        .container-fluid {
+            background-color: black; /* Ensure container background matches theme */
+        }
+
+    </style>
+
 
 </head>
 
 <body>
 
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
-  <th:block th:fragment="content">
-    <h1 class="mt-4" align="center">Main
+    <th:block th:fragment="content">
 
-    </h1>
-
-  <div class="d-flex" id="wrapper">
-
-    <!-- Sidebar -->
-
-    <!-- /#sidebar-wrapper -->
+        <h1 class="mt-4" align="center">Main</h1>
 
 
+        <div>
 
 
+            <!-- 슬라이드 -->
+            <div class="container-fluid" style="margin-top: 3rem; margin-bottom: 3rem;">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide"><img
+                                src="https://wallpapers.com/images/high/pubg-banner-2048-x-1152-background-t9uinvbt4bsr71qv.webp">
+                        </div>
+                        <div class="swiper-slide"><img src="https://via.placeholder.com/150"></div>
+                        <div class="swiper-slide"><img src="https://via.placeholder.com/150"></div>
+                        <div class="swiper-slide"><img src="https://via.placeholder.com/150"></div>
+                        <div class="swiper-slide"><img src="https://via.placeholder.com/150"></div>
 
-    <!-- 본문 -->
-    <div class="container-fluid" style="margin-top: 3rem; margin-bottom: 3rem; margin-left: 3rem; margin-right: 3rem;">
-      <!-- 베스트 평점 게임 섹션 -->
-      <div class="mb-5">
-        <h1 class="mt-4">베스트 평점 게임</h1>
-        <p>평점 상위 데이터 출력</p>
-        <div class="row">
-          <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card">
-              <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sample Image 1">
-              <div class="card-body">
-                <h5 class="card-title">GAME TITLE</h5>
-                <p class="card-text">SCORE</p>
-              </div>
+
+                    </div>
+
+                    <!-- 네비게이션 -->
+                    <div class="swiper-button-next"></div><!-- 다음 버튼 (오른쪽에 있는 버튼) -->
+                    <div class="swiper-button-prev"></div><!-- 이전 버튼 -->
+
+                    <!-- 페이징 -->
+                    <div class="swiper-pagination"></div>
+                </div>
             </div>
-          </div>
 
-          <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card">
-              <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sample Image 2">
-              <div class="card-body">
-                <h5 class="card-title">GAME TITLE</h5>
-                <p class="card-text">SCORE</p>
-              </div>
-            </div>
-          </div>
 
-          <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card">
-              <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sample Image 3">
-              <div class="card-body">
-                <h5 class="card-title">GAME TITLE</h5>
-                <p class="card-text">SCORE</p>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
+        <div class="d-flex" id="wrapper">
+            <!-- 본문 -->
 
-      <!-- 신규 등록 게임 섹션 -->
-      <div>
-        <h1 class="mt-4">신규 등록 게임</h1>
-        <p>등록일 최근순 상위 게임 출력</p>
-        <div class="row">
-          <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card">
-              <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sample Image 1">
-              <div class="card-body">
-                <h5 class="card-title">GAME TITLE</h5>
-                <p class="card-text">SCORE</p>
-              </div>
-            </div>
-          </div>
+            <div class="container-fluid"
+                 style="margin-top: 3rem; margin-bottom: 3rem; margin-left: 3rem; margin-right: 3rem;">
 
-          <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card">
-              <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sample Image 2">
-              <div class="card-body">
-                <h5 class="card-title">GAME TITLE</h5>
-                <p class="card-text">SCORE</p>
-              </div>
-            </div>
-          </div>
+                <!-- 베스트 평점 게임 섹션 -->
+                <div class="mb-5">
+                    <h1 class="mt-4">베스트 평점 게임</h1>
+                    <p>평점 상위 데이터 출력</p>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="card">
+                                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sample Image 1">
+                                <div class="card-body">
+                                    <h5 class="card-title">GAME TITLE</h5>
+                                    <p class="card-text">SCORE</p>
+                                </div>
+                            </div>
+                        </div>
 
-          <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card">
-              <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sample Image 3">
-              <div class="card-body">
-                <h5 class="card-title">GAME TITLE</h5>
-                <p class="card-text">SCORE</p>
-              </div>
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="card">
+                                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sample Image 2">
+                                <div class="card-body">
+                                    <h5 class="card-title">GAME TITLE</h5>
+                                    <p class="card-text">SCORE</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="card">
+                                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sample Image 3">
+                                <div class="card-body">
+                                    <h5 class="card-title">GAME TITLE</h5>
+                                    <p class="card-text">SCORE</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 신규 등록 게임 섹션 -->
+                <div>
+                    <h1 class="mt-4">신규 등록 게임</h1>
+                    <p>등록일 최근순 상위 게임 출력</p>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="card">
+                                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sample Image 1">
+                                <div class="card-body">
+                                    <h5 class="card-title">GAME TITLE</h5>
+                                    <p class="card-text">SCORE</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="card">
+                                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sample Image 2">
+                                <div class="card-body">
+                                    <h5 class="card-title">GAME TITLE</h5>
+                                    <p class="card-text">SCORE</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="card">
+                                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sample Image 3">
+                                <div class="card-body">
+                                    <h5 class="card-title">GAME TITLE</h5>
+                                    <p class="card-text">SCORE</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
+            <!-- /본문 -->
         </div>
-      </div>
-    </div>
-    <!-- /본문 -->
-  </div>
-    <!-- /#wrapper -->
-
-  </th:block>
+        <!-- /#wrapper -->
+    </th:block>
 </th:block>
 
 
+<!-- Bootstrap core JavaScript -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
+<!-- 슬라이드 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/js/swiper.min.js"></script>
+<script>
 
+    new Swiper('.swiper-container', {
 
-  <!-- Bootstrap core JavaScript -->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        slidesPerView : 1, // 동시에 보여줄 슬라이드 갯수
+        spaceBetween : 30, // 슬라이드간 간격
+        slidesPerGroup : 1, // 그룹으로 묶을 수, slidesPerView 와 같은 값을 지정하는게 좋음
 
-  <!-- Menu Toggle Script -->
+        // 그룹수가 맞지 않을 경우 빈칸으로 메우기
+        // 3개가 나와야 되는데 1개만 있다면 2개는 빈칸으로 채워서 3개를 만듬
+        loopFillGroupWithBlank : true,
 
+        loop : true, // 무한 반복
 
-
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script>
-    $(document).ready(function() {
-      $(".listBtn").click(function() {
-        window.location.href = "/guestbook/list";  // JavaScript에서 페이지 이동
-      });
+        pagination : { // 페이징
+            el : '.swiper-pagination',
+            clickable : true, // 페이징을 클릭하면 해당 영역으로 이동, 필요시 지정해 줘야 기능 작동
+        },
+        navigation : { // 네비게이션
+            nextEl : '.swiper-button-next', // 다음 버튼 클래스명
+            prevEl : '.swiper-button-prev', // 이번 버튼 클래스명
+        },
     });
-  </script>
 
+</script>
 
 </body>
 
