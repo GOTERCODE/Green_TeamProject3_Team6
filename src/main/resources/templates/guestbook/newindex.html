@@ -38,22 +38,9 @@
         }
         /* Swiper Slide Image */
         .swiper-slide img {
+
             max-width: 100%; /* Limit the image width */
         }
-
-        .swiper-button-next {
-        color: white;
-        }
-
-
-        .swiper-button-prev {
-        color: white;
-        }
-
-        .swiper-pagination {
-
-        }
-
 
 
 
@@ -77,14 +64,33 @@
         }
 
         /* Card Styles */
-        .card {
-            background-color: black; /* Darker background for card */
-            border: 1px solid #444; /* Slightly lighter border */
-        }
-        .card-body {
-            color: white; /* Text color in card body */
-            background-color: black;
-        }
+.card {
+    background-color: black; /* Darker background for card */
+    border: 1px solid #444; /* Slightly lighter border */
+    width: 100%; /* Full width of the container */
+    height: 550px; /* Fixed height for the card */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Hide overflow of the image */
+}
+
+/* Card Image Styles */
+.card-img-top {
+    width: 100%; /* Full width of the card */
+    height: 80%; /* Adjust height to control the image area */
+
+}
+
+/* Card Body Styles */
+.card-body {
+    color: white; /* Text color in card body */
+    background-color: black; /* Background color matches card */
+    height: 40%; /* Fixed height for the card body */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center the content vertically */
+    text-align: center; /* Center the text */
+}
 
         /* Container Fluid */
         .container-fluid {
@@ -111,10 +117,13 @@
             <div class="container-fluid" style="margin-top: 3rem; margin-bottom: 3rem;">
                 <div class="swiper-container">
                     <div class="swiper-wrapper">
+
+                        <div class="swiper-slide"><img
+                                src="https://cdna.artstation.com/p/assets/images/images/011/687/244/large/hamnevegen-ron2.jpg?1530861550">
+                        </div>
                         <div class="swiper-slide"><img
                                 src="https://wallpapers.com/images/high/pubg-banner-2048-x-1152-background-t9uinvbt4bsr71qv.webp">
                         </div>
-                        <div class="swiper-slide"><img src="https://via.placeholder.com/150"></div>
                         <div class="swiper-slide"><img src="https://via.placeholder.com/150"></div>
                         <div class="swiper-slide"><img src="https://via.placeholder.com/150"></div>
                         <div class="swiper-slide"><img src="https://via.placeholder.com/150"></div>
@@ -141,25 +150,27 @@
 
                 <!-- 베스트 평점 게임 섹션 -->
                 <div class="mb-5">
-                    <h1 class="mt-4">베스트 평점 게임</h1>
+                    <h1 class="mt-4">BEST SCORE GAMES</h1>
                     <p>평점 상위 데이터 출력</p>
                     <div class="row">
                         <div class="col-lg-4 col-md-6 mb-4">
                             <div class="card">
-                                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sample Image 1">
+                                <img src="https://cdn1.epicgames.com/offer/24b9b5e323bc40eea252a10cdd3b2f10/EGS_LeagueofLegends_RiotGames_S2_1200x1600-905a96cea329205358868f5871393042"
+                                     class="card-img-top" alt="Sample Image 1">
                                 <div class="card-body">
-                                    <h5 class="card-title">GAME TITLE</h5>
-                                    <p class="card-text">SCORE</p>
+                                    <h5 class="card-title">LEAGUE OF LEGENDS</h5>
+                                    <p class="card-text">SCORE 4.7</p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-lg-4 col-md-6 mb-4">
                             <div class="card">
-                                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sample Image 2">
+                                <img src="https://assets-prd.ignimgs.com/2021/10/12/hearthstone-heroes-1634060719818.png"
+                                     class="card-img-top" alt="Sample Image 2">
                                 <div class="card-body">
-                                    <h5 class="card-title">GAME TITLE</h5>
-                                    <p class="card-text">SCORE</p>
+                                    <h5 class="card-title">Hearthstone</h5>
+                                    <p class="card-text">SCORE 4.0</p>
                                 </div>
                             </div>
                         </div>
@@ -178,7 +189,7 @@
 
                 <!-- 신규 등록 게임 섹션 -->
                 <div>
-                    <h1 class="mt-4">신규 등록 게임</h1>
+                    <h1 class="mt-4">NEW GAMES</h1>
                     <p>등록일 최근순 상위 게임 출력</p>
                     <div class="row">
                         <div class="col-lg-4 col-md-6 mb-4">
@@ -216,6 +227,11 @@
             <!-- /본문 -->
         </div>
         <!-- /#wrapper -->
+
+        <div>
+            <h1 class="mt-4">BEST NEWS</h1>
+            <p>뉴스 게시물 상위 추천수 출력</p>
+        </div>
     </th:block>
 </th:block>
 

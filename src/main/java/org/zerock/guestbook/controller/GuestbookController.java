@@ -21,6 +21,14 @@ public class GuestbookController {
 
     private final GuestbookService service;
 
+
+    @GetMapping("/login")
+    public String login() {
+        return "/guestbook/login"; // "login.html" 템플릿 파일을 반환
+    }
+
+
+
     @GetMapping("/")
     public String index() {
         return "redirect:/guestbook/newindex";

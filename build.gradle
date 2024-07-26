@@ -30,39 +30,49 @@ repositories {
 
 
 dependencies {
-
-
-
-
-
+	// Spring Boot Starter for JPA
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// Spring Boot Starter for Thymeleaf
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	// Spring Boot Starter for Web
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// Lombok for reducing boilerplate code
 	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// Spring Boot DevTools for development
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	// MariaDB JDBC Driver
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
 
 
+	// Thymeleaf Layout Dialect for Thymeleaf templates
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0'
 
+	// QueryDSL for type-safe queries
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"
 
+	// MyBatis Spring Boot Starter
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
+
+	// Testing dependencies
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	// Annotation processors for QueryDSL
 	annotationProcessor(
-
 			"jakarta.persistence:jakarta.persistence-api",
-
 			"jakarta.annotation:jakarta.annotation-api",
-
-			"com.querydsl:querydsl-apt:${queryDslVersion}:jakarta")
-
-			testCompileOnly 'org.projectlombok:lombok'
-
-			testAnnotationProcessor 'org.projectlombok:lombok'
-
+			"com.querydsl:querydsl-apt:${queryDslVersion}:jakarta"
+	)
 }
+
 
 tasks.named('test') {
 	useJUnitPlatform()
