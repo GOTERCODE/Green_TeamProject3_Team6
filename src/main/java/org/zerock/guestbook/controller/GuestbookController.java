@@ -1,5 +1,6 @@
 package org.zerock.guestbook.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.guestbook.dto.GuestbookDTO;
 import org.zerock.guestbook.dto.PageRequestDTO;
 import org.zerock.guestbook.service.GuestbookService;
+import org.zerock.guestbook.entity.Member;
+
 
 @Controller
 @RequestMapping("/guestbook")
@@ -34,12 +37,12 @@ public class GuestbookController {
         return "redirect:/guestbook/newindex";
     }
 
-    @GetMapping("/newindex")
-    public void newIndex(PageRequestDTO pageRequestDTO, Model model) {
-        log.info("newindex............." + pageRequestDTO);
-
-        model.addAttribute("result", service.getList(pageRequestDTO));
-    }
+//    @GetMapping("/newindex")
+//    public void newIndex(PageRequestDTO pageRequestDTO, Model model) {
+//        log.info("newindex............." + pageRequestDTO);
+//
+//        model.addAttribute("result", service.getList(pageRequestDTO));
+//    }
 
     @GetMapping("/list")
     public void list(PageRequestDTO pageRequestDTO, Model model) {
@@ -96,5 +99,26 @@ public class GuestbookController {
         redirectAttributes.addAttribute("gno", dto.getGno());
 
         return "redirect:/guestbook/read";
+    }
+
+
+    @GetMapping("/newindex")
+    public String newIndex(PageRequestDTO pageRequestDTO, Model model, HttpSession session) {
+        log.info("newindex............." + pageRequestDTO);
+
+        // 세션에서 로그인된 사용자 정보 가져오기
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+
+        // 모델에 로그인된 사용자 추가
+        if (loggedInUser != null) {
+            model.addAttribute("loggedInUser", loggedInUser);
+        }else {
+            model.addAttribute("loginError", "You need to log in.");
+        }
+
+        // 페이지 요청 DTO를 모델에 추가
+        model.addAttribute("result", service.getList(pageRequestDTO));
+
+        return "guestbook/newindex"; // Thymeleaf 템플릿 이름
     }
 }
