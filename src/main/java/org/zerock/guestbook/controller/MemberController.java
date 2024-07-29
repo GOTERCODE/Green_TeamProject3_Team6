@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.zerock.guestbook.entity.Member;
 import org.zerock.guestbook.service.MemberService;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class MemberController {
