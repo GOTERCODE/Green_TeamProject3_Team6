@@ -41,7 +41,8 @@
         <a href="/guestbook/newindex" style="text-decoration: none;">
             <div class="sidebar-heading" style="color: white;">Main Page</div>
         </a>
-        <div class="list-group list-group-flush"><a href="#" class="list-group-item list-group-item-action bg-dark" style="color: white;">Games</a>
+        <div class="list-group list-group-flush">
+            <a href="#" class="list-group-item list-group-item-action bg-dark gameBtn" style="color: white;">Games</a>
             <a href="#" class="list-group-item list-group-item-action bg-dark" style="color: white;">News</a>
             <a href="#" class="list-group-item list-group-item-action bg-dark" style="color: white;">Profile</a>
             <a th:if="${loggedInUser == null}" href="#" class="list-group-item list-group-item-action bg-dark loginBtn" style="color: white;">Login</a>
@@ -123,6 +124,13 @@
                 window.location.href = "/Member/logout";
             });
         });
+
+    $(document).ready(function() {
+    $(".gameBtn").click(function() {
+        window.location.href = "/guestbook/boardgames";
+    });
+});
+
 
 </script>
 

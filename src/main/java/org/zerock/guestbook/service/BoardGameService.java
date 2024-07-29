@@ -13,7 +13,7 @@ public class BoardGameService {
 
     private final BoardGameRepository boardGameRepository;
 
-    public List<BoardGame> getAllBoardGames() {
+    public List<BoardGame> findAll() {
         return boardGameRepository.findAll();
     }
 

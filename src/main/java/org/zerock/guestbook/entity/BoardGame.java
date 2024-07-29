@@ -49,15 +49,39 @@ public class BoardGame {
     private String gameTitle;
 
     @Transient
-    private String thumbnailBase64; // Transient field for Base64 encoded thumbnail
+    private String thumbnailBase64;
 
-    // Getter for thumbnailBase64
+    @Transient
+    private String formattedDate;  // 포맷된 날짜 문자열
+
     public String getThumbnailBase64() {
         return thumbnailBase64;
     }
 
-    // Setter for thumbnailBase64
     public void setThumbnailBase64(String thumbnailBase64) {
         this.thumbnailBase64 = thumbnailBase64;
+    }
+
+    @Transient
+    private String formattedScore;  // 소수점 포맷된 점수
+
+    public String getFormattedScore() {
+        return formattedScore;
+    }
+
+    public void setFormattedScore(String formattedScore) {
+        this.formattedScore = formattedScore;
+    }
+
+    @Transient
+    private int starRating;  // 별의 수
+
+    public int getStarRating() {
+        return starRating;
+    }
+
+    public void setStarRating(int starRating) {
+        this.starRating = starRating;
+
     }
 }

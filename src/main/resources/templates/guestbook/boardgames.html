@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
@@ -11,10 +10,7 @@
     <!-- Bootstrap core CSS -->
     <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/css/simple-sidebar.css}" rel="stylesheet">
-    <title>Login Page</title>
-
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/simple-sidebar.css" rel="stylesheet">
+    <title>Board Games</title>
 
     <style type="text/css">
         /* Body */
@@ -31,61 +27,44 @@
             text-align: center; /* Center align heading */
         }
 
-        /* Paragraph */
-        p {
-            color: white;
+        /* Card Styles */
+        .card {
+            background-color: black; /* Darker background for card */
+            border: 1px solid #444; /* Slightly lighter border */
+            width: 100%; /* Full width of the container */
+            height: 400px; /* Fixed height for the card */
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Hide overflow of the image */
         }
 
-       /* Login Form */
-        .login-form {
-            background-color: #333;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            max-width: 400px;
-            margin: 50px auto;
+        /* Card Image Styles */
+        .card-img-top {
+            width: 100%; /* Full width of the card */
+            height: 70%; /* Adjust height to control the image area */
         }
 
-        .login-form h2 {
-            color: #fff;
-            margin-bottom: 20px;
+        /* Card Body Styles */
+        .card-body {
+            color: white; /* Text color in card body */
+            background-color: black; /* Background color matches card */
+            height: 30%; /* Fixed height for the card body */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center the content vertically */
+            text-align: center; /* Center the text */
         }
 
-        .login-form .form-group {
-            margin-bottom: 15px;
+        /* Container Fluid */
+        .container-fluid {
+            background-color: black; /* Ensure container background matches theme */
+
         }
 
-        .login-form .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
 
-        .login-form .form-control {
-            background-color: #444;
-            border: 1px solid #555;
-            color: #fff;
-        }
-
-        .login-form .btn-primary {
-            background-color: #007bff;
-            border: none;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .login-form .btn-primary:hover {
-            background-color: #0056b3;
-        }
-
-        /* Center align buttons */
-        .login-form .form-group button {
-            margin: 5px;
-        }
-
-        .login-form .form-group .btn-primary {
-            display: inline-block;
+        /* Card Rating Styles */
+        .card-rating {
+            font-size: 1.2rem; /* Adjust font size for stars */
         }
     </style>
 </head>
@@ -93,35 +72,34 @@
 <body>
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
     <th:block th:fragment="content">
-
-<h1>Game List</h1>
+        <h1>Game List</h1>
         <div class="container mt-5">
-            <h1 class="mb-4">Board Games</h1>
+
             <div class="row">
-                <div class="col-lg-4 col-md-6 mb-4" th:each="game : ${boardGames}">
+                <!-- One card per column on large screens, up to 4 cards per row -->
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4" th:each="game : ${boardGames}">
                     <div class="card">
-                        <!-- BLOB 데이터를 Base64로 변환하여 이미지로 표시 -->
-                        <img th:src="${game.getBGThumbnailBase64()}" class="card-img-top" alt="Game Thumbnail">
+                        <img src="https://cdn1.epicgames.com/offer/24b9b5e323bc40eea252a10cdd3b2f10/EGS_LeagueofLegends_RiotGames_S2_1200x1600-905a96cea329205358868f5871393042"
+                             class="card-img-top" alt="Sample Image">
                         <div class="card-body">
-                            <h5 class="card-title" th:text="${game.bGTitle}">Game Title</h5>
-                            <p class="card-text" th:text="'SCORE ' + ${game.bGScoreSum / game.bGScoreCount}">Score</p>
-                            <p class="card-text" th:text="'Writer: ' + ${game.bGWriter}">Writer</p>
-                            <p class="card-text" th:text="'Date: ' + ${#dates.format(game.bGDate, 'yyyy-MM-dd HH:mm:ss')}">Date</p>
-                            <p class="card-text" th:text="'Tag: ' + ${game.bGTag}">Tag</p>
-                            <p class="card-text" th:text="'Game Title: ' + ${game.bGGameTitle}">Game Title</p>
+                            <h5 class="card-title" th:text="${game.title}">Game Title</h5>
+                            <p class="card-text" th:text="'SCORE ' + ${game.formattedScore}">Score</p>
+                            <p class="card-text card-rating">
+                    <span th:each="i : ${#numbers.sequence(1, 5)}" th:text="'★'"
+                          th:classappend="${i <= game.starRating ? 'text-warning' : 'text-muted'}"></span>
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
+        </div>
     </th:block>
 </th:block>
 <!-- Bootstrap core JavaScript -->
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-
 </body>
 
 </html>
