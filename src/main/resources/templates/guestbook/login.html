@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -95,7 +94,7 @@
         <!-- Login Form -->
         <div class="login-form">
             <h2 align="center">Login</h2>
-            <form th:action="@{/login}" method="post">
+            <form th:action="@{/Member/login}" method="post">
                 <div class="form-group">
                     <label for="username">User ID</label>
                     <input type="text" class="form-control" id="username" name="username" placeholder="Enter your User ID" required>

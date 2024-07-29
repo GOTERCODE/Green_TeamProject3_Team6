@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.guestbook.dto.GuestbookDTO;
 import org.zerock.guestbook.dto.PageRequestDTO;
@@ -26,11 +23,18 @@ public class GuestbookController {
 
 
     @GetMapping("/login")
-    public String login() {
-        return "/guestbook/login"; // "login.html" 템플릿 파일을 반환
+    public String login(HttpSession session) {
+        // 세션에서 로그인된 사용자 정보 가져오기
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+
+        // 로그인된 사용자가 있으면 새로운 페이지로 리다이렉트
+        if (loggedInUser != null) {
+            return "redirect:/guestbook/newindex";
+        }
+
+        // 로그인 페이지로 이동
+        return "guestbook/login";
     }
-
-
 
     @GetMapping("/")
     public String index() {
@@ -121,4 +125,16 @@ public class GuestbookController {
 
         return "guestbook/newindex"; // Thymeleaf 템플릿 이름
     }
+
+    @GetMapping("/basic")
+    public String yourPage(HttpSession session, Model model) {
+        // 세션에서 로그인된 사용자 정보 가져오기
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+
+        // 모델에 로그인된 사용자 추가
+        model.addAttribute("loggedInUser", loggedInUser);
+
+        return "your-template"; // Thymeleaf 템플릿 이름
+    }
+
 }

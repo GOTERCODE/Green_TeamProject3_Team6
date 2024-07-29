@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.zerock.guestbook.dto.PageRequestDTO;
 import org.zerock.guestbook.entity.Member;
@@ -13,16 +14,12 @@ import org.zerock.guestbook.service.MemberService;
 
 import jakarta.servlet.http.HttpSession;
 
+@RequestMapping("/Member")
 @Controller
 public class MemberController {
 
     @Autowired
     private MemberService memberService;
-
-    @GetMapping("/login")
-    public String loginForm() {
-        return "login"; // 로그인 폼 페이지를 반환합니다.
-    }
 
     @PostMapping("/login")
     public String login(@RequestParam("username") String username,
@@ -42,7 +39,7 @@ public class MemberController {
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/login"; // 로그아웃 시 로그인 페이지로 리다이렉트합니다.
+        return "redirect:/guestbook/newindex"; // 로그아웃 시 로그인 페이지로 리다이렉트합니다.
     }
 
 }
