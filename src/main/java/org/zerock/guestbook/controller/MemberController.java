@@ -42,4 +42,9 @@ public class MemberController {
         return "redirect:/guestbook/newindex"; // 로그아웃 시 로그인 페이지로 리다이렉트합니다.
     }
 
+    @GetMapping("/user_info_register")
+    public String user_info_register(){
+        return "guestbook/user_info_register";
+    }
+
 }
