@@ -86,7 +86,7 @@
 
     .cont_forms_active_login {
       box-shadow: 1px 10px 30px -10px rgba(0, 0, 0, 0.5);
-      height: 420px;
+      height: 470px;
       top: -60px;
       left: 0px;
       -webkit-transition: all 0.5s;
@@ -98,7 +98,7 @@
 
     .cont_forms_active_sign_up {
       box-shadow: 1px 10px 30px -10px rgba(0, 0, 0, 0.5);
-      height: 420px;
+      height: 470px;
       top: -60px;
       left: 320px;
       -webkit-transition: all 0.5s;
@@ -481,25 +481,25 @@ form {
                 <div class="cont_form_sign_up">
                     <a href="#" onclick="hidden_login_and_sign_up()"><i class="material-icons">&#xE5C4;</i></a>
                     <h2>SIGN UP</h2>
-                    <form th:action="@{/Member/Register_Test}" method="post">
+                    <form id="registrationForm" th:action="@{/Member/Register_Test}" method="post">
                         <div class="form_field">
-                            <input type="text" placeholder="Email" id="userEmail" name="userEmail"/>
+                            <input type="email" placeholder="Email" id="userEmail" required name="userEmail"/>
                         </div>
                         <div class="form_field">
-                            <input type="text" placeholder="User Nick" id="userNick" name="userNick" />
+                            <input type="text" placeholder="User Nick" id="userNick" required name="userNick" />
                         </div>
                         <div class="form_field">
-                            <input type="text" placeholder="User Id" id="register_username" name="register_username" />
+                            <input type="text" placeholder="User Id" id="register_username" required name="register_username" />
                         </div>
                         <div class="form_field">
-                            <input type="password" placeholder="Password" id="userpassword" name="userpassword"/>
+                            <input type="password" placeholder="Password" id="userpassword" required onkeyup="checkPasswordMatch();" name="userpassword"/>
                         </div>
                         <div class="form_field">
-                            <input type="password" placeholder="Confirm Password" id="userpassowrd2" name="userpassowrd2"/>
+                            <input type="password" placeholder="Confirm Password" id="userpassword2" required onkeyup="checkPasswordMatch();" name="userpassowrd2"/>
                         </div>
+                        <div id="MatchMessage"></div>
                         <button type="submit" class="btn_sign_up">SIGN UP</button>
 
-                        <!--onclick="change_to_sign_up()"-->
                     </form>
 
                 </div>
@@ -510,6 +510,57 @@ form {
     </div>
 </div>
 </body>
+<!-- 비밀번호 확인용 -->
+<script>
+    function checkPasswordMatch() {
+        var password = document.getElementById("userpassword").value;
+        var repeatPassword = document.getElementById("userpassword2").value;
+        var message = document.getElementById("MatchMessage");
+
+
+        if(password.length >= 6){
+                if (password === repeatPassword) {
+                    message.innerHTML = "비밀번호가 일치합니다.";
+                    message.style.color = "green";
+                } else {
+                    message.innerHTML = "비밀번호가 일치하지 않습니다.";
+                    message.style.color = "red";
+                }
+
+            } else {
+            	 message.innerHTML = "비밀번호는 6글자 이상이어야합니다.";
+                 message.style.color = "red";
+            }
+    }
+</script>
+<script>
+    function validateAndSubmit(event) {
+        event.preventDefault();
+
+        var password = document.getElementById("userpassword").value;
+        var repeatPassword = document.getElementById("userpassword2").value;
+        var message = document.getElementById("MatchMessage");
+        var nickname = document.getElementById("userNick").value;
+        var nameKor = /^[가-힣]+$/;
+
+        if (!nameKor.test(nickname)) {
+            message.innerHTML = "닉네임은 한글만 가능합니다.";
+            message.style.color = "red";
+            return; // 폼 제출을 방지합니다.
+        }
+
+        // 비밀번호 검증
+        if (password !== repeatPassword || password.length < 6) {
+            message.innerHTML = "비밀번호가 일치하지 않거나 6글자 이상이 아닙니다.";
+            message.style.color = "red";
+            return; // 폼 제출을 방지합니다.
+        }
+
+        // 모든 검증이 통과하면 폼을 제출합니다.
+        document.getElementById("registrationForm").submit();
+
+    }
+</script>
 
 <script>
     const time_to_show_login = 400;

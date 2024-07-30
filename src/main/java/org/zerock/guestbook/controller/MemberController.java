@@ -49,7 +49,7 @@ public class MemberController {
             return "redirect:/Member/login";
         } catch (Exception e) {
             // 회원가입 실패 시 에러 메시지 추가 후 로그인 페이지로 리다이렉트
-            redirectAttributes.addFlashAttribute("registrationError", "Registration failed. Please try again.");
+            redirectAttributes.addFlashAttribute("registrationError",  "회원가입 실패. 다시 시도해 주세요.");
             return "redirect:/Member/login";
         }
     }
