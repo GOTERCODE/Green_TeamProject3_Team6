@@ -1,31 +1,15 @@
 package org.zerock.guestbook.service;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.zerock.guestbook.entity.BoardGame;
-import org.zerock.guestbook.repository.BoardGameRepository;
 
-import java.util.List;
+public interface BoardGameService {
+    Page<BoardGame> findAll(Pageable pageable);
 
-@Service
-@RequiredArgsConstructor
-public class BoardGameService {
+    BoardGame getBoardGameById(Long id);
 
-    private final BoardGameRepository boardGameRepository;
+    BoardGame createBoardGame(BoardGame boardGame);
 
-    public List<BoardGame> findAll() {
-        return boardGameRepository.findAll();
-    }
-
-    public BoardGame getBoardGameById(Long id) {
-        return boardGameRepository.findById(id).orElse(null);
-    }
-
-    public BoardGame createBoardGame(BoardGame boardGame) {
-        return boardGameRepository.save(boardGame);
-    }
-
-    public void deleteBoardGame(Long id) {
-        boardGameRepository.deleteById(id);
-    }
+    void deleteBoardGame(Long id);
 }
