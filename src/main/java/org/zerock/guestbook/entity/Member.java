@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,4 +32,5 @@ public class Member {
 
     @Column(name = "M_ISADMIN", nullable = false)
     private boolean isAdmin; // M_ISADMIN column
+
 }

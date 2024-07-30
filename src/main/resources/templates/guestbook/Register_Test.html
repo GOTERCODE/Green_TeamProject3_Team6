@@ -482,10 +482,21 @@ form {
                     <a href="#" onclick="hidden_login_and_sign_up()"><i class="material-icons">&#xE5C4;</i></a>
                     <h2>SIGN UP</h2>
                     <form th:action="@{/Member/Register_Test}" method="post">
-                        <input type="text" placeholder="Email" id="userEmail" name="userEmail"/>
-                        <input type="text" placeholder="User Id" id="username" name="username" />
-                        <input type="password" placeholder="Password" id="userpassowrd" name="userpassowrd"/>
-                        <input type="password" placeholder="Confirm Password" id="userpassowrd2" name="userpassowrd2"/>
+                        <div class="form_field">
+                            <input type="text" placeholder="Email" id="userEmail" name="userEmail"/>
+                        </div>
+                        <div class="form_field">
+                            <input type="text" placeholder="User Nick" id="userNick" name="userNick" />
+                        </div>
+                        <div class="form_field">
+                            <input type="text" placeholder="User Id" id="register_username" name="register_username" />
+                        </div>
+                        <div class="form_field">
+                            <input type="password" placeholder="Password" id="userpassword" name="userpassword"/>
+                        </div>
+                        <div class="form_field">
+                            <input type="password" placeholder="Confirm Password" id="userpassowrd2" name="userpassowrd2"/>
+                        </div>
                         <button type="submit" class="btn_sign_up">SIGN UP</button>
 
                         <!--onclick="change_to_sign_up()"-->

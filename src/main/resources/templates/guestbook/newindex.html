@@ -109,11 +109,6 @@
     <p>Email: <span th:text="${loggedInUser.email}"></span></p>
 </div>
 
-<!-- 로그인된 사용자가 없는 경우 메시지 표시 -->
-<div th:unless="${loggedInUser != null}">
-    <p>You are not logged in.</p>
-</div>
-
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
     <th:block th:fragment="content">
 
