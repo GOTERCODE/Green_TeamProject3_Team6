@@ -31,7 +31,7 @@ public class BoardGame {
 
     @Lob
     @Column(name = "B_G_THUMBNAIL")
-    private byte[] thumbnail;
+    private String thumbnail;
 
     @Column(name = "B_G_SCORESUM", precision = 5, scale = 2)
     private Double scoreSum;
@@ -54,13 +54,7 @@ public class BoardGame {
     @Transient
     private String formattedDate;  // 포맷된 날짜 문자열
 
-    public String getThumbnailBase64() {
-        return thumbnailBase64;
-    }
 
-    public void setThumbnailBase64(String thumbnailBase64) {
-        this.thumbnailBase64 = thumbnailBase64;
-    }
 
     @Transient
     private String formattedScore;  // 소수점 포맷된 점수

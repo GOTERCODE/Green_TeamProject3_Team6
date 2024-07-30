@@ -79,8 +79,7 @@
                 <!-- One card per column on large screens, up to 4 cards per row -->
                 <div class="col-lg-3 col-md-4 col-sm-6 mb-4" th:each="game : ${boardGames}">
                     <div class="card">
-                        <img src="https://cdn1.epicgames.com/offer/24b9b5e323bc40eea252a10cdd3b2f10/EGS_LeagueofLegends_RiotGames_S2_1200x1600-905a96cea329205358868f5871393042"
-                             class="card-img-top" alt="Sample Image">
+                        <img th:src="${game.thumbnail}" class="card-img-top" alt="Game Thumbnail">
                         <div class="card-body">
                             <h5 class="card-title" th:text="${game.title}">Game Title</h5>
                             <p class="card-text" th:text="'SCORE ' + ${game.formattedScore}">Score</p>
