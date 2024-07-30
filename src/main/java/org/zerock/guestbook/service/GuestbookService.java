@@ -5,39 +5,15 @@ import org.zerock.guestbook.dto.PageRequestDTO;
 import org.zerock.guestbook.dto.PageResultDTO;
 import org.zerock.guestbook.entity.Guestbook;
 
+import java.util.List;
+
 public interface GuestbookService {
 
-    Long register(GuestbookDTO dto);
+//    Long register(GuestbookDTO dto);
 
-    PageResultDTO<GuestbookDTO, Guestbook> getList(PageRequestDTO requestDTO);
+    List<GuestbookDTO> getBestScoreGames();
 
-    GuestbookDTO read(Long gno);
+    List<GuestbookDTO> getNewGames();
 
-    void modify(GuestbookDTO dto);
-
-    void remove(Long gno);
-
-    default Guestbook dtoToEntity(GuestbookDTO dto) {
-        Guestbook entity = Guestbook.builder()
-                .gno(dto.getGno())
-                .title(dto.getTitle())
-                .content(dto.getContent())
-                .writer(dto.getWriter())
-                .build();
-        return entity;
-    }
-
-    default GuestbookDTO entityToDto(Guestbook entity){
-
-        GuestbookDTO dto  = GuestbookDTO.builder()
-                .gno(entity.getGno())
-                .title(entity.getTitle())
-                .content(entity.getContent())
-                .writer(entity.getWriter())
-                .regDate(entity.getRegDate())
-                .modDate(entity.getModDate())
-                .build();
-
-        return dto;
-    }
+//    PageResultDTO<GuestbookDTO, Guestbook> getList(PageRequestDTO requestDTO); // 추가된 메서드
 }

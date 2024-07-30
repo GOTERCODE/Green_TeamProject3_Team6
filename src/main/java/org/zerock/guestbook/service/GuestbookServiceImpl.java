@@ -1,104 +1,61 @@
 package org.zerock.guestbook.service;
 
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.zerock.guestbook.dto.GuestbookDTO;
-import org.zerock.guestbook.dto.PageRequestDTO;
-import org.zerock.guestbook.dto.PageResultDTO;
 import org.zerock.guestbook.entity.Guestbook;
-import org.zerock.guestbook.entity.QGuestbook;
 import org.zerock.guestbook.repository.GuestbookRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
-import java.util.Optional;
-import java.util.function.Function;
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-@Log4j2
-@RequiredArgsConstructor
 public class GuestbookServiceImpl implements GuestbookService {
 
-    private final GuestbookRepository repository;
+    @Autowired
+    private GuestbookRepository repository;
 
     @Override
-    public Long register(GuestbookDTO dto) {
+    public List<GuestbookDTO> getBestScoreGames() {
+        Pageable pageable = PageRequest.of(0, 3);  // 페이지 번호, 페이지 크기
+        List<Guestbook> top3ByScore = repository.findTopByOrderByScoreDesc(pageable);
 
-        log.info("DTO------------------------");
-        log.info(dto);
-
-        Guestbook entity = dtoToEntity(dto);
-        log.info(entity);
-
-        repository.save(entity);
-
-        return entity.getGno();
-    }
-
-    public PageResultDTO<GuestbookDTO, Guestbook> getList(PageRequestDTO requestDTO) {
-        Pageable pageable = requestDTO.getPageable(Sort.by("gno").descending());
-
-        BooleanBuilder booleanBuilder = getSearch(requestDTO);
-
-        Page<Guestbook> result = repository.findAll(booleanBuilder, pageable);
-        Function<Guestbook, GuestbookDTO> fn = (entity -> entityToDto(entity));
-
-        return new PageResultDTO<>(result, fn);
+        return top3ByScore.stream()
+                .map(this::entityToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public GuestbookDTO read(Long gno) {
-        Optional<Guestbook> result = repository.findById(gno);
+    public List<GuestbookDTO> getNewGames() {
+        Pageable pageable = PageRequest.of(0, 3);  // 페이지 번호, 페이지 크기
+        List<Guestbook> top3ByDate = repository.findTopByOrderByDateDesc(pageable);
 
-        return result.isPresent() ? entityToDto(result.get()) : null;
+        return top3ByDate.stream()
+                .map(this::entityToDto)
+                .collect(Collectors.toList());
     }
 
-    @Override
-    public void remove(Long gno) {
-        repository.deleteById(gno);
-    }
+    private GuestbookDTO entityToDto(Guestbook entity) {
+        DecimalFormat df = new DecimalFormat("0.0");
+        int score = entity.getScoreSum() != null && entity.getScoreCount() != null ?
+                Math.min(5, (int) Math.round(entity.getScoreSum() / entity.getScoreCount())) : 0;
+        String formattedScore = entity.getScoreSum() != null && entity.getScoreCount() != null ?
+                df.format(entity.getScoreSum() / entity.getScoreCount()) : "0.0";
 
-    @Override
-    public void modify(GuestbookDTO dto) {
-        Optional<Guestbook> result = repository.findById(dto.getGno());
-
-        if (result.isPresent()) {
-            Guestbook entity = result.get();
-            entity.changeTitle(dto.getTitle());
-            entity.changeContent(dto.getContent());
-
-            repository.save(entity);
-        }
-    }
-
-    private BooleanBuilder getSearch(PageRequestDTO requestDTO) {
-        String type = requestDTO.getType();
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-        QGuestbook qGuestbook = QGuestbook.guestbook;
-        String keyword = requestDTO.getKeyword();
-        BooleanExpression expression = qGuestbook.gno.gt(0L);
-        booleanBuilder.and(expression);
-        if (type == null || type.trim().length() == 0) {
-            return booleanBuilder;
-        }
-
-        BooleanBuilder conditionBuilder = new BooleanBuilder();
-        if (type.contains("t")) {
-            conditionBuilder.or(qGuestbook.title.contains(keyword));
-        }
-        if (type.contains("c")) {
-            conditionBuilder.or(qGuestbook.content.contains(keyword));
-        }
-        if (type.contains("w")) {
-            conditionBuilder.or(qGuestbook.writer.contains(keyword));
-        }
-
-        booleanBuilder.and(conditionBuilder);
-
-        return booleanBuilder;
+        return GuestbookDTO.builder()
+                .gno(entity.getId())
+                .title(entity.getTitle())
+                .content(entity.getContent())
+                .writer(entity.getWriter())
+                .scoreSum(entity.getScoreSum())
+                .scoreCount(entity.getScoreCount())
+                .date(entity.getDate())
+                .thumbnail(entity.getThumbnail())
+                .formattedScore(formattedScore)
+                .starRating(score)
+                .build();
     }
 }

@@ -163,71 +163,39 @@
                     <h1 class="mt-4">BEST SCORE GAMES</h1>
                     <p>평점 상위 데이터 출력</p>
                     <div class="row">
-                        <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="col-lg-4 col-md-6 mb-4" th:each="game : ${bestScoreGames}">
                             <div class="card">
-                                <img src="https://cdn1.epicgames.com/offer/24b9b5e323bc40eea252a10cdd3b2f10/EGS_LeagueofLegends_RiotGames_S2_1200x1600-905a96cea329205358868f5871393042"
-                                     class="card-img-top" alt="Sample Image 1">
+                                <img th:src="${game.thumbnail}" class="card-img-top" alt="Game Image">
                                 <div class="card-body">
-                                    <h5 class="card-title">LEAGUE OF LEGENDS</h5>
-                                    <p class="card-text">SCORE 4.7</p>
-                                </div>
-                            </div>
-                        </div>
+                                    <h5 class="card-title" th:text="${game.title}">Game Title</h5>
+                                    <p class="card-text" th:text="'SCORE ' + ${game.formattedScore} + ' ( ' + ${game.scoreCount} + ' )'" />
 
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="card">
-                                <img src="https://assets-prd.ignimgs.com/2021/10/12/hearthstone-heroes-1634060719818.png"
-                                     class="card-img-top" alt="Sample Image 2">
-                                <div class="card-body">
-                                    <h5 class="card-title">Hearthstone</h5>
-                                    <p class="card-text">SCORE 4.0</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="card">
-                                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sample Image 3">
-                                <div class="card-body">
-                                    <h5 class="card-title">GAME TITLE</h5>
-                                    <p class="card-text">SCORE</p>
+                                    <p class="card-text card-rating">
+                                <span th:each="i : ${#numbers.sequence(1, 5)}" th:text="'★'"
+                                      th:classappend="${i <= game.starRating ? 'text-warning' : 'text-muted'}"></span>
+                                    </p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 신규 등록 게임 섹션 -->
+                <!-- NEW GAMES 섹션 -->
                 <div>
                     <h1 class="mt-4">NEW GAMES</h1>
                     <p>등록일 최근순 상위 게임 출력</p>
                     <div class="row">
-                        <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="col-lg-4 col-md-6 mb-4" th:each="game : ${newGames}">
                             <div class="card">
-                                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sample Image 1">
+                                <img th:src="${game.thumbnail}" class="card-img-top" alt="Game Image">
                                 <div class="card-body">
-                                    <h5 class="card-title">GAME TITLE</h5>
-                                    <p class="card-text">SCORE</p>
-                                </div>
-                            </div>
-                        </div>
+                                    <h5 class="card-title" th:text="${game.title}">Game Title</h5>
+                                    <p class="card-text" th:text="'SCORE ' + ${game.formattedScore} + ' ( ' + ${game.scoreCount} + ' )'" />
 
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="card">
-                                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sample Image 2">
-                                <div class="card-body">
-                                    <h5 class="card-title">GAME TITLE</h5>
-                                    <p class="card-text">SCORE</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="card">
-                                <img src="https://via.placeholder.com/150" class="card-img-top" alt="Sample Image 3">
-                                <div class="card-body">
-                                    <h5 class="card-title">GAME TITLE</h5>
-                                    <p class="card-text">SCORE</p>
+                                    <p class="card-text card-rating">
+                                <span th:each="i : ${#numbers.sequence(1, 5)}" th:text="'★'"
+                                      th:classappend="${i <= game.starRating ? 'text-warning' : 'text-muted'}"></span>
+                                    </p>
                                 </div>
                             </div>
                         </div>

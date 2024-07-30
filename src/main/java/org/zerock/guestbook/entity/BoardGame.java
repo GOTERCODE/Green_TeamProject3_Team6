@@ -48,8 +48,7 @@ public class BoardGame {
     @Column(name = "B_G_GAMETITLE")
     private String gameTitle;
 
-    @Transient
-    private String thumbnailBase64;
+
 
     @Transient
     private String formattedDate;  // 포맷된 날짜 문자열
