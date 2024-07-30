@@ -7,6 +7,9 @@ import org.zerock.guestbook.entity.BoardGame;
 public interface BoardGameService {
     Page<BoardGame> findAll(Pageable pageable);
 
+    // 수정된 메서드 시그니처
+    Page<BoardGame> searchByKeyword(String keyword, String sortOrder, Pageable pageable);
+
     BoardGame getBoardGameById(Long id);
 
     BoardGame createBoardGame(BoardGame boardGame);

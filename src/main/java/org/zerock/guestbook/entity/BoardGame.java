@@ -77,4 +77,7 @@ public class BoardGame {
         this.starRating = starRating;
 
     }
+
+    @Transient
+    private Double scoreRatio;
 }

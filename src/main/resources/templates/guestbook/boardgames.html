@@ -58,85 +58,140 @@
         /* Container Fluid */
         .container-fluid {
             background-color: black; /* Ensure container background matches theme */
-
         }
-
 
         /* Card Rating Styles */
         .card-rating {
             font-size: 1.2rem; /* Adjust font size for stars */
         }
 
-
-
-        /* 페이징 처리 css */
-
-         .pagination .page-item.active .page-link {
-            background-color: black; /* 활성 페이지 버튼의 배경색 */
-            border-color: #007bff; /* 활성 페이지 버튼의 테두리 색 */
+        /* Pagination CSS */
+        .pagination .page-item.active .page-link {
+            background-color: black; /* Active page button background color */
+            border-color: #007bff; /* Active page button border color */
             color: white;
         }
+
         .pagination .page-item .page-link {
-            color: black; /* 비활성 페이지 버튼의 글자색 */
+            color: black; /* Inactive page button text color */
             background-color: white;
             border-color: #007bff;
         }
+
         .pagination .page-item .page-link:hover {
-            background-color: #007bff; /* 비활성 페이지 버튼의 호버 배경색 */
-            border-color: #007bff; /* 비활성 페이지 버튼의 호버 테두리 색 */
+            background-color: #007bff; /* Inactive page button hover background color */
+            border-color: #007bff; /* Inactive page button hover border color */
+        }
+
+        /* Search and Sort Container */
+       .search-sort-container {
+            border: 1px solid #444; /* Border color */
+            padding: 10px; /* Padding inside the container */
+            border-radius: 5px; /* Rounded corners */
+            margin-bottom: 20px; /* Space below the container */
+            background-color: #222; /* Background color for the container */
+            position: relative; /* Allow absolute positioning inside */
+        }
+
+        .search-sort-container form {
+            width: 100%;
+            margin-bottom: 50px; /* Space for the absolute positioned button */
+        }
+
+        .search-sort-container .input-group {
+            flex: 1; /* Take up available space */
+        }
+
+        .search-sort-container select {
+
+
+        }
+
+        /* Button Container */
+        .search-sort-container .submit-container {
+            position: absolute;
+            bottom: 10px; /* Space from the bottom */
+            left: 50%; /* Center horizontally */
+            transform: translateX(-50%); /* Center horizontally */
+            width: 100%; /* Full width of parent container */
+            text-align: center; /* Center align the button */
         }
     </style>
 </head>
 
 <body>
-<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
     <th:block th:fragment="content">
         <h1>Game List</h1>
         <div class="container mt-5">
+            <!-- Search and Sort Container -->
+            <div class="search-sort-container">
+                <!-- Search and Sort Form -->
+                <form th:action="@{/guestbook/boardgames}" method="get" class="mb-4">
+                    <div class="input-group mb-3">
+                        <input type="text" name="keyword" class="form-control" placeholder="Search by title"
+                               th:value="${keyword}">
 
-            <div class="row">
-                <!-- One card per column on large screens, up to 4 cards per row -->
-                <div class="col-lg-3 col-md-4 col-sm-6 mb-4" th:each="game : ${boardGames}">
-                    <div class="card">
-                        <img th:src="${game.thumbnail}" class="card-img-top" alt="Game Thumbnail">
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${game.title}">Game Title</h5>
-                            <p class="card-text" th:text="'SCORE ' + ${game.formattedScore} + ' ( ' + ${game.scoreCount} + ' )'" />
+                    </div>
 
-                            <p class="card-text card-rating">
-                    <span th:each="i : ${#numbers.sequence(1, 5)}" th:text="'★'"
-                          th:classappend="${i <= game.starRating ? 'text-warning' : 'text-muted'}"></span>
-                            </p>
+                    <div class="form-row align-items-center">
+                        <div class="col-auto mb-3">
+                            <select class="custom-select mr-sm-2" id="sortOrder" name="sortOrder">
+                                <option value="dateDesc" th:selected="${sortOrder == 'dateDesc'}">최근순</option>
+                                <option value="dateAsc" th:selected="${sortOrder == 'dateAsc'}">오래된순</option>
+                                <option value="scoreDesc" th:selected="${sortOrder == 'scoreDesc'}">높은 평점순</option>
+                                <option value="scoreAsc" th:selected="${sortOrder == 'scoreAsc'}">낮은 평점순</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="submit-container">
+                        <button class="btn btn-primary" type="submit" style="background-color: black">Search</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Board Games -->
+            <div class="container mt-5">
+                <div class="row">
+                    <!-- One card per column on large screens, up to 4 cards per row -->
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4" th:each="game : ${boardGames}">
+                        <div class="card">
+                            <img th:src="${game.thumbnail}" class="card-img-top" alt="Game Thumbnail">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${game.title}">Game Title</h5>
+                                <p class="card-text" th:text="'SCORE ' + ${game.formattedScore} + ' ( ' + ${game.scoreCount} + ' )'"></p>
+                                <p class="card-text card-rating">
+                                        <span th:each="i : ${#numbers.sequence(1, 5)}" th:text="'★'"
+                                              th:classappend="${i <= game.starRating ? 'text-warning' : 'text-muted'}"></span>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                            <a class="page-link" th:href="@{/guestbook/boardgames(page=${currentPage - 1}, keyword=${keyword}, sortOrder=${sortOrder})}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'">
+                            <a class="page-link" th:href="@{/guestbook/boardgames(page=${i}, keyword=${keyword}, sortOrder=${sortOrder})}" th:text="${i + 1}">1</a>
+                        </li>
+                        <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                            <a class="page-link" th:href="@{/guestbook/boardgames(page=${currentPage + 1}, keyword=${keyword}, sortOrder=${sortOrder})}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
-
-            <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                        <a class="page-link" th:href="@{/guestbook/boardgames(page=${currentPage - 1})}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'">
-                        <a class="page-link" th:href="@{/guestbook/boardgames(page=${i})}" th:text="${i + 1}">1</a>
-                    </li>
-                    <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                        <a class="page-link" th:href="@{/guestbook/boardgames(page=${currentPage + 1})}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-
         </div>
     </th:block>
 </th:block>
 <!-- Bootstrap core JavaScript -->
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </body>
 
 </html>

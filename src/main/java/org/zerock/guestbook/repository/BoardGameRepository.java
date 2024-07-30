@@ -1,8 +1,22 @@
 package org.zerock.guestbook.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.zerock.guestbook.entity.BoardGame;
 
 public interface BoardGameRepository extends JpaRepository<BoardGame, Long> {
-    // JpaRepository는 기본적으로 findAll(Pageable pageable) 메서드를 제공하여 페이징 처리를 지원합니다.
+
+    @Query("SELECT bg FROM BoardGame bg " +
+            "WHERE LOWER(bg.title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "ORDER BY " +
+            "CASE WHEN :sortOrder = 'scoreDesc' THEN (bg.scoreSum / bg.scoreCount) ELSE NULL END DESC, " +
+            "CASE WHEN :sortOrder = 'scoreAsc' THEN (bg.scoreSum / bg.scoreCount) ELSE NULL END ASC, " +
+            "CASE WHEN :sortOrder = 'dateAsc' THEN bg.date ELSE NULL END ASC, " +
+            "CASE WHEN :sortOrder = 'dateDesc' THEN bg.date ELSE NULL END DESC")
+    Page<BoardGame> findByTitleContainingIgnoreCase(@Param("keyword") String keyword,
+                                                    @Param("sortOrder") String sortOrder,
+                                                    Pageable pageable);
 }

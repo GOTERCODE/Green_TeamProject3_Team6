@@ -1,6 +1,5 @@
 package org.zerock.guestbook.service;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -8,14 +7,22 @@ import org.zerock.guestbook.entity.BoardGame;
 import org.zerock.guestbook.repository.BoardGameRepository;
 
 @Service
-@RequiredArgsConstructor
 public class BoardGameServiceImpl implements BoardGameService {
 
     private final BoardGameRepository boardGameRepository;
 
+    public BoardGameServiceImpl(BoardGameRepository boardGameRepository) {
+        this.boardGameRepository = boardGameRepository;
+    }
+
     @Override
     public Page<BoardGame> findAll(Pageable pageable) {
         return boardGameRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<BoardGame> searchByKeyword(String keyword, String sortOrder, Pageable pageable) {
+        return boardGameRepository.findByTitleContainingIgnoreCase(keyword, sortOrder, pageable);
     }
 
     @Override
