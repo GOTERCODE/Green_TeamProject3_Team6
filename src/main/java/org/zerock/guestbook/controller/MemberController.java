@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.zerock.guestbook.dto.PageRequestDTO;
 import org.zerock.guestbook.entity.Member;
 import org.zerock.guestbook.service.MemberService;
 
@@ -42,9 +41,31 @@ public class MemberController {
         return "redirect:/guestbook/newindex"; // 로그아웃 시 로그인 페이지로 리다이렉트합니다.
     }
 
-    @GetMapping("/user_info_register")
-    public String user_info_register(){
-        return "guestbook/user_info_register";
+    @GetMapping("/Register_Test")
+    public String user_info_register(HttpSession session){
+        // 세션에서 로그인된 사용자 정보 가져오기
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+
+        // 로그인된 사용자가 있으면 새로운 페이지로 리다이렉트
+        if (loggedInUser != null) {
+            return "redirect:/guestbook/newindex";
+        }
+
+        return "/guestbook/Register_Test";
+    }
+
+    @GetMapping("/login")
+    public String login(HttpSession session) {
+        // 세션에서 로그인된 사용자 정보 가져오기
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+
+        // 로그인된 사용자가 있으면 새로운 페이지로 리다이렉트
+        if (loggedInUser != null) {
+            return "redirect:/guestbook/newindex";
+        }
+
+        // 로그인 페이지로 이동
+        return "/guestbook/Register_Test";
     }
 
 }
