@@ -1,12 +1,11 @@
 package org.zerock.guestbook.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.guestbook.entity.Member;
 import org.zerock.guestbook.service.MemberService;
@@ -39,19 +38,22 @@ public class MemberController {
     @PostMapping("/Register_Test")
     public String Register_Test(@RequestParam("userEmail") String userEmail,
                                 @RequestParam("userNick") String userNick,
-                                @RequestParam("register_username") String register_username,
-                                @RequestParam("userpassword") String userpassword,
+                                @RequestParam("register_username") String registerUsername,
+                                @RequestParam("userpassword") String userPassword,
                                 RedirectAttributes redirectAttributes) {
         try {
-            // 회원가입 처리
-            Member member = memberService.Register_Test(userEmail, userNick, register_username, userpassword);
-            // 회원가입 성공 시 로그인 페이지로 리다이렉트
-            return "redirect:/Member/login";
-        } catch (Exception e) {
-            // 회원가입 실패 시 에러 메시지 추가 후 로그인 페이지로 리다이렉트
-            redirectAttributes.addFlashAttribute("registrationError",  "회원가입 실패. 다시 시도해 주세요.");
-            return "redirect:/Member/login";
+            Member newMember = memberService.Register_Test(userEmail, userNick, registerUsername, userPassword);
+            redirectAttributes.addFlashAttribute("registration", "회원가입을 성공했습니다.");
+            return "redirect:/Member/Register_Test"; // 성공 후 다른 페이지로 리다이렉트
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("registrationError", e.getMessage());
+            return "redirect:/Member/Register_Test";
         }
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
 

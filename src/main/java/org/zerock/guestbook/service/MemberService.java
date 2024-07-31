@@ -42,13 +42,13 @@ public class MemberService {
 
     private void checkForDuplicates(String email, String nickname, String username) {
         if (memberRepository_register.findByEmail(email).isPresent()) {
-            throw new IllegalArgumentException("Email already in use.");
+            throw new IllegalArgumentException("해당 이메일을 사용 중인 유저가 있습니다.");
         }
         if (memberRepository_register.findByNickname(nickname).isPresent()) {
-            throw new IllegalArgumentException("Nickname already in use.");
+            throw new IllegalArgumentException("해당 닉네임을 사용 중인 유저가 있습니다.");
         }
         if (memberRepository_register.findByUsername(username).isPresent()) {
-            throw new IllegalArgumentException("Username already in use.");
+            throw new IllegalArgumentException("해당 ID를 사용 중인 유저가 있습니다.");
         }
     }
 

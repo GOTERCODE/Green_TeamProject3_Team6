@@ -9,6 +9,13 @@
     <!-- Bootstrap core CSS -->
     <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/css/simple-sidebar.css}" rel="stylesheet">
+    <!-- Include jQuery 모달-->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- Include Popper.js for Bootstrap tooltips and popovers 모달-->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <!-- Include Bootstrap JS 모달-->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <title>Login Page</title>
 
 
@@ -420,18 +427,63 @@ form {
 
 
     </style>
-
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        document.addEventListener('DOMContentLoaded', function() {
+            var errorMessage = /*[[${registrationError}]]*/ '';
+            var Message = /*[[${registration}]]*/ '';
+            if (errorMessage) {
+                $('#errorModal').modal('show');
+            }
+            if (Message) {
+                $('#Modal').modal('show');
+                change_to_login();
+            }
+        });
+        /*]]>*/
+    </script>
 <body>
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">회원가입 실패</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" th:text="${registrationError}"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalLabel">회원가입 성공</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" th:text="${registration}"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="cotn_principal">
     <div class="cont_centrar">
-
         <div class="cont_login">
             <div class="cont_info_log_sign_up">
                 <div class="col_md_login">
                     <div class="cont_ba_opcitiy">
 
                         <h2>LOGIN</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <p>로그인 해주세요.</p>
                         <button class="btn_login" onclick="change_to_login()">LOGIN</button>
                     </div>
                 </div>
@@ -439,8 +491,7 @@ form {
                     <div class="cont_ba_opcitiy">
                         <h2>SIGN UP</h2>
 
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-
+                        <p>회원가입 해주세요.</p>
                         <button class="btn_sign_up" onclick="change_to_sign_up()">SIGN UP</button>
                     </div>
                 </div>
@@ -495,11 +546,10 @@ form {
                             <input type="password" placeholder="Password" id="userpassword" required onkeyup="checkPasswordMatch();" name="userpassword"/>
                         </div>
                         <div class="form_field">
-                            <input type="password" placeholder="Confirm Password" id="userpassword2" required onkeyup="checkPasswordMatch();" name="userpassowrd2"/>
+                            <input type="password" placeholder="Confirm Password" id="userpassword2" required onkeyup="checkPasswordMatch();" name="userpassword2"/>
                         </div>
                         <div id="MatchMessage"></div>
-                        <button type="submit" class="btn_sign_up">SIGN UP</button>
-
+                        <button type="submit" class="btn_sign_up" onclick="validateAndSubmit(event)">SIGN UP</button>
                     </form>
 
                 </div>
@@ -541,10 +591,14 @@ form {
         var repeatPassword = document.getElementById("userpassword2").value;
         var message = document.getElementById("MatchMessage");
         var nickname = document.getElementById("userNick").value;
-        var nameKor = /^[가-힣]+$/;
+        var pattern = /^[가-힣a-zA-Z]+$/;
+        var nameEng = /^[a-zA-Z]+(?: [a-zA-Z]+)*$/;
+        var nameEngandNumber = /^[a-zA-Z0-9]+$/;
+        var userID = document.getElementById("register_username").value;
 
-        if (!nameKor.test(nickname)) {
-            message.innerHTML = "닉네임은 한글만 가능합니다.";
+
+        if (!pattern.test(nickname)) {
+            message.innerHTML = "닉네임은 한글과 영문 또는 한글과 영문 혼합만 가능합니다.";
             message.style.color = "red";
             return; // 폼 제출을 방지합니다.
         }
@@ -556,9 +610,21 @@ form {
             return; // 폼 제출을 방지합니다.
         }
 
+        if(userID.length < 6){
+            message.innerHTML = "ID 는 6글자 이상이어야합니다.";
+            message.style.color = "red";
+            return; // 폼 제출을 방지합니다.
+        }
+
+        if(!nameEngandNumber.test(userID)){
+            message.innerHTML = "ID 는 영문이거나 영문과 숫자 혼합이어야합니다.";
+            message.style.color = "red";
+            return; // 폼 제출을 방지합니다.
+        }
+
+
         // 모든 검증이 통과하면 폼을 제출합니다.
         document.getElementById("registrationForm").submit();
-
     }
 </script>
 
