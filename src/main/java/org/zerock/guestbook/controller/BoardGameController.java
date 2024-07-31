@@ -1,5 +1,6 @@
 package org.zerock.guestbook.controller;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.zerock.guestbook.entity.BoardGame;
 import org.zerock.guestbook.service.BoardGameService;
+import org.zerock.guestbook.entity.Member;
+import org.zerock.guestbook.service.MemberService;
 
 import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
@@ -32,7 +35,7 @@ public class BoardGameController {
             @RequestParam(defaultValue = "dateDesc") String sortOrder,
             @RequestParam(defaultValue = "") String keyword,
             @RequestParam(required = false) String[] tags,  // 태그 배열을 String[]로 수정
-            Model model) {
+            HttpSession session,Model model) {
 
         DecimalFormat df = new DecimalFormat("0.0");
 
@@ -72,6 +75,8 @@ public class BoardGameController {
         model.addAttribute("sortOrder", sortOrder);
         model.addAttribute("keyword", keyword);
         model.addAttribute("tags", tagsStr);  // 선택된 태그 문자열을 모델에 추가
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+        model.addAttribute("loggedInUser", loggedInUser);
 
         return "guestbook/boardgames";
     }

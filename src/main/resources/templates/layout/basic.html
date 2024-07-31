@@ -31,7 +31,6 @@
     </style>
 
 </head>
-
 <body>
 
 <div class="d-flex" id="wrapper">
@@ -63,6 +62,9 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                    <div th:if="${loggedInUser != null}">
+                        <p>로그인: <span th:text="${loggedInUser.username}"></span></p>
+                    </div>
                     <li class="nav-item active">
                         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                     </li>

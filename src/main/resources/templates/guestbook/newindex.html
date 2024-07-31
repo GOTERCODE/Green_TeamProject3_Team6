@@ -103,11 +103,6 @@
 </head>
 
 <body>
-<!-- 로그인된 사용자가 있는 경우 정보 표시 -->
-<div th:if="${loggedInUser != null}">
-    <p>Logged in as: <span th:text="${loggedInUser.username}"></span></p>
-    <p>Email: <span th:text="${loggedInUser.email}"></span></p>
-</div>
 
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
     <th:block th:fragment="content">
