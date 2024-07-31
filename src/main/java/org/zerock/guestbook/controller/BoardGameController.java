@@ -3,7 +3,6 @@ package org.zerock.guestbook.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +12,6 @@ import org.zerock.guestbook.service.BoardGameService;
 
 import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +30,7 @@ public class BoardGameController {
             @RequestParam(defaultValue = "12") int size,
             @RequestParam(defaultValue = "dateDesc") String sortOrder,
             @RequestParam(defaultValue = "") String keyword,
+            @RequestParam(required = false) String[] tags,  // 태그 파라미터 추가
             Model model) {
 
         DecimalFormat df = new DecimalFormat("0.0");
@@ -40,7 +39,7 @@ public class BoardGameController {
         Pageable pageable = PageRequest.of(page, size);
 
         // 페이징 처리된 BoardGame 데이터 조회
-        Page<BoardGame> boardGamesPage = boardGameService.searchByKeyword(keyword, sortOrder, pageable);
+        Page<BoardGame> boardGamesPage = boardGameService.searchByKeywordAndTags(keyword, tags, sortOrder, pageable);
 
         // DTO로 변환
         List<BoardGame> boardGames = boardGamesPage.stream()
@@ -62,13 +61,19 @@ public class BoardGameController {
                 })
                 .collect(Collectors.toList());
 
+        // 선택된 태그를 문자열로 변환
+        String tagsStr = tags != null ? String.join(",", tags) : "";
+
         model.addAttribute("boardGames", boardGames);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", boardGamesPage.getTotalPages());
         model.addAttribute("totalItems", boardGamesPage.getTotalElements());
-        model.addAttribute("sortOrder", sortOrder);  // 현재 정렬 조건 추가
+        model.addAttribute("sortOrder", sortOrder);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("tags", tagsStr);  // 선택된 태그 문자열을 모델에 추가
 
         return "guestbook/boardgames";
     }
+
+
 }

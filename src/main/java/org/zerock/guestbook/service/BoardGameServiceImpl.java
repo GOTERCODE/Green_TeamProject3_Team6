@@ -2,9 +2,11 @@ package org.zerock.guestbook.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.zerock.guestbook.entity.BoardGame;
 import org.zerock.guestbook.repository.BoardGameRepository;
+import org.zerock.guestbook.repository.BoardGameSpecifications;
 
 @Service
 public class BoardGameServiceImpl implements BoardGameService {
@@ -21,8 +23,11 @@ public class BoardGameServiceImpl implements BoardGameService {
     }
 
     @Override
-    public Page<BoardGame> searchByKeyword(String keyword, String sortOrder, Pageable pageable) {
-        return boardGameRepository.findByTitleContainingIgnoreCase(keyword, sortOrder, pageable);
+    public Page<BoardGame> searchByKeywordAndTags(String keyword, String[] tags, String sortOrder, Pageable pageable) {
+        Specification<BoardGame> spec = Specification.where(BoardGameSpecifications.hasKeyword(keyword))
+                .and(BoardGameSpecifications.hasTags(tags))
+                .and(BoardGameSpecifications.sortBy(sortOrder));
+        return boardGameRepository.findAll(spec, pageable);
     }
 
     @Override

@@ -22,4 +22,5 @@ public class GuestbookDTO {
         private String thumbnail;  // 썸네일 URL
         private String formattedScore;  // 포맷된 점수
         private int starRating;  // 별의 수
+        private String tag;
 }

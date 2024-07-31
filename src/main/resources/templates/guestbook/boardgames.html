@@ -13,108 +13,111 @@
     <title>Board Games</title>
 
     <style type="text/css">
-        /* Body */
         body {
             background-color: black;
             color: white;
-            margin: 0; /* Remove default margin */
-            font-family: Arial, sans-serif; /* Set a default font */
+            margin: 0;
+            font-family: Arial, sans-serif;
         }
 
-        /* Heading */
         h1 {
             color: white;
-            text-align: center; /* Center align heading */
+            text-align: center;
         }
 
-        /* Card Styles */
         .card {
-            background-color: black; /* Darker background for card */
-            border: 1px solid #444; /* Slightly lighter border */
-            width: 100%; /* Full width of the container */
-            height: 400px; /* Fixed height for the card */
+            background-color: black;
+            border: 1px solid #444;
+            width: 100%;
+            height: 400px;
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* Hide overflow of the image */
+            overflow: hidden;
         }
 
-        /* Card Image Styles */
         .card-img-top {
-            width: 100%; /* Full width of the card */
-            height: 70%; /* Adjust height to control the image area */
+            width: 100%;
+            height: 70%;
         }
 
-        /* Card Body Styles */
         .card-body {
-            color: white; /* Text color in card body */
-            background-color: black; /* Background color matches card */
-            height: 30%; /* Fixed height for the card body */
+            color: white;
+            background-color: black;
+            height: 30%;
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Center the content vertically */
-            text-align: center; /* Center the text */
+            justify-content: center;
+            text-align: center;
         }
 
-        /* Container Fluid */
         .container-fluid {
-            background-color: black; /* Ensure container background matches theme */
+            background-color: black;
         }
 
-        /* Card Rating Styles */
         .card-rating {
-            font-size: 1.2rem; /* Adjust font size for stars */
+            font-size: 1.2rem;
         }
 
-        /* Pagination CSS */
         .pagination .page-item.active .page-link {
-            background-color: black; /* Active page button background color */
-            border-color: #007bff; /* Active page button border color */
+            background-color: black;
+            border-color: #007bff;
             color: white;
         }
 
         .pagination .page-item .page-link {
-            color: black; /* Inactive page button text color */
+            color: black;
             background-color: white;
             border-color: #007bff;
         }
 
         .pagination .page-item .page-link:hover {
-            background-color: #007bff; /* Inactive page button hover background color */
-            border-color: #007bff; /* Inactive page button hover border color */
+            background-color: #007bff;
+            border-color: #007bff;
         }
 
-        /* Search and Sort Container */
-       .search-sort-container {
-            border: 1px solid #444; /* Border color */
-            padding: 10px; /* Padding inside the container */
-            border-radius: 5px; /* Rounded corners */
-            margin-bottom: 20px; /* Space below the container */
-            background-color: #222; /* Background color for the container */
-            position: relative; /* Allow absolute positioning inside */
+        .search-sort-container {
+            border: 1px solid #444;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            background-color: #222;
+            position: relative;
         }
 
         .search-sort-container form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
             width: 100%;
-            margin-bottom: 50px; /* Space for the absolute positioned button */
         }
 
-        .search-sort-container .input-group {
-            flex: 1; /* Take up available space */
+        .search-sort-container .input-group,
+        .search-sort-container .custom-select {
+            width: 100%;
         }
 
-        .search-sort-container select {
-
-
-        }
-
-        /* Button Container */
         .search-sort-container .submit-container {
-            position: absolute;
-            bottom: 10px; /* Space from the bottom */
-            left: 50%; /* Center horizontally */
-            transform: translateX(-50%); /* Center horizontally */
-            width: 100%; /* Full width of parent container */
-            text-align: center; /* Center align the button */
+            display: flex;
+            justify-content: center;
+        }
+
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background-color: #444;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .tag.selected {
+            background-color: #007bff;
         }
     </style>
 </head>
@@ -127,23 +130,26 @@
             <!-- Search and Sort Container -->
             <div class="search-sort-container">
                 <!-- Search and Sort Form -->
-                <form th:action="@{/guestbook/boardgames}" method="get" class="mb-4">
-                    <div class="input-group mb-3">
-                        <input type="text" name="keyword" class="form-control" placeholder="Search by title"
-                               th:value="${keyword}">
-
+                <form th:action="@{/guestbook/boardgames}" method="get">
+                    <div class="d-flex mb-3 gap-2">
+                        <input type="text" name="keyword" class="form-control" placeholder="Search by title" th:value="${keyword}">
+                        <select class="custom-select" id="sortOrder" name="sortOrder">
+                            <option value="dateDesc" th:selected="${sortOrder == 'dateDesc'}">최근순</option>
+                            <option value="dateAsc" th:selected="${sortOrder == 'dateAsc'}">오래된순</option>
+                            <option value="scoreDesc" th:selected="${sortOrder == 'scoreDesc'}">높은 평점순</option>
+                            <option value="scoreAsc" th:selected="${sortOrder == 'scoreAsc'}">낮은 평점순</option>
+                        </select>
                     </div>
-
-                    <div class="form-row align-items-center">
-                        <div class="col-auto mb-3">
-                            <select class="custom-select mr-sm-2" id="sortOrder" name="sortOrder">
-                                <option value="dateDesc" th:selected="${sortOrder == 'dateDesc'}">최근순</option>
-                                <option value="dateAsc" th:selected="${sortOrder == 'dateAsc'}">오래된순</option>
-                                <option value="scoreDesc" th:selected="${sortOrder == 'scoreDesc'}">높은 평점순</option>
-                                <option value="scoreAsc" th:selected="${sortOrder == 'scoreAsc'}">낮은 평점순</option>
-                            </select>
-                        </div>
+                    <div class="tag-container">
+                        <div class="tag" data-tag="싱글플레이어" onclick="selectTag(this)">싱글플레이어</div>
+                        <div class="tag" data-tag="멀티플레이어" onclick="selectTag(this)">멀티플레이어</div>
+                        <div class="tag" data-tag="전략" onclick="selectTag(this)">전략</div>
+                        <div class="tag" data-tag="공포" onclick="selectTag(this)">공포</div>
+                        <div class="tag" data-tag="FPS" onclick="selectTag(this)">FPS</div>
+                        <div class="tag" data-tag="FPS" onclick="selectTag(this)">RPG</div>
+                        <div class="tag" data-tag="어드벤쳐" onclick="selectTag(this)">어드벤쳐</div>
                     </div>
+                    <input type="hidden" id="selectedTags" name="tags" th:value="${tags}">
                     <div class="submit-container">
                         <button class="btn btn-primary" type="submit" style="background-color: black">Search</button>
                     </div>
@@ -153,7 +159,6 @@
             <!-- Board Games -->
             <div class="container mt-5">
                 <div class="row">
-                    <!-- One card per column on large screens, up to 4 cards per row -->
                     <div class="col-lg-3 col-md-4 col-sm-6 mb-4" th:each="game : ${boardGames}">
                         <div class="card">
                             <img th:src="${game.thumbnail}" class="card-img-top" alt="Game Thumbnail">
@@ -161,8 +166,8 @@
                                 <h5 class="card-title" th:text="${game.title}">Game Title</h5>
                                 <p class="card-text" th:text="'SCORE ' + ${game.formattedScore} + ' ( ' + ${game.scoreCount} + ' )'"></p>
                                 <p class="card-text card-rating">
-                                        <span th:each="i : ${#numbers.sequence(1, 5)}" th:text="'★'"
-                                              th:classappend="${i <= game.starRating ? 'text-warning' : 'text-muted'}"></span>
+                                    <span th:each="i : ${#numbers.sequence(1, 5)}" th:text="'★'"
+                                          th:classappend="${i <= game.starRating ? 'text-warning' : 'text-muted'}"></span>
                                 </p>
                             </div>
                         </div>
@@ -171,15 +176,15 @@
                 <nav aria-label="Page navigation">
                     <ul class="pagination justify-content-center">
                         <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                            <a class="page-link" th:href="@{/guestbook/boardgames(page=${currentPage - 1}, keyword=${keyword}, sortOrder=${sortOrder})}" aria-label="Previous">
+                            <a class="page-link" th:href="@{/guestbook/boardgames(page=${currentPage - 1}, keyword=${keyword}, sortOrder=${sortOrder}, tags=${tags})}" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
                         <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'">
-                            <a class="page-link" th:href="@{/guestbook/boardgames(page=${i}, keyword=${keyword}, sortOrder=${sortOrder})}" th:text="${i + 1}">1</a>
+                            <a class="page-link" th:href="@{/guestbook/boardgames(page=${i}, keyword=${keyword}, sortOrder=${sortOrder}, tags=${tags})}" th:text="${i + 1}">1</a>
                         </li>
                         <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                            <a class="page-link" th:href="@{/guestbook/boardgames(page=${currentPage + 1}, keyword=${keyword}, sortOrder=${sortOrder})}" aria-label="Next">
+                            <a class="page-link" th:href="@{/guestbook/boardgames(page=${currentPage + 1}, keyword=${keyword}, sortOrder=${sortOrder}, tags=${tags})}" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
@@ -189,9 +194,29 @@
         </div>
     </th:block>
 </th:block>
+
 <!-- Bootstrap core JavaScript -->
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const selectedTags = new URLSearchParams(window.location.search).get('tags');
+        if (selectedTags) {
+            const tagArray = selectedTags.split(',');
+            document.querySelectorAll('.tag').forEach(tag => {
+                if (tagArray.includes(tag.getAttribute('data-tag'))) {
+                    tag.classList.add('selected');
+                }
+            });
+        }
+    });
+
+    function selectTag(element) {
+        element.classList.toggle('selected');
+        const selectedTags = Array.from(document.querySelectorAll('.tag.selected')).map(tag => tag.getAttribute('data-tag'));
+        document.getElementById('selectedTags').value = selectedTags.join(',');
+    }
+</script>
 </body>
 
 </html>
