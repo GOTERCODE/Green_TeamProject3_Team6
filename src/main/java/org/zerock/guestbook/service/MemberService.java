@@ -6,6 +6,10 @@ import org.zerock.guestbook.entity.Member;
 import org.zerock.guestbook.repository.MemberRepository;
 import org.zerock.guestbook.repository.MemberRepository_Register;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+
 @Service
 public class MemberService {
 
@@ -19,8 +23,35 @@ public class MemberService {
 
     public Member login(String username, String password) {
         Member member = memberRepository.findByUsername(username);
-        if (member != null && member.getPassword().equals(password)) {
-            return member;
+
+        try {
+            // 해시를 생성할 문자열
+            String string1 = password;
+
+            // SHA-256 해시 객체 생성
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+            // 문자열을 바이트 배열로 변환하고 해시 계산
+            byte[] hashBytes = digest.digest(string1.getBytes());
+
+            // 바이트 배열을 16진수 문자열로 변환
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hashBytes) {
+                // 바이트를 2자리 16진수로 변환하여 StringBuilder에 추가
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+
+            // 해시된 비밀번호와 데이터베이스의 비밀번호 비교
+            if (member.getPassword().equals(hexString.toString())) {
+                return member; // 로그인 성공
+            }
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -34,7 +65,38 @@ public class MemberService {
         newMember.setEmail(userEmail);
         newMember.setNickname(userNick);
         newMember.setUsername(register_username);
-        newMember.setPassword(userpassword); // 비밀번호 암호화
+        //newMember.setPassword(userpassword);
+
+        try {
+            // 해시를 생성할 문자열
+            String string1 = userpassword;
+
+            // SHA-256 해시 객체 생성
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+            // 문자열을 바이트 배열로 변환하고 해시 계산
+            byte[] hashBytes = digest.digest(string1.getBytes());
+
+            // 바이트 배열을 16진수 문자열로 변환
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hashBytes) {
+                // 바이트를 2자리 16진수로 변환하여 StringBuilder에 추가
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+
+            newMember.setPassword(hexString.toString());
+
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+
+
 
         // 데이터베이스에 저장
         return memberRepository.save(newMember);
