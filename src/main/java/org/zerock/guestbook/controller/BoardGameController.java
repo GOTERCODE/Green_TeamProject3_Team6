@@ -3,6 +3,7 @@ package org.zerock.guestbook.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,13 +31,13 @@ public class BoardGameController {
             @RequestParam(defaultValue = "12") int size,
             @RequestParam(defaultValue = "dateDesc") String sortOrder,
             @RequestParam(defaultValue = "") String keyword,
-            @RequestParam(required = false) String[] tags,  // 태그 파라미터 추가
+            @RequestParam(required = false) String[] tags,  // 태그 배열을 String[]로 수정
             Model model) {
 
         DecimalFormat df = new DecimalFormat("0.0");
 
-        // Pageable 설정
-        Pageable pageable = PageRequest.of(page, size);
+        // Pageable 설정 (정렬 조건 포함)
+        Pageable pageable = PageRequest.of(page, size, getSortOrder(sortOrder));
 
         // 페이징 처리된 BoardGame 데이터 조회
         Page<BoardGame> boardGamesPage = boardGameService.searchByKeywordAndTags(keyword, tags, sortOrder, pageable);
@@ -76,4 +77,18 @@ public class BoardGameController {
     }
 
 
+
+    private Sort getSortOrder(String sortOrder) {
+        switch (sortOrder) {
+            case "scoreDesc":
+                return Sort.by(Sort.Order.desc("score")); // Entity에서의 정렬만 고려
+            case "scoreAsc":
+                return Sort.by(Sort.Order.asc("score")); // Entity에서의 정렬만 고려
+            case "dateAsc":
+                return Sort.by(Sort.Order.asc("date"));
+            case "dateDesc":
+            default:
+                return Sort.by(Sort.Order.desc("date"));
+        }
+    }
 }

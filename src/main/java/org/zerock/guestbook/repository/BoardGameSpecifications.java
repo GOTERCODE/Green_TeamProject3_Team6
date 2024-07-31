@@ -1,7 +1,14 @@
 package org.zerock.guestbook.repository;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Order;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
 import org.zerock.guestbook.entity.BoardGame;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BoardGameSpecifications {
 
@@ -20,29 +27,38 @@ public class BoardGameSpecifications {
                 return builder.conjunction(); // 모든 레코드 반환
             }
 
-            // 모든 태그를 포함하는 레코드를 찾기 위한 조건 생성
-            Specification<BoardGame> spec = (root1, query1, builder1) -> builder1.conjunction();
+            List<Predicate> tagPredicates = new ArrayList<>();
             for (String tag : tags) {
-                Specification<BoardGame> currentTagSpec = (root1, query1, builder1) ->
-                        builder1.like(builder1.lower(root1.get("tag")), "%" + tag.toLowerCase() + "%");
-                spec = spec.and(currentTagSpec); // AND 조건 추가
+                tagPredicates.add(builder.like(builder.lower(root.get("tag")), "%" + tag.toLowerCase() + "%"));
             }
-            return spec.toPredicate(root, query, builder);
+
+            // 모든 태그가 포함된 레코드를 찾기 위한 조건 생성
+            return builder.and(tagPredicates.toArray(new Predicate[0]));
         };
     }
 
     public static Specification<BoardGame> sortBy(String sortOrder) {
         return (root, query, builder) -> {
-            if (sortOrder.equals("scoreDesc")) {
-                query.orderBy(builder.desc(root.get("scoreSum")));
-            } else if (sortOrder.equals("scoreAsc")) {
-                query.orderBy(builder.asc(root.get("scoreSum")));
-            } else if (sortOrder.equals("dateAsc")) {
-                query.orderBy(builder.asc(root.get("date")));
-            } else {
-                query.orderBy(builder.desc(root.get("date")));
+            if (sortOrder == null || sortOrder.isEmpty()) {
+                return builder.conjunction(); // 기본값
             }
-            return builder.conjunction(); // Sorting은 쿼리에서 직접 처리
+
+            query.orderBy(getSortOrders(sortOrder, root, builder));
+            return query.getRestriction(); // Sort가 적용되도록
         };
+    }
+
+    private static List<Order> getSortOrders(String sortOrder, Root<BoardGame> root, CriteriaBuilder builder) {
+        switch (sortOrder) {
+            case "scoreDesc":
+                return List.of(builder.desc(root.get("score")));
+            case "scoreAsc":
+                return List.of(builder.asc(root.get("score")));
+            case "dateAsc":
+                return List.of(builder.asc(root.get("date")));
+            case "dateDesc":
+            default:
+                return List.of(builder.desc(root.get("date")));
+        }
     }
 }

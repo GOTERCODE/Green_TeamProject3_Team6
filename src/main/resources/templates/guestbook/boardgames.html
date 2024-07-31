@@ -93,7 +93,7 @@
 
         .search-sort-container .input-group,
         .search-sort-container .custom-select {
-            width: 100%;
+            width: 20%;
         }
 
         .search-sort-container .submit-container {
@@ -125,14 +125,14 @@
 <body>
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
     <th:block th:fragment="content">
-        <h1>Game List</h1>
+        <h1>게임 목록</h1>
         <div class="container mt-5">
-            <!-- Search and Sort Container -->
+            <!-- 검색 및 정렬 컨테이너 -->
             <div class="search-sort-container">
-                <!-- Search and Sort Form -->
-                <form th:action="@{/guestbook/boardgames}" method="get">
+                <!-- 검색 및 정렬 폼 -->
+                <form id="searchForm" th:action="@{/guestbook/boardgames}" method="get">
                     <div class="d-flex mb-3 gap-2">
-                        <input type="text" name="keyword" class="form-control" placeholder="Search by title" th:value="${keyword}">
+                        <input type="text" name="keyword" class="form-control" placeholder="제목으로 검색" th:value="${keyword}">
                         <select class="custom-select" id="sortOrder" name="sortOrder">
                             <option value="dateDesc" th:selected="${sortOrder == 'dateDesc'}">최근순</option>
                             <option value="dateAsc" th:selected="${sortOrder == 'dateAsc'}">오래된순</option>
@@ -146,24 +146,31 @@
                         <div class="tag" data-tag="전략" onclick="selectTag(this)">전략</div>
                         <div class="tag" data-tag="공포" onclick="selectTag(this)">공포</div>
                         <div class="tag" data-tag="FPS" onclick="selectTag(this)">FPS</div>
-                        <div class="tag" data-tag="FPS" onclick="selectTag(this)">RPG</div>
+                        <div class="tag" data-tag="RPG" onclick="selectTag(this)">RPG</div>
+                        <div class="tag" data-tag="PVP" onclick="selectTag(this)">PVP</div>
+                        <div class="tag" data-tag="PVE" onclick="selectTag(this)">PVE</div>
+                        <div class="tag" data-tag="협동" onclick="selectTag(this)">협동</div>
+                        <div class="tag" data-tag="경쟁" onclick="selectTag(this)">경쟁</div>
+                        <div class="tag" data-tag="육성" onclick="selectTag(this)">육성</div>
                         <div class="tag" data-tag="어드벤쳐" onclick="selectTag(this)">어드벤쳐</div>
+                        <div class="tag" data-tag="액션" onclick="selectTag(this)">액션</div>
+                        <div class="tag" data-tag="추리" onclick="selectTag(this)">추리</div>
                     </div>
                     <input type="hidden" id="selectedTags" name="tags" th:value="${tags}">
                     <div class="submit-container">
-                        <button class="btn btn-primary" type="submit" style="background-color: black">Search</button>
+                        <button class="btn btn-primary" type="submit" style="background-color: black">검색</button>
                     </div>
                 </form>
             </div>
 
-            <!-- Board Games -->
+            <!-- 보드 게임 리스트 -->
             <div class="container mt-5">
                 <div class="row">
                     <div class="col-lg-3 col-md-4 col-sm-6 mb-4" th:each="game : ${boardGames}">
                         <div class="card">
-                            <img th:src="${game.thumbnail}" class="card-img-top" alt="Game Thumbnail">
+                            <img th:src="${game.thumbnail}" class="card-img-top" alt="게임 썸네일">
                             <div class="card-body">
-                                <h5 class="card-title" th:text="${game.title}">Game Title</h5>
+                                <h5 class="card-title" th:text="${game.title}">게임 제목</h5>
                                 <p class="card-text" th:text="'SCORE ' + ${game.formattedScore} + ' ( ' + ${game.scoreCount} + ' )'"></p>
                                 <p class="card-text card-rating">
                                     <span th:each="i : ${#numbers.sequence(1, 5)}" th:text="'★'"
@@ -176,7 +183,7 @@
                 <nav aria-label="Page navigation">
                     <ul class="pagination justify-content-center">
                         <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                            <a class="page-link" th:href="@{/guestbook/boardgames(page=${currentPage - 1}, keyword=${keyword}, sortOrder=${sortOrder}, tags=${tags})}" aria-label="Previous">
+                            <a class="page-link" th:href="@{/guestbook/boardgames(page=${currentPage - 1}, keyword=${keyword}, sortOrder=${sortOrder}, tags=${tags})}" aria-label="이전">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
@@ -184,7 +191,7 @@
                             <a class="page-link" th:href="@{/guestbook/boardgames(page=${i}, keyword=${keyword}, sortOrder=${sortOrder}, tags=${tags})}" th:text="${i + 1}">1</a>
                         </li>
                         <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                            <a class="page-link" th:href="@{/guestbook/boardgames(page=${currentPage + 1}, keyword=${keyword}, sortOrder=${sortOrder}, tags=${tags})}" aria-label="Next">
+                            <a class="page-link" th:href="@{/guestbook/boardgames(page=${currentPage + 1}, keyword=${keyword}, sortOrder=${sortOrder}, tags=${tags})}" aria-label="다음">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
@@ -200,6 +207,7 @@
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // 태그 선택 상태 초기화
         const selectedTags = new URLSearchParams(window.location.search).get('tags');
         if (selectedTags) {
             const tagArray = selectedTags.split(',');
@@ -217,6 +225,7 @@
         document.getElementById('selectedTags').value = selectedTags.join(',');
     }
 </script>
+
 </body>
 
 </html>

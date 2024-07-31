@@ -48,7 +48,8 @@ public class BoardGame {
     @Column(name = "B_G_GAMETITLE")
     private String gameTitle;
 
-
+    @Column(name = "B_G_SCORE", precision = 5, scale = 2)
+    private Double score;
 
     @Transient
     private String formattedDate;  // 포맷된 날짜 문자열

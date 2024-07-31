@@ -9,7 +9,6 @@ public interface BoardGameService {
 
     Page<BoardGame> searchByKeywordAndTags(String keyword, String[] tags, String sortOrder, Pageable pageable);
 
-
     BoardGame getBoardGameById(Long id);
 
     BoardGame createBoardGame(BoardGame boardGame);
