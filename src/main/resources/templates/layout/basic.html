@@ -43,7 +43,7 @@
         <div class="list-group list-group-flush">
             <a href="#" class="list-group-item list-group-item-action bg-dark gameBtn" style="color: white;">Games</a>
             <a href="#" class="list-group-item list-group-item-action bg-dark" style="color: white;">News</a>
-            <a href="#" class="list-group-item list-group-item-action bg-dark" style="color: white;">Profile</a>
+            <a th:if="${loggedInUser != null}" href="#" class="list-group-item list-group-item-action bg-dark profileBtn" style="color: white;">Profile</a>
             <a th:if="${loggedInUser == null}" href="#" class="list-group-item list-group-item-action bg-dark loginBtn" style="color: white;">Login</a>
             <a th:if="${loggedInUser != null}" href="#" class="list-group-item list-group-item-action bg-dark logoutBtn" style="color: white;">LogOut</a>
         </div>
@@ -62,9 +62,12 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-                    <div th:if="${loggedInUser != null}">
-                        <p>로그인: <span th:text="${loggedInUser.username}"></span></p>
-                    </div>
+                    <li th:if="${loggedInUser != null}" class="nav-item active">
+                        <a class="nav-link profileBtn" href="#" th:text="${loggedInUser.nickname}  + '님 환영합니다'">
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+
                     <li class="nav-item active">
                         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                     </li>
@@ -110,29 +113,26 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
     $(document).ready(function() {
-      $(".listBtn").click(function() {
-        window.location.href = "/guestbook/list";  // JavaScript에서 페이지 이동
-      });
-    });
+       $(".listBtn").click(function() {
+           window.location.href = "/guestbook/list";  // JavaScript에서 페이지 이동
+       });
 
-     $(document).ready(function() {
-            $(".loginBtn").click(function() {
-                window.location.href = "/Member/login";  // JavaScript에서 페이지 이동
-            });
-        });
+       $(".loginBtn").click(function() {
+           window.location.href = "/Member/loginpage";  // JavaScript에서 페이지 이동
+       });
 
-         $(document).ready(function() {
-            $(".logoutBtn").click(function() {
-                window.location.href = "/Member/logout";
-            });
-        });
+       $(".logoutBtn").click(function() {
+           window.location.href = "/Member/logout";
+       });
 
-    $(document).ready(function() {
-    $(".gameBtn").click(function() {
-        window.location.href = "/guestbook/boardgames";
-    });
-});
+       $(".gameBtn").click(function() {
+           window.location.href = "/guestbook/boardgames";
+       });
 
+       $(".profileBtn").click(function() {
+           window.location.href = "/Member/MyPage";
+       });
+   });
 
 </script>
 

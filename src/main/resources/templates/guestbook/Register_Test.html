@@ -55,6 +55,15 @@
       filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cfd8dc', endColorstr='#b0bec5',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
     }
 
+    .cotn_principal2 {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    height: 100%;
+    background: url('https://i.pinimg.com/originals/e0/97/81/e097814065839fdd1877617ce43e1696.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
     .cont_centrar {
       display: flex;
       align-self: center;
@@ -432,12 +441,17 @@ form {
         document.addEventListener('DOMContentLoaded', function() {
             var errorMessage = /*[[${registrationError}]]*/ '';
             var Message = /*[[${registration}]]*/ '';
+            var login_errorMessage = /*[[${loginError}]]*/ '';
+
             if (errorMessage) {
                 $('#errorModal').modal('show');
             }
             if (Message) {
                 $('#Modal').modal('show');
                 change_to_login();
+            }
+            if (login_errorMessage) {
+                $('#loginerrorModal').modal('show');
             }
         });
         /*]]>*/
@@ -475,7 +489,23 @@ form {
         </div>
     </div>
 </div>
-<div class="cotn_principal">
+<div class="modal fade" id="loginerrorModal" tabindex="-1" role="dialog" aria-labelledby="loginerrorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginerrorModalLabel">로그인 실패</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" th:text="${loginError}"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="cotn_principal2"> <!-- 배경화면 CSS -->
     <div class="cont_centrar">
         <div class="cont_login">
             <div class="cont_info_log_sign_up">
@@ -537,10 +567,10 @@ form {
                             <input type="email" placeholder="Email" id="userEmail" required name="userEmail"/>
                         </div>
                         <div class="form_field">
-                            <input type="text" placeholder="User Nick" id="userNick" required name="userNick" />
+                            <input type="text" placeholder="NickName" id="userNick" required name="userNick" />
                         </div>
                         <div class="form_field">
-                            <input type="text" placeholder="User Id" id="register_username" required name="register_username" />
+                            <input type="text" placeholder="ID" id="register_username" required name="register_username" />
                         </div>
                         <div class="form_field">
                             <input type="password" placeholder="Password" id="userpassword" required onkeyup="checkPasswordMatch();" name="userpassword"/>
