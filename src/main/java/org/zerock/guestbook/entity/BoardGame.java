@@ -21,7 +21,7 @@ public class BoardGame {
     private String writer;
 
     @Column(name = "B_G_WRITERNUM", nullable = false)
-    private Integer writerNum;
+    private Long writerNum;
 
     @Column(name = "B_G_TITLE", nullable = false)
     private String title;

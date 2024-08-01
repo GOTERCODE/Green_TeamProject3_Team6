@@ -7,15 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.zerock.guestbook.entity.BoardGame;
 import org.zerock.guestbook.service.BoardGameService;
 import org.zerock.guestbook.entity.Member;
 import org.zerock.guestbook.service.MemberService;
 
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -123,5 +122,48 @@ public class BoardGameController {
 
 
 
+    @GetMapping("/guestbook/boardgames/create")
+    public String showCreateBoardGameForm(Model model) {
+        model.addAttribute("boardGame", new BoardGame());
+        return "guestbook/create-boardgame";
+    }
+
+    @PostMapping("/guestbook/boardgames")
+    public String createBoardGame(@ModelAttribute BoardGame boardGame, HttpSession session) {
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/Member/loginpage";
+        }
+        boardGame.setWriter(loggedInUser.getUsername()); // 세션의 사용자 이름을 작성자로 설정
+        boardGame.setWriterNum(loggedInUser.getId()); // 세션의 사용자 ID를 작성자 번호로 설정
+
+        // Date 파싱 및 변환
+        if (boardGame.getDate() != null) {
+            try {
+                LocalDateTime date = LocalDateTime.parse(boardGame.getDate().toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+                boardGame.setDate(date);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // 태그를 처리합니다. 콤마로 구분된 문자열로 들어오는 경우
+        String tagsString = boardGame.getTag(); // getTag()가 tags를 반환하는지 확인합니다
+        if (tagsString != null && !tagsString.isEmpty()) {
+            String[] tagsArray = tagsString.split(",");
+            boardGame.setTag(String.join(",", tagsArray)); // 태그를 콤마로 구분된 문자열로 설정
+        }
+
+        boardGameService.createBoardGame(boardGame);
+        return "redirect:/guestbook/boardgames";
+    }
 
 }
+
+
+
+
+
+
+
+

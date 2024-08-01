@@ -115,7 +115,12 @@
                 <img th:src="${boardGame.thumbnail}" class="game-thumbnail" alt="게임 썸네일">
                 <div class="game-info-box">
                     <div class="game-info">
-                        <p class="game-score"><strong>Score:</strong> <span th:text="${boardGame.formattedScore}">0.0</span></p>
+                        <p class="game-score">
+                            <strong>Score:</strong>
+                            <span th:text="${boardGame.formattedScore}">0.0</span>
+                            <span th:text="'(' + ${boardGame.scoreCount} + ')'"> (0) </span>
+                        </p>
+
                         <p class="game-rating">
                             <span th:each="i : ${#numbers.sequence(1, 5)}" th:text="'★'" th:classappend="${i <= boardGame.starRating ? 'text-warning' : 'text-muted'}"></span>
                         </p>

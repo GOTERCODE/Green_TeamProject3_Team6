@@ -43,7 +43,7 @@
 
         /* Swiper Slide Image */
         .swiper-slide img {
-            max-width: 100%; /* Limit the image width */
+            width: 100%;
         }
 
         /* Body */
@@ -67,16 +67,16 @@
 
         /* Card Styles */
         .card {
-            background-color: black; /* Darker background for card */
-            border: 1px solid #444; /* Slightly lighter border */
-            width: 100%; /* Full width of the container */
-            height: 550px; /* Fixed height for the card */
-            display: flex;
-            flex-direction: column;
-            overflow: hidden; /* Hide overflow of the image */
-            position: relative; /* Needed for positioning tags */
-            transition: transform 0.3s ease; /* Smooth transition for hover effect */
-        }
+    background-color: black; /* Darker background for card */
+    border: 1px solid #444; /* Slightly lighter border */
+    width: 100%; /* Full width of the container */
+    height: 550px; /* Fixed height for the card */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Hide overflow of the image */
+    position: relative; /* Needed for positioning tags */
+    transition: transform 0.3s ease; /* Smooth transition for hover effect */
+}
 
         /* Card Hover Effect */
         .card:hover {
@@ -84,23 +84,35 @@
             border: 3px solid #007bff;
         }
 
+/* Card Image Container */
+.card-img-container {
+    width: 100%; /* Full width of the card */
+    height: 80%; /* Adjust height to control the image area */
+    overflow: hidden; /* Hide overflow of the image */
+    display: flex; /* Center the image inside the container */
+    align-items: flex-start; /* Align image at the top */
+}
+
+
         /* Card Image Styles */
-        .card-img-top {
-            width: 100%; /* Full width of the card */
-            height: 80%; /* Adjust height to control the image area */
-            object-fit: cover; /* Maintain aspect ratio */
-        }
+.card-img-top {
+    width: 100%; /* Full width of the container */
+    height: 100%; /* Full height of the container */
+    display: block; /* Ensure the image is a block element */
+}
+
+
 
         /* Card Body Styles */
-        .card-body {
-            color: white; /* Text color in card body */
-            background-color: black; /* Background color matches card */
-            height: 40%; /* Fixed height for the card body */
-            display: flex;
-            flex-direction: column;
-            justify-content: center; /* Center the content vertically */
-            text-align: center; /* Center the text */
-        }
+.card-body {
+    color: white; /* Text color in card body */
+    background-color: black; /* Background color matches card */
+    height: 20%; /* Adjust height to fit the remaining space */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center the content vertically */
+    text-align: center; /* Center the text */
+}
 
         /* Tags Overlay */
         .card-tags {
@@ -163,7 +175,9 @@
                         <div class="col-lg-4 col-md-6 mb-4" th:each="game : ${bestScoreGames}">
                             <a th:href="@{/guestbook/boardgames/{gno}(gno=${game.gno})}" class="card-link">
                                 <div class="card">
-                                    <img th:src="${game.thumbnail}" class="card-img-top" alt="Game Image">
+                                    <div class="card-img-container">
+                                        <img th:src="${game.thumbnail}" class="card-img-top" alt="Game Image">
+                                    </div>
                                     <div class="card-body">
                                         <h5 class="card-title" th:text="${game.title}">Game Title</h5>
                                         <p class="card-text" th:text="'SCORE ' + ${game.formattedScore} + ' ( ' + ${game.scoreCount} + ' )'"></p>
@@ -177,6 +191,7 @@
                                         <div class="tag" th:each="tag : ${game.tag}" th:text="${tag}"></div>
                                     </div>
                                 </div>
+
                             </a>
                         </div>
                     </div>
@@ -190,7 +205,9 @@
                         <div class="col-lg-4 col-md-6 mb-4" th:each="game : ${newGames}">
                             <a th:href="@{/guestbook/boardgames/{gno}(gno=${game.gno})}" class="card-link">
                                 <div class="card">
-                                    <img th:src="${game.thumbnail}" class="card-img-top" alt="Game Image">
+                                    <div class="card-img-container">
+                                        <img th:src="${game.thumbnail}" class="card-img-top" alt="Game Image">
+                                    </div>
                                     <div class="card-body">
                                         <h5 class="card-title" th:text="${game.title}">Game Title</h5>
                                         <p class="card-text" th:text="'SCORE ' + ${game.formattedScore} + ' ( ' + ${game.scoreCount} + ' )'"></p>
@@ -204,6 +221,7 @@
                                         <div class="tag" th:each="tag : ${game.tag}" th:text="${tag}"></div>
                                     </div>
                                 </div>
+
                             </a>
                         </div>
                     </div>
