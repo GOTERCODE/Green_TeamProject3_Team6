@@ -56,6 +56,7 @@ public class GuestbookServiceImpl implements GuestbookService {
                 .thumbnail(entity.getThumbnail())
                 .formattedScore(formattedScore)
                 .starRating(score)
+                .tag(entity.getTag())
                 .build();
     }
 }

@@ -12,21 +12,17 @@
     <link th:href="@{/css/simple-sidebar.css}" rel="stylesheet">
     <title>Simple Sidebar - Start Bootstrap Template</title>
 
-    <!-- Include jQuery 모달-->
+    <!-- Include jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <!-- Include Popper.js for Bootstrap tooltips and popovers 모달-->
+    <!-- Include Popper.js for Bootstrap tooltips and popovers -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <!-- Include Bootstrap JS 모달-->
+    <!-- Include Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <!-- Bootstrap core CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/simple-sidebar.css" rel="stylesheet">
-
-    <!-- 슬라이드 -->
+    <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/css/swiper.min.css">
-    <style type="text/css">
 
+    <style type="text/css">
         /* Swiper Container */
         .swiper-container {
             width: 95%;
@@ -35,6 +31,7 @@
             background-color: black;
             margin: 0 auto; /* Center the container */
         }
+
         /* Swiper Slide */
         .swiper-slide {
             text-align: center;
@@ -43,13 +40,11 @@
             justify-content: center; /* Horizontal centering */
             background-color: black; /* Add background color for slide */
         }
+
         /* Swiper Slide Image */
         .swiper-slide img {
-
             max-width: 100%; /* Limit the image width */
         }
-
-
 
         /* Body */
         body {
@@ -71,107 +66,118 @@
         }
 
         /* Card Styles */
-.card {
-    background-color: black; /* Darker background for card */
-    border: 1px solid #444; /* Slightly lighter border */
-    width: 100%; /* Full width of the container */
-    height: 550px; /* Fixed height for the card */
-    display: flex;
-    flex-direction: column;
-    overflow: hidden; /* Hide overflow of the image */
-}
-
-/* Card Image Styles */
-.card-img-top {
-    width: 100%; /* Full width of the card */
-    height: 80%; /* Adjust height to control the image area */
-
-}
-
-/* Card Body Styles */
-.card-body {
-    color: white; /* Text color in card body */
-    background-color: black; /* Background color matches card */
-    height: 40%; /* Fixed height for the card body */
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Center the content vertically */
-    text-align: center; /* Center the text */
-}
-
-        /* Container Fluid */
-        .container-fluid {
-            background-color: black; /* Ensure container background matches theme */
+        .card {
+            background-color: black; /* Darker background for card */
+            border: 1px solid #444; /* Slightly lighter border */
+            width: 100%; /* Full width of the container */
+            height: 550px; /* Fixed height for the card */
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Hide overflow of the image */
+            position: relative; /* Needed for positioning tags */
+            transition: transform 0.3s ease; /* Smooth transition for hover effect */
         }
 
+        /* Card Hover Effect */
+        .card:hover {
+            transform: scale(1.05); /* Slight zoom effect on hover */
+            border: 3px solid #007bff;
+        }
+
+        /* Card Image Styles */
+        .card-img-top {
+            width: 100%; /* Full width of the card */
+            height: 80%; /* Adjust height to control the image area */
+            object-fit: cover; /* Maintain aspect ratio */
+        }
+
+        /* Card Body Styles */
+        .card-body {
+            color: white; /* Text color in card body */
+            background-color: black; /* Background color matches card */
+            height: 40%; /* Fixed height for the card body */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center the content vertically */
+            text-align: center; /* Center the text */
+        }
+
+        /* Tags Overlay */
+        .card-tags {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+            color: white;
+            opacity: 0;
+            transition: opacity 0.3s ease; /* Smooth transition for hover effect */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 1rem; /* Add some padding */
+        }
+
+        /* Show tags on hover */
+        .card:hover .card-tags {
+            opacity: 1; /* Show tags on hover */
+        }
     </style>
-
-
 </head>
 
 <body>
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
     <th:block th:fragment="content">
-
         <h1 class="mt-4" align="center">Main</h1>
 
-
-        <div>
-
-
-            <!-- 슬라이드 -->
-            <div class="container-fluid" style="margin-top: 3rem; margin-bottom: 3rem;">
-                <div class="swiper-container">
-                    <div class="swiper-wrapper">
-
-                        <div class="swiper-slide"><img
-                                src="https://cdna.artstation.com/p/assets/images/images/011/687/244/large/hamnevegen-ron2.jpg?1530861550">
-                        </div>
-                        <div class="swiper-slide"><img
-                                src="https://wallpapers.com/images/high/pubg-banner-2048-x-1152-background-t9uinvbt4bsr71qv.webp">
-                        </div>
-                        <div class="swiper-slide"><img src="https://via.placeholder.com/150"></div>
-                        <div class="swiper-slide"><img src="https://via.placeholder.com/150"></div>
-                        <div class="swiper-slide"><img src="https://via.placeholder.com/150"></div>
-
-
-                    </div>
-
-                    <!-- 네비게이션 -->
-                    <div class="swiper-button-next"></div><!-- 다음 버튼 (오른쪽에 있는 버튼) -->
-                    <div class="swiper-button-prev"></div><!-- 이전 버튼 -->
-
-                    <!-- 페이징 -->
-                    <div class="swiper-pagination"></div>
+        <!-- 슬라이드 -->
+        <div class="container-fluid" style="margin-top: 3rem; margin-bottom: 3rem;">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><img src="https://cdna.artstation.com/p/assets/images/images/011/687/244/large/hamnevegen-ron2.jpg?1530861550"></div>
+                    <div class="swiper-slide"><img src="https://wallpapers.com/images/high/pubg-banner-2048-x-1152-background-t9uinvbt4bsr71qv.webp"></div>
+                    <div class="swiper-slide"><img src="https://via.placeholder.com/150"></div>
+                    <div class="swiper-slide"><img src="https://via.placeholder.com/150"></div>
+                    <div class="swiper-slide"><img src="https://via.placeholder.com/150"></div>
                 </div>
+
+                <!-- 네비게이션 -->
+                <div class="swiper-button-next"></div><!-- 다음 버튼 -->
+                <div class="swiper-button-prev"></div><!-- 이전 버튼 -->
+
+                <!-- 페이징 -->
+                <div class="swiper-pagination"></div>
             </div>
-
-
         </div>
+
+        <!-- 본문 -->
         <div class="d-flex" id="wrapper">
-            <!-- 본문 -->
-
-            <div class="container-fluid"
-                 style="margin-top: 3rem; margin-bottom: 3rem; margin-left: 3rem; margin-right: 3rem;">
-
+            <div class="container-fluid" style="margin-top: 3rem; margin-bottom: 3rem; margin-left: 3rem; margin-right: 3rem;">
                 <!-- 베스트 평점 게임 섹션 -->
                 <div class="mb-5">
                     <h1 class="mt-4">BEST SCORE GAMES</h1>
                     <p>평점 상위 데이터 출력</p>
                     <div class="row">
                         <div class="col-lg-4 col-md-6 mb-4" th:each="game : ${bestScoreGames}">
-                            <div class="card">
-                                <img th:src="${game.thumbnail}" class="card-img-top" alt="Game Image">
-                                <div class="card-body">
-                                    <h5 class="card-title" th:text="${game.title}">Game Title</h5>
-                                    <p class="card-text" th:text="'SCORE ' + ${game.formattedScore} + ' ( ' + ${game.scoreCount} + ' )'" />
-
-                                    <p class="card-text card-rating">
-                                <span th:each="i : ${#numbers.sequence(1, 5)}" th:text="'★'"
-                                      th:classappend="${i <= game.starRating ? 'text-warning' : 'text-muted'}"></span>
-                                    </p>
+                            <a th:href="@{/guestbook/boardgames/{gno}(gno=${game.gno})}" class="card-link">
+                                <div class="card">
+                                    <img th:src="${game.thumbnail}" class="card-img-top" alt="Game Image">
+                                    <div class="card-body">
+                                        <h5 class="card-title" th:text="${game.title}">Game Title</h5>
+                                        <p class="card-text" th:text="'SCORE ' + ${game.formattedScore} + ' ( ' + ${game.scoreCount} + ' )'"></p>
+                                        <p class="card-text card-rating">
+                                            <span th:each="i : ${#numbers.sequence(1, 5)}" th:text="'★'" th:classappend="${i <= game.starRating ? 'text-warning' : 'text-muted'}"></span>
+                                        </p>
+                                    </div>
+                                    <!-- 태그 오버레이 -->
+                                    <div class="card-tags">
+                                        <!-- 여기에 태그나 추가 정보를 넣습니다. -->
+                                        <div class="tag" th:each="tag : ${game.tag}" th:text="${tag}"></div>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -182,25 +188,29 @@
                     <p>등록일 최근순 상위 게임 출력</p>
                     <div class="row">
                         <div class="col-lg-4 col-md-6 mb-4" th:each="game : ${newGames}">
-                            <div class="card">
-                                <img th:src="${game.thumbnail}" class="card-img-top" alt="Game Image">
-                                <div class="card-body">
-                                    <h5 class="card-title" th:text="${game.title}">Game Title</h5>
-                                    <p class="card-text" th:text="'SCORE ' + ${game.formattedScore} + ' ( ' + ${game.scoreCount} + ' )'" />
-
-                                    <p class="card-text card-rating">
-                                <span th:each="i : ${#numbers.sequence(1, 5)}" th:text="'★'"
-                                      th:classappend="${i <= game.starRating ? 'text-warning' : 'text-muted'}"></span>
-                                    </p>
+                            <a th:href="@{/guestbook/boardgames/{gno}(gno=${game.gno})}" class="card-link">
+                                <div class="card">
+                                    <img th:src="${game.thumbnail}" class="card-img-top" alt="Game Image">
+                                    <div class="card-body">
+                                        <h5 class="card-title" th:text="${game.title}">Game Title</h5>
+                                        <p class="card-text" th:text="'SCORE ' + ${game.formattedScore} + ' ( ' + ${game.scoreCount} + ' )'"></p>
+                                        <p class="card-text card-rating">
+                                            <span th:each="i : ${#numbers.sequence(1, 5)}" th:text="'★'" th:classappend="${i <= game.starRating ? 'text-warning' : 'text-muted'}"></span>
+                                        </p>
+                                    </div>
+                                    <!-- 태그 오버레이 -->
+                                    <div class="card-tags">
+                                        <!-- 여기에 태그나 추가 정보를 넣습니다. -->
+                                        <div class="tag" th:each="tag : ${game.tag}" th:text="${tag}"></div>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- /본문 -->
         </div>
-        <!-- /#wrapper -->
 
         <div>
             <h1 class="mt-4">BEST NEWS</h1>
@@ -209,41 +219,31 @@
     </th:block>
 </th:block>
 
-
 <!-- Bootstrap core JavaScript -->
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
-<!-- 슬라이드 -->
+<!-- Swiper JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/js/swiper.min.js"></script>
 <script>
-
     new Swiper('.swiper-container', {
-
-        slidesPerView : 1, // 동시에 보여줄 슬라이드 갯수
-        spaceBetween : 30, // 슬라이드간 간격
-        slidesPerGroup : 1, // 그룹으로 묶을 수, slidesPerView 와 같은 값을 지정하는게 좋음
-
-        // 그룹수가 맞지 않을 경우 빈칸으로 메우기
-        // 3개가 나와야 되는데 1개만 있다면 2개는 빈칸으로 채워서 3개를 만듬
-        loopFillGroupWithBlank : true,
-
-        loop : true, // 무한 반복
-
-        pagination : { // 페이징
-            el : '.swiper-pagination',
-            clickable : true, // 페이징을 클릭하면 해당 영역으로 이동, 필요시 지정해 줘야 기능 작동
+        slidesPerView: 1, // 동시에 보여줄 슬라이드 갯수
+        spaceBetween: 30, // 슬라이드간 간격
+        slidesPerGroup: 1, // 그룹으로 묶을 수, slidesPerView 와 같은 값을 지정하는게 좋음
+        loopFillGroupWithBlank: true, // 그룹수가 맞지 않을 경우 빈칸으로 메우기
+        loop: true, // 무한 반복
+        pagination: { // 페이징
+            el: '.swiper-pagination',
+            clickable: true, // 페이징을 클릭하면 해당 영역으로 이동
         },
-        navigation : { // 네비게이션
-            nextEl : '.swiper-button-next', // 다음 버튼 클래스명
-            prevEl : '.swiper-button-prev', // 이번 버튼 클래스명
+        navigation: { // 네비게이션
+            nextEl: '.swiper-button-next', // 다음 버튼 클래스명
+            prevEl: '.swiper-button-prev', // 이전 버튼 클래스명
         },
     });
-
 </script>
-
 </body>
 
 </html>

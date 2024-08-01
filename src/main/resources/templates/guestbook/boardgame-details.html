@@ -23,11 +23,29 @@
             gap: 20px; /* 두 요소 사이의 간격 조정 */
         }
 
-        .comment-container {
-            border: 2px solid white;
+        .sub-container {
+            display: flex;
+            justify-content: flex-start; /* 왼쪽 정렬 */
+            align-items: flex-start; /* 상단 정렬 */
             padding: 20px;
-            background-color: #333;
-            width: 100%;
+            gap: 20px; /* 두 요소 사이의 간격 조정 */
+        }
+
+        .comment-container {
+            border: 2px solid white; /* 테두리 두께, 스타일, 색상 조절 */
+            padding: 20px;
+            background-color: #333; /* 배경 색상 조절 */
+            width: 75%; /* 너비 조절 */
+
+        }
+
+        .score-container{
+            border: 2px solid white; /* 테두리 두께, 스타일, 색상 조절 */
+            padding: 20px;
+            background-color: #333; /* 배경 색상 조절 */
+            width: 25%; /* 너비 조절 */
+            display: flex;
+            flex-direction: column;
 
         }
 
@@ -80,6 +98,7 @@
         .back-button {
             margin-top: 20px;
         }
+
     </style>
 </head>
 
@@ -107,12 +126,31 @@
                 <a href="#" class="btn btn-secondary back-button" th:href="@{/guestbook/boardgames}">Back to List</a>
             </div>
         </div>
+        <div class="sub-container">
+
         <div class="comment-container">
             <p>Comment Output</p>
             <p>Comment Output</p>
             <p>Comment Output</p>
             <p>Comment Output</p>
             <p>Comment Output</p>
+        </div>
+            <div class="score-container">
+                <p>평가하기</p>
+                <p>내 평가 점수 : </p>
+
+                <select class="score-select" id="score" name="score">
+
+                    <option value="5">★★★★★</option>
+                    <option value="4">★★★★☆</option>
+                    <option value="3">★★★☆☆</option>
+                    <option value="2">★★☆☆☆</option>
+                    <option value="1">★☆☆☆☆</option>
+
+                </select>
+                <button>평가등록</button>
+
+            </div>
         </div>
     </th:block>
 </th:block>
