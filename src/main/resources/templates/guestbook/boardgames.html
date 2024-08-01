@@ -134,8 +134,8 @@
                     <div class="d-flex mb-3 gap-2">
                         <input type="text" name="keyword" class="form-control" placeholder="제목으로 검색" th:value="${keyword}">
                         <select class="custom-select" id="sortOrder" name="sortOrder">
-                            <option value="dateDesc" th:selected="${sortOrder == 'dateDesc'}">최근순</option>
-                            <option value="dateAsc" th:selected="${sortOrder == 'dateAsc'}">오래된순</option>
+                            <option value="dateDesc" th:selected="${sortOrder == 'dateDesc'}">발매일 최근순</option>
+                            <option value="dateAsc" th:selected="${sortOrder == 'dateAsc'}">발매일 오래된순</option>
                             <option value="scoreDesc" th:selected="${sortOrder == 'scoreDesc'}">높은 평점순</option>
                             <option value="scoreAsc" th:selected="${sortOrder == 'scoreAsc'}">낮은 평점순</option>
                         </select>
@@ -147,6 +147,7 @@
                         <div class="tag" data-tag="공포" onclick="selectTag(this)">공포</div>
                         <div class="tag" data-tag="FPS" onclick="selectTag(this)">FPS</div>
                         <div class="tag" data-tag="RPG" onclick="selectTag(this)">RPG</div>
+                        <div class="tag" data-tag="RTS" onclick="selectTag(this)">RTS</div>
                         <div class="tag" data-tag="PVP" onclick="selectTag(this)">PVP</div>
                         <div class="tag" data-tag="PVE" onclick="selectTag(this)">PVE</div>
                         <div class="tag" data-tag="협동" onclick="selectTag(this)">협동</div>
@@ -155,6 +156,15 @@
                         <div class="tag" data-tag="어드벤쳐" onclick="selectTag(this)">어드벤쳐</div>
                         <div class="tag" data-tag="액션" onclick="selectTag(this)">액션</div>
                         <div class="tag" data-tag="추리" onclick="selectTag(this)">추리</div>
+                        <div class="tag" data-tag="샌드박스" onclick="selectTag(this)">샌드박스</div>
+                        <div class="tag" data-tag="시뮬레이션" onclick="selectTag(this)">시뮬레이션</div>
+                        <div class="tag" data-tag="로그라이크" onclick="selectTag(this)">로그라이크</div>
+                        <div class="tag" data-tag="생존" onclick="selectTag(this)">생존</div>
+                        <div class="tag" data-tag="스포츠" onclick="selectTag(this)">스포츠</div>
+                        <div class="tag" data-tag="레이싱" onclick="selectTag(this)">레이싱</div>
+                        <div class="tag" data-tag="음악" onclick="selectTag(this)">음악</div>
+                        <div class="tag" data-tag="오픈월드" onclick="selectTag(this)">오픈월드</div>
+                        <div class="tag" data-tag="카드게임" onclick="selectTag(this)">카드게임</div>
                     </div>
                     <input type="hidden" id="selectedTags" name="tags" th:value="${tags}">
                     <div class="submit-container">
@@ -167,18 +177,21 @@
             <div class="container mt-5">
                 <div class="row">
                     <div class="col-lg-3 col-md-4 col-sm-6 mb-4" th:each="game : ${boardGames}">
-                        <div class="card">
-                            <img th:src="${game.thumbnail}" class="card-img-top" alt="게임 썸네일">
-                            <div class="card-body">
-                                <h5 class="card-title" th:text="${game.title}">게임 제목</h5>
-                                <p class="card-text" th:text="'SCORE ' + ${game.formattedScore} + ' ( ' + ${game.scoreCount} + ' )'"></p>
-                                <p class="card-text card-rating">
-                                    <span th:each="i : ${#numbers.sequence(1, 5)}" th:text="'★'"
-                                          th:classappend="${i <= game.starRating ? 'text-warning' : 'text-muted'}"></span>
-                                </p>
+                        <a th:href="@{/guestbook/boardgames/{id}(id=${game.id})}" class="card-link">
+                            <div class="card">
+                                <img th:src="${game.thumbnail}" class="card-img-top" alt="게임 썸네일">
+                                <div class="card-body">
+                                    <h5 class="card-title" th:text="${game.title}">게임 제목</h5>
+                                    <p class="card-text" th:text="'SCORE ' + ${game.formattedScore} + ' ( ' + ${game.scoreCount} + ' )'"></p>
+                                    <p class="card-text card-rating">
+                    <span th:each="i : ${#numbers.sequence(1, 5)}" th:text="'★'"
+                          th:classappend="${i <= game.starRating ? 'text-warning' : 'text-muted'}"></span>
+                                    </p>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
+
                 </div>
                 <nav aria-label="Page navigation">
                     <ul class="pagination justify-content-center">

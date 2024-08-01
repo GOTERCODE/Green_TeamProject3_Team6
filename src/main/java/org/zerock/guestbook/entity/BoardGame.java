@@ -56,6 +56,7 @@ public class BoardGame {
 
 
 
+
     @Transient
     private String formattedScore;  // 소수점 포맷된 점수
 
@@ -82,3 +83,4 @@ public class BoardGame {
     @Transient
     private Double scoreRatio;
 }
+
