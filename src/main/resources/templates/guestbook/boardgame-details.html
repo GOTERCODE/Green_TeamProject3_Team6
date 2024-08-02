@@ -105,6 +105,15 @@
             flex-direction: column;
             align-items: center; /* 중앙 정렬 */
         }
+
+        .text-warning {
+    color: #ffc107; /* 황금색 */
+}
+
+.text-muted {
+    color: #6c757d; /* 회색 */
+}
+
     </style>
 </head>
 
@@ -170,9 +179,9 @@
                 <div th:if="${userScore != null}">
                     <p>나의 등록 평점:
                         <span>
-           <span th:each="i : ${#numbers.sequence(1, 5)}"
-                 th:text="'★'"
-                 th:classappend="${i <= boardGame.starRating ? 'text-warning' : 'text-muted'}"></span>
+            <span th:each="i : ${#numbers.sequence(1, 5)}"
+                  th:text="${userScore >= i ? '★' : '☆'}"
+                  th:classappend="${userScore >= i ? 'text-warning' : 'text-muted'}"></span>
         </span>
                     </p>
 
