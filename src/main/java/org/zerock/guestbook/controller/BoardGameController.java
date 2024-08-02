@@ -98,7 +98,7 @@ public class BoardGameController {
     }
 
     @GetMapping("/guestbook/boardgames/{id}")
-    public String getBoardGameDetails(@PathVariable Long id, Model model) {
+    public String getBoardGameDetails(@PathVariable Long id, Model model, HttpSession session) {
         BoardGame boardGame = boardGameService.getBoardGameById(id);
         if (boardGame == null) {
             return "redirect:/guestbook/boardgames";
@@ -116,6 +116,9 @@ public class BoardGameController {
         boardGame.setScoreRatio(boardGame.getScoreSum() != null && boardGame.getScoreCount() != null ?
                 boardGame.getScoreSum() / (double) boardGame.getScoreCount() : 0.0);
 
+
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+        model.addAttribute("loggedInUser", loggedInUser);
         model.addAttribute("boardGame", boardGame);
         return "guestbook/boardgame-details"; // Ensure this matches the template filename
     }
@@ -157,6 +160,56 @@ public class BoardGameController {
         boardGameService.createBoardGame(boardGame);
         return "redirect:/guestbook/boardgames";
     }
+
+
+    @GetMapping("/guestbook/boardgames/edit/{id}")
+    public String showEditBoardGameForm(@PathVariable Long id, Model model) {
+        BoardGame boardGame = boardGameService.getBoardGameById(id);
+        if (boardGame == null) {
+            return "redirect:/guestbook/boardgames";
+        }
+
+        // 날짜를 문자열로 포맷
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        String formattedDate = boardGame.getDate() != null ? boardGame.getDate().format(formatter) : "";
+
+        model.addAttribute("boardGame", boardGame);
+        model.addAttribute("formattedDate", formattedDate);
+        return "guestbook/edit-boardgame";
+    }
+
+
+    @PostMapping("/guestbook/boardgames/edit")
+    public String updateBoardGame(@ModelAttribute BoardGame boardGame, HttpSession session) {
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/Member/loginpage";
+        }
+        boardGame.setWriter(loggedInUser.getUsername()); // 세션의 사용자 이름을 작성자로 설정
+        boardGame.setWriterNum(loggedInUser.getId()); // 세션의 사용자 ID를 작성자 번호로 설정
+
+        // Date 파싱 및 변환
+        if (boardGame.getDate() != null) {
+            try {
+                LocalDateTime date = LocalDateTime.parse(boardGame.getDate().toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+                boardGame.setDate(date);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // 태그를 처리합니다. 콤마로 구분된 문자열로 들어오는 경우
+        String tagsString = boardGame.getTag(); // getTag()가 tags를 반환하는지 확인합니다
+        if (tagsString != null && !tagsString.isEmpty()) {
+            String[] tagsArray = tagsString.split(",");
+            boardGame.setTag(String.join(",", tagsArray)); // 태그를 콤마로 구분된 문자열로 설정
+        }
+
+        boardGameService.createBoardGame(boardGame);
+        return "redirect:/guestbook/boardgames";
+    }
+
+
 
 }
 

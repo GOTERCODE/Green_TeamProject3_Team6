@@ -3,6 +3,9 @@ package org.zerock.guestbook.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Table(name = "board_game")
@@ -45,6 +48,14 @@ public class BoardGame {
     @Column(name = "B_G_TAG")
     private String tag;
 
+    @Transient
+    public List<String> getTagList() {
+        if (tag != null && !tag.isEmpty()) {
+            return Arrays.asList(tag.split(","));
+        }
+        return Collections.emptyList();
+    }
+
     @Column(name = "B_G_GAMETITLE")
     private String gameTitle;
 
@@ -83,4 +94,6 @@ public class BoardGame {
     @Transient
     private Double scoreRatio;
 }
+
+
 

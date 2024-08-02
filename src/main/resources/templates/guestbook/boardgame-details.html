@@ -126,6 +126,12 @@
                     </div>
                 </div>
                 <a href="#" class="btn btn-secondary back-button" th:href="@{/guestbook/boardgames}">Back to List</a>
+
+                <div th:if="${loggedInUser != null and loggedInUser.isAdmin}">
+                    <br>
+                    <a th:href="@{/guestbook/boardgames/edit/{id}(id=${boardGame.id})}"
+                       class="btn btn-primary">수정하기 (Admin)</a>
+                </div>
             </div>
         </div>
         <div class="sub-container">
@@ -148,7 +154,9 @@
                 </select>
                 <button>평가등록</button>
             </div>
-        </div>
+            </div>
+
+
     </th:block>
 </th:block>
 </body>

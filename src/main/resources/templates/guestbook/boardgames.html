@@ -157,7 +157,7 @@
         <!-- 관리자만 볼 수 있는 버튼 -->
         <div class="container mt-3">
             <div th:if="${loggedInUser != null and loggedInUser.isAdmin}">
-                <a href="/guestbook/boardgames/create" class="btn btn-primary" style="background-color: black; color: white;">게임 등록하기</a>
+                <a href="/guestbook/boardgames/create" class="btn btn-primary" style="background-color: black; color: white;">게임 등록하기 (Admin)</a>
             </div>
         </div>
 

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/simple-sidebar.css}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+
+    <title>Edit Board Game</title>
+
+    <style type="text/css">
+        <style type="text/css">
+        body {
+            background-color: black;
+            color: white;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .tag-container {
+            border: 2px solid white;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .tag {
+            background-color: #444;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .tag.selected {
+            background-color: #007bff;
+        }
+
+        .content-container {
+            border: 2px solid white;
+            padding: 20px;
+            background-color: #333;
+            width: 75%;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            color: black;
+        }
+
+        .input-container {
+            border: 2px solid white;
+            padding: 20px;
+            background-color: #333;
+            width: 25%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .btn-custom {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            margin: 0;
+            border: 1px solid transparent;
+            border-radius: 0.25rem;
+            font-size: 1rem;
+            font-weight: 400;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            text-decoration: none;
+            background-color: black;
+            color: white;
+            border-color: black;
+        }
+
+        .btn-custom:hover {
+            background-color: #333;
+            border-color: #222;
+        }
+
+        .btn-custom:focus {
+            outline: none;
+        }
+
+        .btn-custom-reset {
+            background-color: red;
+            border-color: red;
+        }
+
+        .btn-custom-reset:hover {
+            background-color: darkred;
+            border-color: darkred;
+        }
+    </style>
+
+</head>
+
+<body>
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
+    <th:block th:fragment="content">
+        <h1>게임 수정</h1>
+        <form action="/guestbook/boardgames/edit" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="id" name="id" th:value="${boardGame.id}" />
+            <div class="main-container">
+                <div class="content-container">
+                    <label for="content">내용:</label>
+                    <textarea id="content" name="content" th:text="${boardGame.content}"></textarea><br/>
+                </div>
+
+                <div class="input-container">
+                    <label for="title">게임 제목:</label>
+                    <input type="text" id="title" name="title" th:value="${boardGame.title}" required /><br/>
+
+                    <label for="thumbnail">썸네일 사진 URL:</label>
+                    <input type="text" id="thumbnail" name="thumbnail" th:value="${boardGame.thumbnail}" /><br/>
+
+                    <label for="date">발매일:</label>
+                    <input type="datetime-local" id="date" name="date" th:value="${formattedDate}" /><br/>
+
+                    <label for="tag">태그:</label>
+                    <div class="tag-container">
+                        <div class="tag" data-tag="싱글플레이어"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), '싱글플레이어') ? 'selected' : ''}"
+                             onclick="selectTag(this)">싱글플레이어</div>
+                        <div class="tag" data-tag="멀티플레이어"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), '멀티플레이어') ? 'selected' : ''}"
+                             onclick="selectTag(this)">멀티플레이어</div>
+                        <div class="tag" data-tag="전략"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), '전략') ? 'selected' : ''}"
+                             onclick="selectTag(this)">전략</div>
+                        <div class="tag" data-tag="공포"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), '공포') ? 'selected' : ''}"
+                             onclick="selectTag(this)">공포</div>
+                        <div class="tag" data-tag="FPS"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), 'FPS') ? 'selected' : ''}"
+                             onclick="selectTag(this)">FPS</div>
+                        <div class="tag" data-tag="RPG"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), 'RPG') ? 'selected' : ''}"
+                             onclick="selectTag(this)">RPG</div>
+                        <div class="tag" data-tag="RTS"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), 'RTS') ? 'selected' : ''}"
+                             onclick="selectTag(this)">RTS</div>
+                        <div class="tag" data-tag="PVP"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), 'PVP') ? 'selected' : ''}"
+                             onclick="selectTag(this)">PVP</div>
+                        <div class="tag" data-tag="PVE"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), 'PVE') ? 'selected' : ''}"
+                             onclick="selectTag(this)">PVE</div>
+                        <div class="tag" data-tag="협동"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), '협동') ? 'selected' : ''}"
+                             onclick="selectTag(this)">협동</div>
+                        <div class="tag" data-tag="경쟁"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), '경쟁') ? 'selected' : ''}"
+                             onclick="selectTag(this)">경쟁</div>
+                        <div class="tag" data-tag="육성"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), '육성') ? 'selected' : ''}"
+                             onclick="selectTag(this)">육성</div>
+                        <div class="tag" data-tag="어드벤쳐"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), '어드벤쳐') ? 'selected' : ''}"
+                             onclick="selectTag(this)">어드벤쳐</div>
+                        <div class="tag" data-tag="액션"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), '액션') ? 'selected' : ''}"
+                             onclick="selectTag(this)">액션</div>
+                        <div class="tag" data-tag="추리"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), '추리') ? 'selected' : ''}"
+                             onclick="selectTag(this)">추리</div>
+                        <div class="tag" data-tag="샌드박스"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), '샌드박스') ? 'selected' : ''}"
+                             onclick="selectTag(this)">샌드박스</div>
+                        <div class="tag" data-tag="시뮬레이션"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), '시뮬레이션') ? 'selected' : ''}"
+                             onclick="selectTag(this)">시뮬레이션</div>
+                        <div class="tag" data-tag="로그라이크"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), '로그라이크') ? 'selected' : ''}"
+                             onclick="selectTag(this)">로그라이크</div>
+                        <div class="tag" data-tag="생존"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), '생존') ? 'selected' : ''}"
+                             onclick="selectTag(this)">생존</div>
+                        <div class="tag" data-tag="스포츠"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), '스포츠') ? 'selected' : ''}"
+                             onclick="selectTag(this)">스포츠</div>
+                        <div class="tag" data-tag="레이싱"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), '레이싱') ? 'selected' : ''}"
+                             onclick="selectTag(this)">레이싱</div>
+                        <div class="tag" data-tag="음악"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), '음악') ? 'selected' : ''}"
+                             onclick="selectTag(this)">음악</div>
+                        <div class="tag" data-tag="오픈월드"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), '오픈월드') ? 'selected' : ''}"
+                             onclick="selectTag(this)">오픈월드</div>
+                        <div class="tag" data-tag="카드게임"
+                             th:classappend="${boardGame.getTagList() != null && #lists.contains(boardGame.getTagList(), '카드게임') ? 'selected' : ''}"
+                             onclick="selectTag(this)">카드게임</div>
+                    </div>
+
+
+                    <input type="hidden" id="selectedTags" name="tag" /><br/>
+
+                    <button type="submit" class="btn-custom">Submit</button>
+                    <a href="/guestbook/boardgames" class="btn-custom">Back to list</a>
+                    <button type="reset" class="btn-custom btn-custom-reset">Reset</button>
+                </div>
+            </div>
+        </form>
+    </th:block>
+</th:block>
+
+<!-- jQuery (necessary for Summernote) -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<!-- Summernote JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#content').summernote({
+            height: 650, // Set editor height
+            tabsize: 2,  // Set tab size
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        });
+
+        window.selectTag = function(element) {
+            element.classList.toggle('selected');
+            const selectedTags = Array.from(document.querySelectorAll('.tag.selected')).map(tag => tag.getAttribute('data-tag'));
+            document.getElementById('selectedTags').value = selectedTags.join(',');
+        }
+
+        // Initialize tags based on existing tags
+        const existingTags = document.querySelectorAll('.tag');
+        existingTags.forEach(tag => {
+            if (document.getElementById('selectedTags').value.includes(tag.getAttribute('data-tag'))) {
+                tag.classList.add('selected');
+            }
+        });
+    });
+</script>
+</body>
+
+</html>
