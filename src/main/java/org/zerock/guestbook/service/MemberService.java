@@ -119,4 +119,14 @@ public class MemberService {
         }
     }
 
+
+//    public Member findById(String id) {
+//        return memberRepository.findById(id).orElse(null);
+//    }
+
+    public Member findByUsername(String username) {
+        return memberRepository.findByUsername(username);
+    }
+
+
 }

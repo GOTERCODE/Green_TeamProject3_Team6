@@ -5,7 +5,7 @@ import org.zerock.guestbook.entity.Member;
 
 import java.util.Optional;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<Member, String> {
     Member findByUsername(String username);
 }
 

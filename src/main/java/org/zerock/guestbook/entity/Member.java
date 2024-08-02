@@ -16,7 +16,7 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "M_NUM")
-    private Long id; // MEMBER table's primary key
+    private String id; // MEMBER table's primary key
 
     @Column(name = "M_ID", unique = true, nullable = false)
     private String username; // M_ID column

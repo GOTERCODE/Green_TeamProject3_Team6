@@ -12,12 +12,16 @@ import org.zerock.guestbook.entity.Member;
 import org.zerock.guestbook.service.MemberService;
 
 import jakarta.servlet.http.HttpSession;
+import org.zerock.guestbook.service.UserBoardService;
 
 @RequestMapping("/Member")
 @Controller
 public class MemberController {
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private UserBoardService userboardservice;
 
     @PostMapping("/login")
     public String login(@RequestParam("username") String username,
@@ -76,20 +80,27 @@ public class MemberController {
         return "/guestbook/Register_Test";
     }
 
-    @GetMapping("/MyPage")
-    public String MyPage(HttpSession session,Model model) {
-        // 세션에서 로그인된 사용자 정보 가져오기
-        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
-        model.addAttribute("loggedInUser", loggedInUser);
+     @GetMapping("/MyPage")
+     public String MyPage(HttpSession session,Model model) {
+            Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+            model.addAttribute("loggedInUser", loggedInUser);
 
-        // 로그인 하지 않앗다면 로그인,회원가입 페이지로 리다이렉트
-        if (loggedInUser == null) {
-            return "redirect:/Member/Register_Test";
-        }else{
-            // 마이페이지로 이동
-            return "/guestbook/MyPage";
+            if (loggedInUser == null) {
+                return "redirect:/Member/loginpage";
+            }else{
+                return "/guestbook/MyPage";
         }
 
+    }
+    @GetMapping("/getUserById")
+    public ResponseEntity<Member> getUserById(@RequestParam("id") String id) {
+        Member member = memberService.findByUsername(id);
+       // Board_game bg = userboardservice.board_game(member.getusername());
+        if (member != null) {
+            return ResponseEntity.ok(member);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
 }
