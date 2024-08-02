@@ -8,11 +8,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.zerock.guestbook.entity.BoardGame;
 import org.zerock.guestbook.entity.Member;
 import org.zerock.guestbook.service.MemberService;
-
-import jakarta.servlet.http.HttpSession;
-import org.zerock.guestbook.service.UserBoardService;
+import org.zerock.guestbook.service.UserBoardGameService;
 
 @RequestMapping("/Member")
 @Controller
@@ -21,7 +20,8 @@ public class MemberController {
     private MemberService memberService;
 
     @Autowired
-    private UserBoardService userboardservice;
+    private UserBoardGameService userboardgameservice;
+
 
     @PostMapping("/login")
     public String login(@RequestParam("username") String username,
@@ -92,15 +92,73 @@ public class MemberController {
         }
 
     }
+
+//    @GetMapping("/getUserById")
+//    public ResponseEntity<Member> getUserById(@RequestParam("id") String id) {
+//        Member member = memberService.findByUsername(id);
+//        if (member != null) {
+//            return ResponseEntity.ok(member);
+//        } else {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+//        }
+//    }
+
     @GetMapping("/getUserById")
-    public ResponseEntity<Member> getUserById(@RequestParam("id") String id) {
-        Member member = memberService.findByUsername(id);
-       // Board_game bg = userboardservice.board_game(member.getusername());
-        if (member != null) {
-            return ResponseEntity.ok(member);
+    public ResponseEntity<BoardGame> getUserById(@RequestParam("id") String id) {
+        BoardGame BG = userboardgameservice.findByUsername(id);
+        if (BG != null) {
+            return ResponseEntity.ok(BG);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+
+    @GetMapping("/Colrumbia")
+    public String Colrumbia(HttpSession session,Model model) {
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+        model.addAttribute("loggedInUser", loggedInUser);
+
+        if (loggedInUser == null) {
+            return "redirect:/Member/loginpage";
+        }else{
+            return "/guestbook/colrumbia";
+        }
+
+    }
+
+
+    @PostMapping("/updateProfile")
+    public String updateProfile(@RequestParam("newuser_email") String email,
+                                @RequestParam("newuser_nick") String nickname,
+                                @RequestParam("newuser_id") String username,
+                                @RequestParam("newuser_password") String password,
+                                @RequestParam("newuser_password2") String password2,
+                                RedirectAttributes redirectAttributes,
+                                HttpSession session) {
+        try {
+            Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+            String currentPassword = loggedInUser.getPassword();
+            System.out.println(currentPassword);
+            if(password == null || password.isEmpty() || password2 == null || password2.isEmpty()) {
+                Member updatedMember = memberService.updateMember2(email, nickname, username, currentPassword);
+                // 세션에 현재 사용자 정보 갱신
+                session.setAttribute("loggedInUser", updatedMember);
+            }else{
+                Member updatedMember = memberService.updateMember(email, nickname, username, password);
+                session.setAttribute("loggedInUser", updatedMember);
+            }
+
+
+
+            // 성공 메시지와 함께 리다이렉트
+            redirectAttributes.addFlashAttribute("updateSuccess", "회원정보가 성공적으로 수정되었습니다.");
+            return "redirect:/Member/MyPage";
+        } catch (IllegalArgumentException e) {
+            // 오류 메시지와 함께 리다이렉트
+            redirectAttributes.addFlashAttribute("updateError", e.getMessage());
+            return "redirect:/Member/MyPage";
+        }
+    }
+
 
 }

@@ -119,14 +119,60 @@ public class MemberService {
         }
     }
 
+    // 회원정보 업데이트 메소드
+    public Member updateMember(String email, String nickname, String username, String password) {
+        Member member = memberRepository.findByUsername(username);
 
-//    public Member findById(String id) {
-//        return memberRepository.findById(id).orElse(null);
-//    }
+        if (member == null) {
+            throw new IllegalArgumentException("회원이 존재하지 않습니다.");
+        }
 
-    public Member findByUsername(String username) {
-        return memberRepository.findByUsername(username);
+        member.setEmail(email);
+        member.setNickname(nickname);
+        member.setUsername(username);
+
+
+        if (!password.isEmpty()) {
+            try {
+                String hashedPassword = hashPassword(password);
+                member.setPassword(hashedPassword);
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+                throw new IllegalArgumentException("비밀번호 해시 처리 중 오류 발생.");
+            }
+        }
+
+        // 업데이트된 정보를 데이터베이스에 저장
+        return memberRepository.save(member);
     }
 
+    private String hashPassword(String password) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hashBytes = digest.digest(password.getBytes());
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : hashBytes) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
 
+    // 회원정보 업데이트 메소드
+    public Member updateMember2(String email, String nickname, String username, String password) {
+        Member member = memberRepository.findByUsername(username);
+
+        if (member == null) {
+            throw new IllegalArgumentException("회원이 존재하지 않습니다.");
+        }
+
+        member.setEmail(email);
+        member.setNickname(nickname);
+        member.setUsername(username);
+        member.setPassword(password);
+
+        return memberRepository.save(member);
+    }
 }

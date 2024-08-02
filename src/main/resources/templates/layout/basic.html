@@ -46,6 +46,7 @@
             <a th:if="${loggedInUser != null}" href="#" class="list-group-item list-group-item-action bg-dark profileBtn" style="color: white;">Profile</a>
             <a th:if="${loggedInUser == null}" href="#" class="list-group-item list-group-item-action bg-dark loginBtn" style="color: white;">Login</a>
             <a th:if="${loggedInUser != null}" href="#" class="list-group-item list-group-item-action bg-dark logoutBtn" style="color: white;">LogOut</a>
+            <a th:if="${loggedInUser != null}" href="#" class="list-group-item list-group-item-action bg-dark ColumbiaBtn" style="color: white;">콜롬비아농약파티</a>
         </div>
     </div>
     <!-- /#sidebar-wrapper -->
@@ -131,6 +132,10 @@
 
        $(".profileBtn").click(function() {
            window.location.href = "/Member/MyPage";
+       });
+
+       $(".ColumbiaBtn").click(function() {
+           window.location.href = "/Member/Colrumbia";
        });
    });
 
