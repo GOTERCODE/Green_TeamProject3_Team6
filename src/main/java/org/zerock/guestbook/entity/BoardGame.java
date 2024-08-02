@@ -91,8 +91,25 @@ public class BoardGame {
 
     }
 
+
     @Transient
     private Double scoreRatio;
+
+    public void addScore(Double score) {
+        if (scoreSum == null) scoreSum = 0.0;
+        if (scoreCount == null) scoreCount = 0;
+
+        scoreSum += score;
+        scoreCount++;
+    }
+
+    public void removeScore(Double score) {
+        if (scoreSum == null || scoreCount == null) return;
+
+        scoreSum -= score;
+        scoreCount--;
+    }
+
 }
 
 

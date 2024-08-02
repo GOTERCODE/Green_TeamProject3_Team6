@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.zerock.guestbook.entity.BoardGame;
 import org.zerock.guestbook.repository.BoardGameRepository;
 import org.zerock.guestbook.repository.BoardGameSpecifications;
@@ -43,5 +44,20 @@ public class BoardGameServiceImpl implements BoardGameService {
     @Override
     public void deleteBoardGame(Long id) {
         boardGameRepository.deleteById(id);
+    }
+
+    @Transactional
+    @Override
+    public void updateBoardGameScore(Long boardGameId, Double newScore, boolean isNew) {
+        BoardGame boardGame = boardGameRepository.findById(boardGameId)
+                .orElseThrow(() -> new RuntimeException("BoardGame not found"));
+
+        if (isNew) {
+            boardGame.addScore(newScore);
+        } else {
+            boardGame.removeScore(newScore);
+        }
+
+        boardGameRepository.save(boardGame);
     }
 }

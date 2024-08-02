@@ -8,10 +8,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.guestbook.entity.BoardGame;
 import org.zerock.guestbook.service.BoardGameService;
 import org.zerock.guestbook.entity.Member;
 import org.zerock.guestbook.service.MemberService;
+import org.zerock.guestbook.entity.Score;
+import org.zerock.guestbook.service.ScoreService;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
@@ -22,10 +25,13 @@ import java.util.stream.Collectors;
 @Controller
 public class BoardGameController {
 
+    private final ScoreService scoreService;
+
     private final BoardGameService boardGameService;
 
-    public BoardGameController(BoardGameService boardGameService) {
+    public BoardGameController(BoardGameService boardGameService, ScoreService scoreService) {
         this.boardGameService = boardGameService;
+        this.scoreService = scoreService;
     }
 
     @GetMapping("/guestbook/boardgames")
@@ -109,19 +115,25 @@ public class BoardGameController {
                 df.format(boardGame.getScoreSum() / boardGame.getScoreCount()) : "0.0");
         boardGame.setFormattedDate(boardGame.getDate() != null ?
                 boardGame.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) : "N/A");
-// HH:mm:ss
+
         int score = boardGame.getScoreSum() != null && boardGame.getScoreCount() != null ?
                 Math.min(5, (int) Math.round(boardGame.getScoreSum() / boardGame.getScoreCount())) : 0;
         boardGame.setStarRating(score);
         boardGame.setScoreRatio(boardGame.getScoreSum() != null && boardGame.getScoreCount() != null ?
                 boardGame.getScoreSum() / (double) boardGame.getScoreCount() : 0.0);
 
-
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+        if (loggedInUser != null) {
+
+            Score userScoreEntity = scoreService.findScoreByMemberAndBoardGame(Long.valueOf(loggedInUser.getId()), id);
+            Integer userScore = userScoreEntity != null ? userScoreEntity.getScore() : null;
+            model.addAttribute("userScore", userScore);
+        }
         model.addAttribute("loggedInUser", loggedInUser);
         model.addAttribute("boardGame", boardGame);
-        return "guestbook/boardgame-details"; // Ensure this matches the template filename
+        return "guestbook/boardgame-details";
     }
+
 
 
 
@@ -208,6 +220,19 @@ public class BoardGameController {
         boardGameService.createBoardGame(boardGame);
         return "redirect:/guestbook/boardgames";
     }
+
+    @PostMapping("/guestbook/boardgames/delete")
+    public String deleteBoardGame(@RequestParam Long id, RedirectAttributes redirectAttributes) {
+        boardGameService.deleteBoardGame(id); // 서비스에서 삭제 처리
+        redirectAttributes.addFlashAttribute("message", "BoardGame has been deleted successfully!");
+        return "redirect:/guestbook/boardgames";
+    }
+
+
+
+
+
+
 
 
 

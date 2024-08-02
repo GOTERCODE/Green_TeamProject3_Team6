@@ -1,3 +1,4 @@
+// BoardGameService.java
 package org.zerock.guestbook.service;
 
 import org.springframework.data.domain.Page;
@@ -14,4 +15,6 @@ public interface BoardGameService {
     BoardGame createBoardGame(BoardGame boardGame);
 
     void deleteBoardGame(Long id);
+
+    void updateBoardGameScore(Long boardGameId, Double newScore, boolean isNew);
 }

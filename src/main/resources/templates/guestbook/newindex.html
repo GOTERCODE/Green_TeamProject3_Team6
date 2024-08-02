@@ -142,7 +142,7 @@
 <body>
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
     <th:block th:fragment="content">
-        <h1 class="mt-4" align="center">Main</h1>
+        <h1 class="mt-4" align="center">Play Pundit</h1>
 
         <!-- 슬라이드 -->
         <div class="container-fluid" style="margin-top: 3rem; margin-bottom: 3rem;">
@@ -169,8 +169,8 @@
             <div class="container-fluid" style="margin-top: 3rem; margin-bottom: 3rem; margin-left: 3rem; margin-right: 3rem;">
                 <!-- 베스트 평점 게임 섹션 -->
                 <div class="mb-5">
-                    <h1 class="mt-4">BEST SCORE GAMES</h1>
-                    <p>평점 상위 데이터 출력</p>
+                    <h2 class="mt-4">BEST SCORE GAMES</h2>
+                    <p>평점 TOP 3</p>
                     <div class="row">
                         <div class="col-lg-4 col-md-6 mb-4" th:each="game : ${bestScoreGames}">
                             <a th:href="@{/guestbook/boardgames/{gno}(gno=${game.gno})}" class="card-link">
@@ -199,8 +199,8 @@
 
                 <!-- NEW GAMES 섹션 -->
                 <div>
-                    <h1 class="mt-4">NEW GAMES</h1>
-                    <p>등록일 최근순 상위 게임 출력</p>
+                    <h2 class="mt-4">NEW GAMES</h2>
+                    <p>최신발매 TOP 3</p>
                     <div class="row">
                         <div class="col-lg-4 col-md-6 mb-4" th:each="game : ${newGames}">
                             <a th:href="@{/guestbook/boardgames/{gno}(gno=${game.gno})}" class="card-link">
