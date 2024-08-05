@@ -83,39 +83,6 @@
     }
     </style>
 </head>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var hash = window.location.hash.substr(1); // 해시에서 '#' 기호를 제거
-        if (hash) {
-            // AJAX 요청을 통해 서버로 해시 값 전송
-            $.ajax({
-                url: '/Member/getUserById',
-                method: 'GET',
-                data: { id: hash }, // 서버로 보낼 파라미터
-                success: function(response) {
-                    // 서버에서 반환된 데이터를 콘솔에 출력
-                    console.log('서버 응답:', response);
-
-                    // 예를 들어, response.id 올바른 필드인지 확인
-                    $('#user-name').text('조회한 회원 : ' + response.writer); // 수정된 필드 이름 확인
-                    $('#user-title').text('이름: ' + response.title);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    // 오류 세부 정보를 콘솔에 출력
-                    console.error('AJAX 요청 실패:', {
-                        status: jqXHR.status,
-                        statusText: jqXHR.statusText,
-                        responseText: jqXHR.responseText,
-                        textStatus: textStatus,
-                        errorThrown: errorThrown
-                    });
-                    $('#user-name').text('정보를 가져오는 데 실패했습니다.');
-                }
-            });
-        }
-    });
-</script>
-
 
 <body>
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">

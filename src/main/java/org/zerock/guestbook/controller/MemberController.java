@@ -113,18 +113,28 @@ public class MemberController {
         }
     }
 
-    @GetMapping("/Colrumbia")
-    public String Colrumbia(HttpSession session,Model model) {
+    @GetMapping("/userserch")
+    public String userSerch(HttpSession session, Model model,
+                            @RequestParam("userserchid") String userserchid,
+                            RedirectAttributes redirectAttributes) {
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
-        model.addAttribute("loggedInUser", loggedInUser);
 
         if (loggedInUser == null) {
             return "redirect:/Member/loginpage";
-        }else{
-            return "/guestbook/colrumbia";
         }
 
+        BoardGame bg = userboardgameservice.findByUsername(userserchid);
+
+        if (bg == null) {
+            redirectAttributes.addFlashAttribute("NoUser", "해당 유저가 없습니다");
+            return "redirect:/guestbook/newindex";
+        } else {
+            System.out.println("대대대"+bg);
+            model.addAttribute("boardGame", bg);
+            return "redirect:/guestbook/UserSerch";
+        }
     }
+
 
 
     @PostMapping("/updateProfile")
