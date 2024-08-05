@@ -17,51 +17,51 @@
 
         .main-container {
             display: flex;
-            justify-content: flex-start; /* 왼쪽 정렬 */
-            align-items: flex-start; /* 상단 정렬 */
+            justify-content: flex-start;
+            align-items: flex-start;
             padding: 20px;
-            gap: 20px; /* 두 요소 사이의 간격 조정 */
+            gap: 20px;
         }
 
         .sub-container {
             display: flex;
-            justify-content: flex-start; /* 왼쪽 정렬 */
-            align-items: flex-start; /* 상단 정렬 */
+            justify-content: flex-start;
+            align-items: flex-start;
             padding: 20px;
-            gap: 20px; /* 두 요소 사이의 간격 조정 */
+            gap: 20px;
         }
 
         .comment-container {
-            border: 2px solid white; /* 테두리 두께, 스타일, 색상 조절 */
+            border: 2px solid white;
             padding: 20px;
-            background-color: #333; /* 배경 색상 조절 */
-            width: 75%; /* 너비 조절 */
+            background-color: #333;
+            width: 75%;
         }
 
         .score-container {
-            border: 2px solid white; /* 테두리 두께, 스타일, 색상 조절 */
+            border: 2px solid white;
             padding: 20px;
-            background-color: #333; /* 배경 색상 조절 */
-            width: 25%; /* 너비 조절 */
+            background-color: #333;
+            width: 25%;
             display: flex;
             flex-direction: column;
         }
 
         .container-content {
-            border: 2px solid white; /* 테두리 두께, 스타일, 색상 조절 */
+            border: 2px solid white;
             padding: 20px;
-            background-color: #333; /* 배경 색상 조절 */
-            width: 75%; /* 너비 조절 */
+            background-color: #333;
+            width: 75%;
         }
 
         .container-card {
-            border: 2px solid white; /* 테두리 두께, 스타일, 색상 조절 */
+            border: 2px solid white;
             padding: 20px;
-            background-color: #333; /* 배경 색상 조절 */
-            width: 25%; /* 너비 조절 */
+            background-color: #333;
+            width: 25%;
             display: flex;
             flex-direction: column;
-            align-items: center; /* 중앙 정렬 */
+            align-items: center;
         }
 
         .game-title {
@@ -84,7 +84,7 @@
         }
 
         .game-info {
-            text-align: center; /* 중앙 정렬 */
+            text-align: center;
         }
 
         .game-rating {
@@ -97,23 +97,22 @@
         }
 
         .container-admin {
-            border: 2px solid white; /* 테두리 두께, 스타일, 색상 조절 */
+            border: 2px solid white;
             padding: 20px;
-            background-color: #333; /* 배경 색상 조절 */
-            width: 100%; /* 너비 조절 */
+            background-color: #333;
+            width: 100%;
             display: flex;
             flex-direction: column;
-            align-items: center; /* 중앙 정렬 */
+            align-items: center;
         }
 
         .text-warning {
-    color: #ffc107; /* 황금색 */
-}
+            color: #ffc107;
+        }
 
-.text-muted {
-    color: #6c757d; /* 회색 */
-}
-
+        .text-muted {
+            color: #6c757d;
+        }
     </style>
 </head>
 
@@ -147,7 +146,6 @@
                 <a href="#" class="btn btn-secondary back-button" th:href="@{/guestbook/boardgames}">Back to List</a>
                 <br>
                 <div th:if="${loggedInUser != null and loggedInUser.isAdmin}" style="display: flex; align-items: center;">
-
                     <a th:href="@{/guestbook/boardgames/edit/{id}(id=${boardGame.id})}"
                        class="btn btn-primary" style="margin-right: 10px;">수정</a>
                     <form th:action="@{/guestbook/boardgames/delete}" method="post" onsubmit="return confirm('게임 데이터를 삭제하시겠습니까?');">
@@ -155,59 +153,73 @@
                         <button type="submit" class="btn btn-danger">삭제</button>
                     </form>
                 </div>
-
-            </div>
             </div>
         </div>
+
         <div class="sub-container">
             <div class="comment-container">
-                <p>Comment Output</p>
-                <p>Comment Output</p>
-                <p>Comment Output</p>
-                <p>Comment Output</p>
-                <p>Comment Output</p>
-            </div>
-            <div class="score-container">
-            <!-- Rating Form -->
-                <div th:if="${loggedInUser == null}">
-                    <div align="center">
-                <p> 평점 등록 - 로그인이 필요합니다</p>
-                    <a href="#" class="btn btn-primary" th:href="@{/Member/loginpage}">로그인 바로가기</a>
+                <!-- 댓글 출력 -->
+                <div th:each="comment : ${comments}">
+                    <div class="comment">
+                        <p><strong th:text="${comment.bgcWriter}">작성자</strong> <span th:text="${#dates.format(comment.bgcDate, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+                        <p th:text="${comment.bgcContent}">댓글 내용</p>
+                        <hr>
                     </div>
                 </div>
-            <div th:if="${loggedInUser != null}">
-                <div th:if="${userScore != null}">
-                    <p>나의 등록 평점:
-                        <span>
-            <span th:each="i : ${#numbers.sequence(1, 5)}"
-                  th:text="${userScore >= i ? '★' : '☆'}"
-                  th:classappend="${userScore >= i ? 'text-warning' : 'text-muted'}"></span>
-        </span>
-                    </p>
 
+                <!-- 댓글 입력 폼 -->
+                <div th:if="${loggedInUser != null}">
+                    <form th:action="@{/guestbook/boardgames/{id}/comments(id=${boardGame.id})}" method="post">
+                        <div class="form-group">
+                            <label for="commentContent">댓글 작성:</label>
+                            <textarea id="commentContent" name="content" class="form-control" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">댓글 등록</button>
+                    </form>
                 </div>
-                <!-- Rate Game Form -->
-                <form th:action="@{/guestbook/boardgames/{id}/rate(id=${boardGame.id})}" method="post">
-                    <label for="score">게임 평가 </label>
-                    <select id="score" name="score">
-                        <option value="5">★★★★★</option>
-                        <option value="4">★★★★☆</option>
-                        <option value="3">★★★☆☆</option>
-                        <option value="2">★★☆☆☆</option>
-                        <option value="1">★☆☆☆☆</option>
-                    </select>
-                    <button type="submit" class="btn btn-primary">등록</button>
-                </form>
-
-                <!-- Delete Score Form -->
-<!--                <form th:action="@{/guestbook/boardgames/{id}/deleteScore(id=${boardGame.id})}" method="post" onsubmit="return confirm('Are you sure you want to delete your score?');">-->
-<!--                    <input type="hidden" name="memberNum" th:value="${loggedInUser.id}">-->
-<!--                    <button type="submit" class="btn btn-danger">Delete My Score</button>-->
-<!--                </form>-->
+                <div th:if="${loggedInUser == null}">
+                    <p>댓글 작성은 로그인이 필요합니다.</p>
+                    <a href="#" class="btn btn-primary" th:href="@{/Member/loginpage}">로그인 바로가기</a>
+                </div>
             </div>
+            <div class="score-container">
+                <!-- Rating Form -->
+                <div th:if="${loggedInUser == null}">
+                    <div align="center">
+                        <p> 평점 등록 - 로그인이 필요합니다</p>
+                        <a href="#" class="btn btn-primary" th:href="@{/Member/loginpage}">로그인 바로가기</a>
+                    </div>
+                </div>
+                <div th:if="${loggedInUser != null}">
+                    <div th:if="${userScore != null}">
+                        <p>나의 등록 평점:
+                            <span>
+                                <span th:each="i : ${#numbers.sequence(1, 5)}"
+                                      th:text="${userScore >= i ? '★' : '☆'}"
+                                      th:classappend="${userScore >= i ? 'text-warning' : 'text-muted'}"></span>
+                            </span>
+                        </p>
+                    </div>
+                    <!-- Rate Game Form -->
+                    <form th:action="@{/guestbook/boardgames/{id}/rate(id=${boardGame.id})}" method="post">
+                        <label for="score">게임 평가 </label>
+                        <select id="score" name="score">
+                            <option value="5">★★★★★</option>
+                            <option value="4">★★★★☆</option>
+                            <option value="3">★★★☆☆</option>
+                            <option value="2">★★☆☆☆</option>
+                            <option value="1">★☆☆☆☆</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary">등록</button>
+                    </form>
+                    <!-- Delete Score Form -->
+                    <!-- <form th:action="@{/guestbook/boardgames/{id}/deleteScore(id=${boardGame.id})}" method="post" onsubmit="return confirm('Are you sure you want to delete your score?');">
+                        <input type="hidden" name="memberNum" th:value="${loggedInUser.id}">
+                        <button type="submit" class="btn btn-danger">Delete My Score</button>
+                    </form> -->
+                </div>
             </div>
-
-
+        </div>
     </th:block>
 </th:block>
 </body>

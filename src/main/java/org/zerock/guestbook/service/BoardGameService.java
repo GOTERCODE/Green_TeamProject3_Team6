@@ -14,6 +14,8 @@ public interface BoardGameService {
 
     BoardGame createBoardGame(BoardGame boardGame);
 
+    BoardGame updateBoardGame(BoardGame boardGame);
+
     void deleteBoardGame(Long id);
 
     void updateBoardGameScore(Long boardGameId, Double newScore, boolean isNew);

@@ -15,7 +15,6 @@
     <title>Edit Board Game</title>
 
     <style type="text/css">
-        <style type="text/css">
         body {
             background-color: black;
             color: white;
@@ -60,11 +59,10 @@
         .content-container {
             border: 2px solid white;
             padding: 20px;
-            background-color: #333;
+            background-color: white;
             width: 75%;
             display: flex;
             flex-direction: column;
-            background-color: white;
             color: black;
         }
 
@@ -113,7 +111,6 @@
             border-color: darkred;
         }
     </style>
-
 </head>
 
 <body>
@@ -214,7 +211,6 @@
                              onclick="selectTag(this)">카드게임</div>
                     </div>
 
-
                     <input type="hidden" id="selectedTags" name="tag" /><br/>
 
                     <button type="submit" class="btn-custom">Submit</button>
@@ -249,20 +245,20 @@
             ]
         });
 
-        window.selectTag = function(element) {
-            element.classList.toggle('selected');
-            const selectedTags = Array.from(document.querySelectorAll('.tag.selected')).map(tag => tag.getAttribute('data-tag'));
-            document.getElementById('selectedTags').value = selectedTags.join(',');
-        }
-
         // Initialize tags based on existing tags
-        const existingTags = document.querySelectorAll('.tag');
-        existingTags.forEach(tag => {
-            if (document.getElementById('selectedTags').value.includes(tag.getAttribute('data-tag'))) {
+        const selectedTags = document.getElementById('selectedTags').value.split(',').filter(tag => tag);
+        document.querySelectorAll('.tag').forEach(tag => {
+            if (selectedTags.includes(tag.getAttribute('data-tag'))) {
                 tag.classList.add('selected');
             }
         });
     });
+
+    function selectTag(element) {
+        element.classList.toggle('selected');
+        const selectedTags = Array.from(document.querySelectorAll('.tag.selected')).map(tag => tag.getAttribute('data-tag'));
+        document.getElementById('selectedTags').value = selectedTags.join(',');
+    }
 </script>
 </body>
 

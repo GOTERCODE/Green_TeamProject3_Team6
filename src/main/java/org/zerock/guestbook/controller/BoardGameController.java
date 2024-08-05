@@ -10,28 +10,33 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.guestbook.entity.BoardGame;
-import org.zerock.guestbook.service.BoardGameService;
+import org.zerock.guestbook.entity.Comment;
 import org.zerock.guestbook.entity.Member;
-import org.zerock.guestbook.service.MemberService;
 import org.zerock.guestbook.entity.Score;
+import org.zerock.guestbook.service.BoardGameService;
+import org.zerock.guestbook.service.CommentService;
 import org.zerock.guestbook.service.ScoreService;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
 public class BoardGameController {
 
     private final ScoreService scoreService;
-
     private final BoardGameService boardGameService;
+    private final CommentService commentService;
 
-    public BoardGameController(BoardGameService boardGameService, ScoreService scoreService) {
+    public BoardGameController(BoardGameService boardGameService, ScoreService scoreService, CommentService commentService) {
         this.boardGameService = boardGameService;
         this.scoreService = scoreService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/guestbook/boardgames")
@@ -40,8 +45,8 @@ public class BoardGameController {
             @RequestParam(defaultValue = "12") int size,
             @RequestParam(defaultValue = "dateDesc") String sortOrder,
             @RequestParam(defaultValue = "") String keyword,
-            @RequestParam(required = false) String[] tags,  // 태그 배열을 String[]로 수정
-            HttpSession session,Model model) {
+            @RequestParam(required = false) String[] tags,
+            HttpSession session, Model model) {
 
         DecimalFormat df = new DecimalFormat("0.0");
 
@@ -80,27 +85,11 @@ public class BoardGameController {
         model.addAttribute("totalItems", boardGamesPage.getTotalElements());
         model.addAttribute("sortOrder", sortOrder);
         model.addAttribute("keyword", keyword);
-        model.addAttribute("tags", tagsStr);  // 선택된 태그 문자열을 모델에 추가
+        model.addAttribute("tags", tagsStr);
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
         model.addAttribute("loggedInUser", loggedInUser);
 
         return "guestbook/boardgames";
-    }
-
-
-
-    private Sort getSortOrder(String sortOrder) {
-        switch (sortOrder) {
-            case "scoreDesc":
-                return Sort.by(Sort.Order.desc("score")); // Entity에서의 정렬만 고려
-            case "scoreAsc":
-                return Sort.by(Sort.Order.asc("score")); // Entity에서의 정렬만 고려
-            case "dateAsc":
-                return Sort.by(Sort.Order.asc("date"));
-            case "dateDesc":
-            default:
-                return Sort.by(Sort.Order.desc("date"));
-        }
     }
 
     @GetMapping("/guestbook/boardgames/{id}")
@@ -122,17 +111,66 @@ public class BoardGameController {
         boardGame.setScoreRatio(boardGame.getScoreSum() != null && boardGame.getScoreCount() != null ?
                 boardGame.getScoreSum() / (double) boardGame.getScoreCount() : 0.0);
 
+        // 댓글 목록 조회
+        List<Comment> comments = commentService.getCommentsByBoardGameId(id);
+
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
         if (loggedInUser != null) {
-
             Score userScoreEntity = scoreService.findScoreByMemberAndBoardGame(Long.valueOf(loggedInUser.getId()), id);
             Integer userScore = userScoreEntity != null ? userScoreEntity.getScore() : null;
             model.addAttribute("userScore", userScore);
         }
         model.addAttribute("loggedInUser", loggedInUser);
         model.addAttribute("boardGame", boardGame);
+        model.addAttribute("comments", comments); // 댓글 목록을 모델에 추가
+
         return "guestbook/boardgame-details";
     }
+
+    @PostMapping("/guestbook/boardgames/{id}/comments")
+    public String addComment(
+            @PathVariable("id") Long boardGameId,
+            @RequestParam("content") String content,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
+        // Get the logged-in user
+        String writerNum = (String) session.getAttribute("userNum");
+        String writer = (String) session.getAttribute("userName");
+
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+        try {
+            writerNum = String.valueOf(Long.valueOf(loggedInUser.getId()));
+            writer = String.valueOf((loggedInUser.getNickname()));
+        } catch (NumberFormatException e) {
+            redirectAttributes.addFlashAttribute("error", "잘못된 사용자 ID 형식입니다.");
+            return "redirect:/guestbook/boardgames/" + boardGameId;
+        }
+
+        if (writerNum == null || writer == null) {
+            redirectAttributes.addFlashAttribute("error", "로그인 후 댓글을 작성할 수 있습니다.");
+            return "redirect:/Member/loginpage";
+        }
+
+        // Create a new comment entity
+        Comment comment = new Comment();
+        comment.setBgcBgid(boardGameId.toString());
+        comment.setBgcWriternum(writerNum);
+        comment.setBgcWriter(writer);
+        comment.setBgcContent(content);
+
+        // Save the comment
+        try {
+            commentService.addComment(comment);
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "댓글 작성 중 오류가 발생했습니다.");
+            return "redirect:/guestbook/boardgames/" + boardGameId;
+        }
+
+        redirectAttributes.addFlashAttribute("message", "댓글이 등록되었습니다.");
+        return "redirect:/guestbook/boardgames/" + boardGameId;
+    }
+
 
 
 
@@ -149,10 +187,9 @@ public class BoardGameController {
         if (loggedInUser == null) {
             return "redirect:/Member/loginpage";
         }
-        boardGame.setWriter(loggedInUser.getUsername()); // 세션의 사용자 이름을 작성자로 설정
-        boardGame.setWriterNum(loggedInUser.getId()); // 세션의 사용자 ID를 작성자 번호로 설정
+        boardGame.setWriter(loggedInUser.getUsername());
+        boardGame.setWriterNum(loggedInUser.getId());
 
-        // Date 파싱 및 변환
         if (boardGame.getDate() != null) {
             try {
                 LocalDateTime date = LocalDateTime.parse(boardGame.getDate().toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
@@ -162,17 +199,15 @@ public class BoardGameController {
             }
         }
 
-        // 태그를 처리합니다. 콤마로 구분된 문자열로 들어오는 경우
-        String tagsString = boardGame.getTag(); // getTag()가 tags를 반환하는지 확인합니다
+        String tagsString = boardGame.getTag();
         if (tagsString != null && !tagsString.isEmpty()) {
             String[] tagsArray = tagsString.split(",");
-            boardGame.setTag(String.join(",", tagsArray)); // 태그를 콤마로 구분된 문자열로 설정
+            boardGame.setTag(String.join(",", tagsArray));
         }
 
         boardGameService.createBoardGame(boardGame);
         return "redirect:/guestbook/boardgames";
     }
-
 
     @GetMapping("/guestbook/boardgames/edit/{id}")
     public String showEditBoardGameForm(@PathVariable Long id, Model model) {
@@ -181,7 +216,6 @@ public class BoardGameController {
             return "redirect:/guestbook/boardgames";
         }
 
-        // 날짜를 문자열로 포맷
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
         String formattedDate = boardGame.getDate() != null ? boardGame.getDate().format(formatter) : "";
 
@@ -190,58 +224,54 @@ public class BoardGameController {
         return "guestbook/edit-boardgame";
     }
 
-
     @PostMapping("/guestbook/boardgames/edit")
-    public String updateBoardGame(@ModelAttribute BoardGame boardGame, HttpSession session) {
+    public String updateBoardGame(@ModelAttribute BoardGame updatedBoardGame, HttpSession session) {
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
             return "redirect:/Member/loginpage";
         }
-        boardGame.setWriter(loggedInUser.getUsername()); // 세션의 사용자 이름을 작성자로 설정
-        boardGame.setWriterNum(loggedInUser.getId()); // 세션의 사용자 ID를 작성자 번호로 설정
 
-        // Date 파싱 및 변환
-        if (boardGame.getDate() != null) {
-            try {
-                LocalDateTime date = LocalDateTime.parse(boardGame.getDate().toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
-                boardGame.setDate(date);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        BoardGame existingBoardGame = boardGameService.getBoardGameById(updatedBoardGame.getId());
+        if (existingBoardGame == null) {
+            return "redirect:/guestbook/boardgames";
         }
 
-        // 태그를 처리합니다. 콤마로 구분된 문자열로 들어오는 경우
-        String tagsString = boardGame.getTag(); // getTag()가 tags를 반환하는지 확인합니다
-        if (tagsString != null && !tagsString.isEmpty()) {
-            String[] tagsArray = tagsString.split(",");
-            boardGame.setTag(String.join(",", tagsArray)); // 태그를 콤마로 구분된 문자열로 설정
+        existingBoardGame.setTitle(updatedBoardGame.getTitle());
+        existingBoardGame.setDate(updatedBoardGame.getDate());
+        existingBoardGame.setContent(updatedBoardGame.getContent());
+        if (updatedBoardGame.getTag() != null && !updatedBoardGame.getTag().isEmpty()) {
+            String[] newTags = updatedBoardGame.getTag().split(",");
+            String[] existingTags = existingBoardGame.getTag() != null ? existingBoardGame.getTag().split(",") : new String[]{};
+            Set<String> tagSet = new HashSet<>(Arrays.asList(existingTags));
+            tagSet.addAll(Arrays.asList(newTags));
+            existingBoardGame.setTag(String.join(",", tagSet));
         }
 
-        boardGameService.createBoardGame(boardGame);
+        existingBoardGame.setWriter(loggedInUser.getUsername());
+        existingBoardGame.setWriterNum(loggedInUser.getId());
+
+        boardGameService.updateBoardGame(existingBoardGame);
         return "redirect:/guestbook/boardgames";
     }
 
     @PostMapping("/guestbook/boardgames/delete")
     public String deleteBoardGame(@RequestParam Long id, RedirectAttributes redirectAttributes) {
-        boardGameService.deleteBoardGame(id); // 서비스에서 삭제 처리
+        boardGameService.deleteBoardGame(id);
         redirectAttributes.addFlashAttribute("message", "BoardGame has been deleted successfully!");
         return "redirect:/guestbook/boardgames";
     }
 
-
-
-
-
-
-
-
-
+    private Sort getSortOrder(String sortOrder) {
+        switch (sortOrder) {
+            case "scoreDesc":
+                return Sort.by(Sort.Order.desc("score"));
+            case "scoreAsc":
+                return Sort.by(Sort.Order.asc("score"));
+            case "dateAsc":
+                return Sort.by(Sort.Order.asc("date"));
+            case "dateDesc":
+            default:
+                return Sort.by(Sort.Order.desc("date"));
+        }
+    }
 }
-
-
-
-
-
-
-
-

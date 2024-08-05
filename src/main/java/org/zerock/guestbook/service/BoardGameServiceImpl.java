@@ -60,4 +60,9 @@ public class BoardGameServiceImpl implements BoardGameService {
 
         boardGameRepository.save(boardGame);
     }
+
+    @Override
+    public BoardGame updateBoardGame(BoardGame boardGame) {
+        return boardGameRepository.save(boardGame);
+    }
 }
