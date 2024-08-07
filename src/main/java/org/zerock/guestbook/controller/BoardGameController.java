@@ -274,4 +274,19 @@ public class BoardGameController {
                 return Sort.by(Sort.Order.desc("date"));
         }
     }
+
+    @PostMapping("/guestbook/boardgames/{id}/comments/edit/{commentId}")
+    public String editComment(@PathVariable Long id,
+                              @PathVariable Long commentId,
+                              @RequestParam String content) {
+        commentService.updateComment(commentId, content);
+        return "redirect:/guestbook/boardgames/" + id;
+    }
+
+    @PostMapping("/guestbook/boardgames/{id}/comments/{commentId}/delete")
+    public String deleteComment(@PathVariable Long id, @PathVariable Long commentId) {
+        commentService.deleteComment(commentId);
+        return "redirect:/guestbook/boardgames/" + id;
+    }
+
 }

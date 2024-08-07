@@ -113,6 +113,18 @@
         .text-muted {
             color: #6c757d;
         }
+
+        .comment-list {
+            border: 2px solid white;
+            padding: 10px;
+            background-color: #555;
+            margin-bottom: 20px;
+        }
+
+        .form-group textarea {
+            width: 100%;
+        }
+
     </style>
 </head>
 
@@ -147,10 +159,10 @@
                 <br>
                 <div th:if="${loggedInUser != null and loggedInUser.isAdmin}" style="display: flex; align-items: center;">
                     <a th:href="@{/guestbook/boardgames/edit/{id}(id=${boardGame.id})}"
-                       class="btn btn-primary" style="margin-right: 10px;">수정</a>
+                       class="btn btn-primary" style="margin-right: 10px; background-color: black; color: white;">수정</a>
                     <form th:action="@{/guestbook/boardgames/delete}" method="post" onsubmit="return confirm('게임 데이터를 삭제하시겠습니까?');">
                         <input type="hidden" name="id" th:value="${boardGame.id}">
-                        <button type="submit" class="btn btn-danger">삭제</button>
+                        <button type="submit" class="btn btn-danger" style="background-color: black; color: white;">삭제</button>
                     </form>
                 </div>
             </div>
@@ -160,9 +172,27 @@
             <div class="comment-container">
                 <!-- 댓글 출력 -->
                 <div th:each="comment : ${comments}">
-                    <div class="comment">
+                    <div class="comment-list">
                         <p><strong th:text="${comment.bgcWriter}">작성자</strong> <span th:text="${#dates.format(comment.bgcDate, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
-                        <p th:text="${comment.bgcContent}">댓글 내용</p>
+
+                        <div th:if="${loggedInUser != null and (loggedInUser.id == comment.bgcWriternum or loggedInUser.isAdmin)}">
+                            <div class="comment-text" th:text="${comment.bgcContent}"></div>
+                            <form class="comment-form" th:action="@{/guestbook/boardgames/{id}/comments/edit/{commentId}(id=${boardGame.id}, commentId=${comment.bgcId})}" method="post" style="display: none;">
+                                <div class="form-group">
+                                    <textarea name="content" rows="4" th:text="${comment.bgcContent}" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="background-color: black; color: white;">등록</button>
+                                <button type="button" class="btn btn-secondary" onclick="cancelEdit(this);" style="background-color: gray; color: white;">취소</button>
+                            </form>
+
+                            <button class="btn btn-primary" onclick="startEdit(this);" style="background-color: black; color: white;">수정</button>
+                            <a th:href="@{/guestbook/boardgames/{id}/comments/{commentId}/delete(id=${boardGame.id}, commentId=${comment.bgcId})}" class="btn btn-danger" style="background-color: black; color: white;">삭제</a>
+                        </div>
+
+
+                        <div th:if="${loggedInUser == null}">
+                            <p th:text="${comment.bgcContent}">댓글 내용</p>
+                        </div>
                         <hr>
                     </div>
                 </div>
@@ -174,7 +204,7 @@
                             <label for="commentContent">댓글 작성:</label>
                             <textarea id="commentContent" name="content" class="form-control" rows="4" required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">댓글 등록</button>
+                        <button type="submit" class="btn btn-primary" style="background-color: black; color: white;">댓글 등록</button>
                     </form>
                 </div>
                 <div th:if="${loggedInUser == null}">
@@ -210,18 +240,28 @@
                             <option value="2">★★☆☆☆</option>
                             <option value="1">★☆☆☆☆</option>
                         </select>
-                        <button type="submit" class="btn btn-primary">등록</button>
+                        <button type="submit" class="btn btn-primary" style="background-color: black; color: white;">등록</button>
                     </form>
-                    <!-- Delete Score Form -->
-                    <!-- <form th:action="@{/guestbook/boardgames/{id}/deleteScore(id=${boardGame.id})}" method="post" onsubmit="return confirm('Are you sure you want to delete your score?');">
-                        <input type="hidden" name="memberNum" th:value="${loggedInUser.id}">
-                        <button type="submit" class="btn btn-danger">Delete My Score</button>
-                    </form> -->
                 </div>
             </div>
         </div>
     </th:block>
 </th:block>
+
+<script>
+    function startEdit(button) {
+        const commentList = button.closest('.comment-list');
+        commentList.querySelector('.comment-text').style.display = 'none';
+        commentList.querySelector('.comment-form').style.display = 'block';
+    }
+
+    function cancelEdit(button) {
+        const commentList = button.closest('.comment-list');
+        commentList.querySelector('.comment-text').style.display = 'block';
+        commentList.querySelector('.comment-form').style.display = 'none';
+    }
+</script>
+
 </body>
 
 </html>
