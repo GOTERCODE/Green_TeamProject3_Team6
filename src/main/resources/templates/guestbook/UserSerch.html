@@ -36,7 +36,7 @@
         }
 
         .custom-card {
-            height: 350px;
+            height: 550px;
             width: 700px;
         }
 
@@ -92,11 +92,17 @@
                 <div class="row gutters-sm">
                     <div class="col-md-4 mb-3">
                         <div class="card custom-card">
-                            <div class="card-body">
-                                <div class="d-flex flex-column align-items-center text-center">
-                                    <p class="text-black" id="user-name">사용자 검색을 해주세요</p>
-                                    <!-- 사용자 정보 표시 -->
-                                    <p class="text-black" id="user-title">시발!!!!!</p>
+                            <div class="card-body text-black">
+                                <div th:text="'검색한 유저 아이디: ' + ${serchuserid}">검색한 유저 아이디를 가져올수없다</div>
+                                <div>
+                                    <div th:with="listSize=${#lists.size(boardGames)}">
+                                        <p>총 게시글 수: <span th:text="${listSize}">게시글 수를 가져올 수 없습니다</span></p>
+                                    </div>
+                                    <th:block th:each="boardGame, iterStat : ${boardGames}">
+                                        <th:block th:if="${iterStat.index lt 10}">
+                                            <p th:text="'제목: ' + ${boardGame.title}">글 제목을 가져올 수 없습니다</p>
+                                        </th:block>
+                                    </th:block>
                                 </div>
                             </div>
                         </div>
@@ -106,6 +112,7 @@
         </div>
     </th:block>
 </th:block>
+
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>

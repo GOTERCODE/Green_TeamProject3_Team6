@@ -2,8 +2,10 @@ package org.zerock.guestbook.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.zerock.guestbook.entity.BoardGame;
+import org.zerock.guestbook.entity.BoardGameTest;
 import org.zerock.guestbook.repository.UserBoardGameRepository;
+
+import java.util.List;
 
 
 @Service
@@ -13,7 +15,8 @@ public class UserBoardGameService {
     private UserBoardGameRepository userboardgameRepository;
 
 
-    public BoardGame findByUsername(String username) {
-        return userboardgameRepository.findByWriter(username);
+    public List<BoardGameTest> findByUsername(String username) {
+        return userboardgameRepository.findByWriterIgnoreCase(username);
     }
+
 }

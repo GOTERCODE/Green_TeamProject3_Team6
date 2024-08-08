@@ -9,9 +9,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.guestbook.entity.BoardGame;
+import org.zerock.guestbook.entity.BoardGameTest;
 import org.zerock.guestbook.entity.Member;
 import org.zerock.guestbook.service.MemberService;
 import org.zerock.guestbook.service.UserBoardGameService;
+
+import java.util.List;
 
 @RequestMapping("/Member")
 @Controller
@@ -93,48 +96,39 @@ public class MemberController {
 
     }
 
+
 //    @GetMapping("/getUserById")
-//    public ResponseEntity<Member> getUserById(@RequestParam("id") String id) {
-//        Member member = memberService.findByUsername(id);
-//        if (member != null) {
-//            return ResponseEntity.ok(member);
+//    public ResponseEntity<BoardGame> getUserById(@RequestParam("id") String id) {
+//        List<BoardGame> BG = userboardgameservice.findByUsername(id);
+//        if (BG != null) {
+//            return ResponseEntity.ok(BG);
 //        } else {
 //            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 //        }
 //    }
 
-    @GetMapping("/getUserById")
-    public ResponseEntity<BoardGame> getUserById(@RequestParam("id") String id) {
-        BoardGame BG = userboardgameservice.findByUsername(id);
-        if (BG != null) {
-            return ResponseEntity.ok(BG);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-    }
-
-    @GetMapping("/userserch")
+    @PostMapping("/userserch")
     public String userSerch(HttpSession session, Model model,
                             @RequestParam("userserchid") String userserchid,
                             RedirectAttributes redirectAttributes) {
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+        model.addAttribute("loggedInUser", loggedInUser);
+        model.addAttribute("serchuserid", userserchid);
 
         if (loggedInUser == null) {
             return "redirect:/Member/loginpage";
         }
 
-        BoardGame bg = userboardgameservice.findByUsername(userserchid);
-
-        if (bg == null) {
-            redirectAttributes.addFlashAttribute("NoUser", "해당 유저가 없습니다");
+        List<BoardGameTest> boardGames = userboardgameservice.findByUsername(userserchid);
+        if (boardGames.isEmpty()) {
+            redirectAttributes.addFlashAttribute("NoUser", "해당 아이디의 유저가 등록한 글이 없습니다");
             return "redirect:/guestbook/newindex";
         } else {
-            System.out.println("대대대"+bg);
-            model.addAttribute("boardGame", bg);
-            return "redirect:/guestbook/UserSerch";
+            model.addAttribute("boardGames", boardGames);
+
+            return "/guestbook/UserSerch";
         }
     }
-
 
 
     @PostMapping("/updateProfile")
@@ -157,9 +151,6 @@ public class MemberController {
                 Member updatedMember = memberService.updateMember(email, nickname, username, password);
                 session.setAttribute("loggedInUser", updatedMember);
             }
-
-
-
             // 성공 메시지와 함께 리다이렉트
             redirectAttributes.addFlashAttribute("updateSuccess", "회원정보가 성공적으로 수정되었습니다.");
             return "redirect:/Member/MyPage";
@@ -169,6 +160,5 @@ public class MemberController {
             return "redirect:/Member/MyPage";
         }
     }
-
 
 }

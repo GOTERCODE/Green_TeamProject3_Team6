@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/simple-sidebar.css" rel="stylesheet">
-    <!-- <link rel="stylesheet" href="/css/login.css"> -->
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/simple-sidebar.css}" rel="stylesheet">
+    <!-- Include jQuery 모달-->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- Include Popper.js for Bootstrap tooltips and popovers 모달-->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <!-- Include Bootstrap JS 모달-->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style type="text/css">
         body {
             margin-top: 20px;
@@ -12,11 +18,11 @@
             background-color: #2c3e50;
         }
 
-        .form_field {
+        .form_field2 {
             margin: 10px 0;
         }
 
-        .form_field > input {
+        .form_field2 > input {
             text-align: left;
             padding: 15px 5px;
             width: 100%;
@@ -82,7 +88,9 @@
             color: black;
         }
 
-        .btn-primary {
+        .btn-primary2
+
+        {
             margin-top: 20px; /* 버튼 위쪽 마진 설정 */
         }
 
@@ -98,6 +106,8 @@
 
     </style>
 </head>
+
+<!-- 모달 -->
 <body>
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
     <th:block th:fragment="content">
@@ -110,35 +120,35 @@
                                 <h5 class="text-center mb-4 text-black">회원 정보 수정</h5>
                                 <form id="updateProfileForm" th:action="@{/Member/updateProfile}" method="post" onsubmit="return validateForm()">
                                     <!-- 아이디 필드 -->
-                                    <p class="form_field text-black" id="Correction_id" th:text="'아이디: ' + ${loggedInUser.username}"></p>
-                                    <div class="form_field">
+                                    <p class="form_field2 text-black" id="Correction_id" th:text="'아이디: ' + ${loggedInUser.username}"></p>
+                                    <div class="form_field2">
                                         <input type="hidden" placeholder="New ID" id="newuser_id" name="newuser_id" th:value="${loggedInUser.username}" />
                                     </div>
 
                                     <!-- 닉네임 필드 -->
-                                    <p class="form_field text-black" id="Correction_nickname" th:text="'닉네임: ' + ${loggedInUser.nickname}"></p>
-                                    <div class="form_field">
+                                    <p class="form_field2 text-black" id="Correction_nickname" th:text="'닉네임: ' + ${loggedInUser.nickname}"></p>
+                                    <div class="form_field2">
                                         <input type="text" placeholder="New Nickname" id="newuser_nick" name="newuser_nick" th:value="${loggedInUser.nickname}" />
                                     </div>
 
                                     <!-- 이메일 필드 -->
-                                    <p class="form_field text-black" id="Correction_email" th:text="'이메일: ' + ${loggedInUser.email}"></p>
-                                    <div class="form_field">
+                                    <p class="form_field2 text-black" id="Correction_email" th:text="'이메일: ' + ${loggedInUser.email}"></p>
+                                    <div class="form_field2">
                                         <input type="email" placeholder="New Email" id="newuser_email" name="newuser_email" th:value="${loggedInUser.email}" />
                                     </div>
 
                                     <!-- 비밀번호 필드 -->
-                                    <p class="form_field text-black" id="Correction_pass">비밀번호를 변경하시려면 새로운 비밀번호를 입력하여 주십시오</p>
-                                    <div class="form_field">
+                                    <p class="form_field2 text-black" id="Correction_pass">비밀번호를 변경하시려면 새로운 비밀번호를 입력하여 주십시오</p>
+                                    <div class="form_field2">
                                         <input type="password" placeholder="New Password" id="newuser_password" name="newuser_password" onkeyup="checkPasswordMatch();" />
                                     </div>
-                                    <div class="form_field">
+                                    <div class="form_field2">
                                         <input type="password" placeholder="Confirm Password" id="newuser_password2" name="newuser_password2" onkeyup="checkPasswordMatch();" />
                                     </div>
 
                                     <!-- 버튼 및 메시지 -->
                                     <div class="form-footer">
-                                        <button class="btn btn-primary" type="submit">수정하기</button>
+                                        <button class="btn btn-primary2 btn-primary" type="submit">수정하기</button>
                                         <div id="MatchMessage"></div>
                                     </div>
                                 </form>
@@ -151,8 +161,6 @@
         </div>
     </th:block>
 </th:block>
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script>
     function validateForm() {
         var form = document.getElementById('updateProfileForm');
