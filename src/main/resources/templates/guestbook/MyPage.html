@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <!-- Include Bootstrap JS 모달-->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <title>마이페이지</title>
     <style type="text/css">
         body {
             margin-top: 20px;
@@ -107,8 +108,24 @@
     </style>
 </head>
 
-<!-- 모달 -->
 <body>
+<!-- 모달 -->
+<div class="modal fade" id="updateSuccess" tabindex="-1" role="dialog" aria-labelledby="updateSuccessLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateSuccessLabel">회원가입 실패</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" th:text="${updateSuccess}"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
     <th:block th:fragment="content">
         <div class="left-aligned-container">
@@ -238,6 +255,23 @@
             }
         }
     }
+</script>
+<!-- 모달 스크립트 -->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    document.addEventListener('DOMContentLoaded', function() {
+        var updateSuccess = /*[[${updateSuccess}]]*/ '';
+        var updateError = /*[[${updateError}]]*/ '';
+
+        if (updateSuccess) {
+            $('#updateSuccess').modal('show');
+        }
+        if (updateError) {
+            $('#updateError').modal('show');
+            change_to_login();
+        }
+    });
+    /*]]>*/
 </script>
 </body>
 </html>

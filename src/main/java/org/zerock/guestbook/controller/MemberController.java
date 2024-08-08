@@ -1,5 +1,6 @@
 package org.zerock.guestbook.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -108,9 +109,8 @@ public class MemberController {
 //    }
 
     @PostMapping("/userserch")
-    public String userSerch(HttpSession session, Model model,
-                            @RequestParam("userserchid") String userserchid,
-                            RedirectAttributes redirectAttributes) {
+    public String userSerch(HttpSession session, Model model, HttpServletRequest request,
+                            @RequestParam("userserchid") String userserchid,RedirectAttributes redirectAttributes) {
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
         model.addAttribute("loggedInUser", loggedInUser);
         model.addAttribute("serchuserid", userserchid);
@@ -122,10 +122,10 @@ public class MemberController {
         List<BoardGameTest> boardGames = userboardgameservice.findByUsername(userserchid);
         if (boardGames.isEmpty()) {
             redirectAttributes.addFlashAttribute("NoUser", "해당 아이디의 유저가 등록한 글이 없습니다");
-            return "redirect:/guestbook/newindex";
+            return "redirect:" + request.getHeader("Referer");
         } else {
             model.addAttribute("boardGames", boardGames);
-
+            // 현재 페이지로 유지
             return "/guestbook/UserSerch";
         }
     }

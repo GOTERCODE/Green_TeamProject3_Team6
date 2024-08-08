@@ -37,7 +37,6 @@
 
     </style>
 
-
 </head>
 <body>
 <div class="d-flex" id="wrapper">
@@ -48,7 +47,7 @@
         </a>
         <div class="list-group list-group-flush">
             <a href="#" class="list-group-item list-group-item-action bg-dark gameBtn" style="color: white;">Games</a>
-            <a href="#" class="list-group-item list-group-item-action bg-dark" style="color: white;">News</a>
+            <a href="#" class="list-group-item list-group-item-action bg-dark NewsBtn" style="color: white;">News</a>
             <a th:if="${loggedInUser != null}" href="#" class="list-group-item list-group-item-action bg-dark profileBtn" style="color: white;">Profile</a>
             <a th:if="${loggedInUser == null}" href="#" class="list-group-item list-group-item-action bg-dark loginBtn" style="color: white;">Login</a>
             <a th:if="${loggedInUser != null}" href="#" class="list-group-item list-group-item-action bg-dark logoutBtn" style="color: white;">LogOut</a>
@@ -144,8 +143,14 @@
        $(".profileBtn").click(function() {
            window.location.href = "/Member/MyPage";
        });
+
+       $(".NewsBtn").click(function() {
+           window.location.href = "/News/MainNew";
+       });
    });
 </script>
+
+
 
 </body>
 </th:block>
