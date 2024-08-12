@@ -3,6 +3,9 @@ package org.zerock.guestbook.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -129,7 +132,6 @@ public class MemberController {
             return "/guestbook/UserSerch";
         }
     }
-
 
     @PostMapping("/updateProfile")
     public String updateProfile(@RequestParam("newuser_email") String email,

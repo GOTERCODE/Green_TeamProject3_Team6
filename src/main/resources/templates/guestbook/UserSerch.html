@@ -8,32 +8,37 @@
         body {
             margin-top: 20px;
             color: #1a202c;
-            text-align: left;
+            text-align: center;
             background-color: #2c3e50;
+            background-image: url('../images/창구.png'); /* 여기에 배경 이미지 경로를 입력하세요 */
+            background-size: cover; /* 배경 이미지가 요소 전체를 덮도록 */
+            background-position: center; /* 배경 이미지의 중심을 맞추기 */
+            background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
         }
 
         .main-body {
             padding: 15px;
+            display: flex; /* Flexbox를 사용하여 자식 요소를 중앙 정렬 */
+            justify-content: center; /* 수평 중앙 정렬 */
+            align-items: center; /* 수직 중앙 정렬 (높이 설정이 필요할 수 있음) */
+            min-height: 100vh; /* 전체 화면 높이 */
         }
 
         .card {
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06);
-        }
-
-        .card {
             position: relative;
             display: flex;
             flex-direction: column;
             min-width: 0;
             word-wrap: break-word;
-            background-color: #fff;
+            background-color: #003366; /* 남색으로 설정 */
             background-clip: border-box;
-            border: 0 solid rgba(0, 0, 0, .125);
+            border: 3px solid #ffffff; /* 박스의 테두리 색 */
             border-radius: .25rem;
         }
 
         .custom-card {
-            height: 550px;
+            height: 780px;
             width: 700px;
         }
 
@@ -41,58 +46,90 @@
             flex: 1 1 auto;
             min-height: 1px;
             padding: 1rem;
+            position: relative; /* 자식 요소를 카드 바디에 상대적으로 위치시키기 위해 추가 */
+            display: flex;
+            flex-direction: column;
+            background-color: #ffffff; /* 카드 본문 배경색을 흰색으로 설정 */
         }
 
-        .gutters-sm {
-            margin-right: -8px;
-            margin-left: -8px;
+        /* 유저 아이디와 총 게시글 수를 묶는 박스 스타일 */
+            .info-box {
+                display: flex; /* Flexbox 레이아웃 사용 */
+                justify-content: space-between; /* 항목을 좌우로 배치 */
+                background-color: #f8f9fa; /* 박스의 배경색 */
+                border: 3px solid #dee2e6; /* 박스의 테두리 색 */
+                border-radius: 0.25rem; /* 테두리의 둥근 정도 */
+                padding: 15px; /* 내부 여백 */
+                margin-bottom: 15px; /* 하단 여백 */
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* 박스의 그림자 */
+            }
+
+        .pagination-container {
+            position: absolute;
+            bottom: 0px; /* 카드 바디 하단에서의 여백 */
+            left: 50%; /* 가운데 정렬을 위한 위치 설정 */
+            transform: translateX(-50%); /* 가운데 정렬을 위한 이동 */
+            width: 100%; /* 너비를 카드 바디에 맞춤 */
+            text-align: center; /* 가운데 정렬 */
+            padding: 10px 0; /* 상하 여백 추가 */
+            background-color: #fff; /* 카드 바디와의 구분을 위해 배경색 추가 */
         }
 
-        .gutters-sm>.col, .gutters-sm>[class*=col-] {
-            padding-right: 8px;
-            padding-left: 8px;
+        .pagination {
+            justify-content: center; /* 가운데 정렬 */
         }
 
-        .mb-3, .my-3 {
-            margin-bottom: 1rem !important;
+        .page-item {
+            display: inline;
         }
 
-        .bg-gray-300 {
-            background-color: #e2e8f0;
-        }
-
-        .h-100 {
-            height: 100% !important;
-        }
-
-        .shadow-none {
-            box-shadow: none !important;
-        }
-
-        .left-aligned-container {
+        .page-link {
+            padding: 0.5rem 0.75rem;
             margin: 0;
-            padding: 0;
-            width: auto;
+            font-size: 1rem;
+            line-height: 1.25;
+            color: #007bff;
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+        }
+
+        .page-link:hover {
+            color: #0056b3;
+            background-color: #e9ecef;
+            border-color: #dee2e6;
+        }
+
+        .active .page-link {
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
         }
 
         .text-black {
             color: black;
         }
 
-        /* 링크 스타일 */
-        a {
-            color: #007bff; /* 파란색 링크 */
-            text-decoration: none; /* 밑줄 제거 */
+        .Dirty-Deeds-Done-Dirt-Cheap {
+            display: block;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f8f9fa; /* 박스의 배경색 */
+            border: 1px solid #dee2e6; /* 박스의 테두리 색 */
+            border-radius: 0.25rem; /* 테두리의 둥근 정도 */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* 박스의 그림자 */
+            color: #333; /* 텍스트 색상 */
+            text-decoration: none; /* 링크 밑줄 제거 */
+            transition: background-color 0.3s, color 0.3s; /* 배경색과 텍스트 색상 변경 시 부드러운 전환 효과 */
         }
 
-        a:hover {
-            text-decoration: underline; /* 밑줄 추가 */
-            color: #0056b3; /* 짙은 파란색 */
+        /* 개별 항목 스타일 */
+        .info-box .info-item {
+             margin: 0; /* 여백 제거 */
         }
 
-        /* 제목 여백 추가 */
-        .post-title {
-            margin-bottom: 1rem; /* 제목 사이에 여백 추가 */
+        .post-title a {
+            color: #333; /* 검은색으로 설정 */
         }
     </style>
     <title th:text="${serchuserid} + 게시글">유저 정보</title>
@@ -101,25 +138,30 @@
 <body>
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
     <th:block th:fragment="content">
-        <div class="left-aligned-container">
-            <div class="main-body">
-                <div class="row gutters-sm">
-                    <div class="col-md-4 mb-3">
-                        <div class="card custom-card">
-                            <div class="card-body text-black">
-                                <div th:text="'검색한 유저 아이디: ' + ${serchuserid}">검색한 유저 아이디를 가져올 수 없습니다</div>
-                                <div>
-                                    <div th:with="listSize=${#lists.size(boardGames)}">
-                                        <p>총 게시글 수: <span th:text="${listSize}">게시글 수를 가져올 수 없습니다</span></p>
-                                    </div>
-                                    <th:block th:each="boardGame, iterStat : ${boardGames}">
-                                        <th:block th:if="${iterStat.index lt 10}">
-                                            <p class="post-title">
-                                                <a th:href="@{/guestbook/boardgames/{id}(id=${boardGame.id})}" th:text="'제목: ' + ${boardGame.title}">글 제목을 가져올 수 없습니다</a>
-                                            </p>
-                                        </th:block>
-                                    </th:block>
+        <div class="main-body">
+            <div class="row gutters-sm">
+                <div class="col-md-4 mb-3">
+                    <div class="card custom-card">
+                        <div class="card-body text-black">
+                            <div class="info-box">
+                                <div class="info-item" th:text="'유저 아이디: ' + ${serchuserid}">검색한 유저 아이디를 가져올 수 없습니다</div>
+                                <div class="info-item">
+                                    <p>총 게시글 수: <span th:text="${#lists.size(boardGames)}">게시글 수를 가져올 수 없습니다</span></p>
                                 </div>
+                            </div>
+                            <div id="postsContainer">
+                                <th:block th:each="boardGame, iterStat : ${boardGames}">
+                                    <p class="post-title Dirty-Deeds-Done-Dirt-Cheap">
+                                        <a th:href="@{/guestbook/boardgames/{id}(id=${boardGame.id})}" th:text="${boardGame.title}">글 제목을 가져올 수 없습니다</a>
+                                    </p>
+                                </th:block>
+                            </div>
+                            <div class="pagination-container">
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination" id="pagination">
+                                        <!-- 페이지네이션 버튼이 자바스크립트로 동적으로 생성됩니다. -->
+                                    </ul>
+                                </nav>
                             </div>
                         </div>
                     </div>
@@ -131,5 +173,44 @@
 
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const postsPerPage = 10;
+        const postsContainer = document.getElementById('postsContainer');
+        const pagination = document.getElementById('pagination');
+        const posts = postsContainer.getElementsByClassName('post-title');
+        const totalPosts = posts.length;
+        const totalPages = Math.ceil(totalPosts / postsPerPage);
+
+        function showPage(page) {
+            for (let i = 0; i < totalPosts; i++) {
+                posts[i].style.display = (i >= (page - 1) * postsPerPage && i < page * postsPerPage) ? 'block' : 'none';
+            }
+        }
+
+        function setupPagination() {
+            for (let i = 1; i <= totalPages; i++) {
+                const li = document.createElement('li');
+                li.className = 'page-item';
+                if (i === 1) li.classList.add('active');
+                const a = document.createElement('a');
+                a.className = 'page-link';
+                a.href = '#';
+                a.textContent = i;
+                a.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    showPage(i);
+                    document.querySelector('.pagination .active').classList.remove('active');
+                    li.classList.add('active');
+                });
+                li.appendChild(a);
+                pagination.appendChild(li);
+            }
+        }
+
+        setupPagination();
+        showPage(1); // 기본적으로 첫 페이지를 표시합니다.
+    });
+</script>
 </body>
 </html>
