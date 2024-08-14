@@ -9,7 +9,7 @@
     <!-- Bootstrap core CSS -->
     <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/css/simple-sidebar.css}" rel="stylesheet">
-    <title> 신규 게임 뉴스 </title>
+    <title>신규 게임 뉴스</title>
 
     <!-- Include jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -19,13 +19,173 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/css/swiper.min.css">
 
+    <style>
+        .news-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #5f5f5f;
+        }
+
+        .news-item img {
+            width: 200px;
+            height: 100px;
+            object-fit: cover;
+            margin-right: 15px;
+            border-radius: 5px;
+        }
+
+        .news-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .news-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+            font-size: 0.9em;
+            color: #ffffff;
+        }
+
+        .news-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        .news-item-container {
+            flex: 1 1 calc(100% - 20px);
+            box-sizing: border-box;
+        }
+
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .pagination .page-item {
+            margin: 0 5px;
+        }
+
+        .pagination .page-link {
+            display: block;
+            padding: 8px 16px;
+            color: #007bff;
+            text-decoration: none;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+
+        .form-control, .custom-select {
+            width: auto; /* 너비를 콘텐츠에 맞게 자동으로 조절 */
+            max-width: 150px; /* 최대 너비를 설정하여 너무 넓어지지 않도록 함 */
+        }
+
+        .d-flex {
+            display: flex;
+            gap: 10px; /* 요소들 간의 간격을 설정 */
+        }
+    </style>
 </head>
 <body>
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
     <th:block th:fragment="content">
-         <h2>역시 정상화는 신 창 섭</h2>
+        <h2 class="news-item">역시 정상화는 신 창 섭</h2>
+        <!-- 관리자만 볼 수 있는 버튼 -->
+        <div class="container mt-3">
+            <div th:if="${loggedInUser != null and loggedInUser.isAdmin}">
+                <a href="/News/news_create" class="btn btn-primary" style="background-color: black; color: white;"> 새 뉴스 등록하기 (Admin)</a>
+            </div>
+        </div>
+
+        <!-- 뉴스 항목 표시 -->
+        <div class="container mt-4">
+            <div class="search-sort-container">
+                <!-- 검색 및 정렬 폼 -->
+                <!-- 제대로 안 했음 -->
+                <form id="searchForm" th:action="@{/News/MainNew}" method="get">
+                    <div class="d-flex mb-3 gap-2">
+                        <input type="text" name="keyword" class="form-control" placeholder="제목으로 검색" th:value="${keyword}">
+                        <select class="custom-select" id="gameOrder" name="gameOrder">
+                            <option value="Allgame" th:selected="${gameOrder == 'Allgame'}">전체 게임</option>
+                            <option value="PC" th:selected="${gameOrder == 'PC'}">PC 게임</option>
+                            <option value="ConSole" th:selected="${gameOrder == 'ConSole'}">콘솔 게임</option>
+                            <option value="M" th:selected="${gameOrder == 'M'}">모바일 게임</option>
+                        </select>
+                        <select class="custom-select" id="sortOrder" name="sortOrder">
+                            <option value="dateDesc" th:selected="${sortOrder == 'dateDesc'}">발매일 최근순</option>
+                            <option value="dateAsc" th:selected="${sortOrder == 'dateAsc'}">발매일 오래된순</option>
+                        </select>
+                        <input type="hidden" id="selectedTags" name="tags" th:value="${tags}">
+                        <div class="submit-container">
+                            <button class="btn btn-primary" type="submit" style="background-color: black">검색</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="postsContainer" class="news-container">
+                <th:block th:each="news : ${newsList}">
+                    <div class="news-item-container post-title">
+                        <div class="news-item">
+                            <img th:src="${news.thumbnail}" alt="Thumbnail">
+                            <div class="news-details">
+                                <h3 class="news-title" th:text="${news.title}">뉴스 제목</h3>
+                                <div class="news-meta">
+                                    <span th:text="'작성자 : ' + ${news.writer}">작성자</span>
+                                    <span style="color: black; margin: 0 10px;">&nbsp;||&nbsp;</span>
+                                    <span th:text="${#temporals.format(news.date, 'yyyy-MM-dd')}">날짜</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a class="page-link" th:href="@{/News/MainNew(page=${currentPage - 1}, keyword=${keyword}, gameOrder=${gameOrder}, sortOrder=${sortOrder})}" aria-label="이전">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'">
+                        <a class="page-link" th:href="@{/News/MainNew(page=${i}, keyword=${keyword}, gameOrder=${gameOrder}, sortOrder=${sortOrder})}" th:text="${i + 1}">1</a>
+                    </li>
+                    <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                        <a class="page-link" th:href="@{/News/MainNew(page=${currentPage + 1}, keyword=${keyword}, gameOrder=${gameOrder}, sortOrder=${sortOrder})}" aria-label="다음">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </th:block>
 </th:block>
-</body>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/js/swiper.min.js"></script>
+</body>
 </html>
