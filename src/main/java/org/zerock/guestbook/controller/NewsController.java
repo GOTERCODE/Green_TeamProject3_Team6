@@ -52,7 +52,7 @@ public class NewsController {
         }
 
         // Pageable 객체 생성
-        Pageable pageable = PageRequest.of(page, 4, sort);
+        Pageable pageable = PageRequest.of(page, 10, sort);
 
         // 게임 카테고리 및 키워드에 따른 뉴스 검색
         Page<News> newsPage;
