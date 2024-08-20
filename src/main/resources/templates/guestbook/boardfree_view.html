@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <title>게임 상세 정보</title>
+    <style type="text/css">
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .sub-container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .comment-container {
+            border: 2px solid white;
+            padding: 20px;
+            background-color: #333;
+            width: 100%;
+        }
+
+        .score-container {
+            border: 2px solid white;
+            padding: 20px;
+            background-color: #333;
+            width: 25%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container-content {
+            border: 2px solid white;
+            padding: 20px;
+            background-color: #333;
+            width: 100%;
+        }
+
+        .container-card {
+            border: 2px solid white;
+            padding: 20px;
+            background-color: #333;
+            width: 25%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .game-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .game-thumbnail {
+            border: 2px solid white;
+            width: 90%;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+
+        .game-info-box {
+            width: 90%;
+            border: 2px solid white;
+            margin-bottom: 15px;
+        }
+
+        .game-info {
+            text-align: center;
+        }
+
+        .game-rating {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .back-button {
+            margin-top: 20px;
+        }
+
+        .container-admin {
+            border: 2px solid white;
+            padding: 20px;
+            background-color: #333;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .text-warning {
+            color: #ffc107;
+        }
+
+        .text-muted {
+            color: #6c757d;
+        }
+
+        .comment-list {
+            border: 2px solid white;
+            padding: 10px;
+            background-color: #555;
+            margin-bottom: 20px;
+        }
+
+        .form-group textarea {
+            width: 100%;
+        }
+
+    </style>
+</head>
+
+<body>
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
+    <th:block th:fragment="content">
+        <h1 class="game-title" th:text="${boardFree.title}">제목</h1>
+        <div class="main-container">
+
+            <div class="container-content">
+                <!-- Summernote에서 작성된 내용을 HTML로 안전하게 출력 -->
+                <div th:utext="${boardFree.content}">내용이 여기에 출력됩니다.</div>
+            </div>
+
+
+        </div>
+
+        <div class="button-container">
+
+            <a href="#" class="btn btn-secondary back-button" th:href="@{/boardfree}">Back to List</a>
+            <br>
+            <div th:if="${loggedInUser != null and loggedInUser.isAdmin}" style="display: flex; align-items: center;">
+                <a th:href="@{/boardfree/edit/{id}(id=${boardFree.id})}"
+                   class="btn btn-primary" style="margin-right: 10px; background-color: black; color: white;">수정</a>
+                <form th:action="@{/boardfree/delete}" method="post" onsubmit="return confirm('게임 데이터를 삭제하시겠습니까?');">
+                    <input type="hidden" name="id" th:value="${boardFree.id}">
+                    <button type="submit" class="btn btn-danger" style="background-color: black; color: white;">삭제</button>
+                </form>
+
+        </div>
+
+<!--        <div class="sub-container">-->
+<!--            <div class="comment-container">-->
+<!--                &lt;!&ndash; 댓글 출력 &ndash;&gt;-->
+<!--                <div th:each="comment : ${comments}">-->
+<!--                    <div class="comment-list">-->
+<!--                        <p><strong th:text="${comment.bgcWriter}">작성자</strong> <span th:text="${#dates.format(comment.bgcDate, 'yyyy-MM-dd HH:mm:ss')}"></span></p>-->
+
+<!--                        <div th:if="${loggedInUser != null and (loggedInUser.id == comment.bgcWriternum or loggedInUser.isAdmin)}">-->
+<!--                            <div class="comment-text" th:text="${comment.bgcContent}"></div><br>-->
+<!--                            <form class="comment-form" th:action="@{/guestbook/boardgames/{id}/comments/edit/{commentId}(id=${boardGame.id}, commentId=${comment.bgcId})}" method="post" style="display: none;">-->
+<!--                                <div class="form-group">-->
+<!--                                    <textarea name="content" rows="4" th:text="${comment.bgcContent}" required></textarea>-->
+<!--                                </div>-->
+<!--                                <button type="submit" class="btn btn-primary" style="background-color: black; color: white;">등록</button>-->
+<!--                                <button type="button" class="btn btn-secondary" onclick="cancelEdit(this);" style="background-color: gray; color: white;">취소</button>-->
+<!--                            </form>-->
+
+<!--                            <button class="btn btn-primary" onclick="startEdit(this);" style="background-color: black; color: white;">수정</button>-->
+<!--                            <form th:action="@{/guestbook/boardgames/{id}/comments/{commentId}/delete(id=${boardGame.id}, commentId=${comment.bgcId})}" method="post" style="display: inline;">-->
+<!--                                <input type="hidden" name="_method" value="delete"/>-->
+<!--                                <button type="submit" class="btn btn-danger" style="background-color: black; color: white;">삭제</button>-->
+<!--                            </form>-->
+
+<!--                        </div>-->
+
+
+<!--                        <div th:if="${loggedInUser == null}">-->
+<!--                            <p th:text="${comment.bgcContent}">댓글 내용</p>-->
+<!--                        </div>-->
+<!--                        <hr>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; 댓글 입력 폼 &ndash;&gt;-->
+<!--                <div th:if="${loggedInUser != null}">-->
+<!--                    <form th:action="@{/guestbook/boardgames/{id}/comments(id=${boardGame.id})}" method="post">-->
+<!--                        <div class="form-group">-->
+<!--                            <label for="commentContent">댓글 작성:</label>-->
+<!--                            <textarea id="commentContent" name="content" class="form-control" rows="4" required></textarea>-->
+<!--                        </div>-->
+<!--                        <button type="submit" class="btn btn-primary" style="background-color: black; color: white;">댓글 등록</button>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--                <div th:if="${loggedInUser == null}">-->
+<!--                    <p>댓글 작성은 로그인이 필요합니다.</p>-->
+<!--                    <a href="#" class="btn btn-primary" th:href="@{/Member/loginpage}">로그인 바로가기</a>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--        </div>-->
+    </th:block>
+</th:block>
+
+<script>
+    function startEdit(button) {
+        const commentList = button.closest('.comment-list');
+        commentList.querySelector('.comment-text').style.display = 'none';
+        commentList.querySelector('.comment-form').style.display = 'block';
+    }
+
+    function cancelEdit(button) {
+        const commentList = button.closest('.comment-list');
+        commentList.querySelector('.comment-text').style.display = 'block';
+        commentList.querySelector('.comment-form').style.display = 'none';
+    }
+</script>
+
+</body>
+
+</html>

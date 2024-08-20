@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/simple-sidebar.css}" rel="stylesheet">
+    <title>boardfree_list</title>
+
+    <style type="text/css">
+        body {
+            background-color: black;
+            color: white;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+        }
+        table {
+    color: white !important;
+    background-color: transparent; /* 배경을 투명하게 설정 */
+}
+
+td, th {
+    color: white !important; /* 모든 텍스트를 흰색으로 강제 설정 */
+}
+
+
+    </style>
+</head>
+<body>
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
+    <th:block th:fragment="content">
+<h1>자유게시판</h1>
+
+<div>
+    <a href="#" th:href="@{/boardfree/create}" class="btn btn-primary">새 글 작성</a>
+</div>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>번호</th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>작성일</th>
+        <th>좋아요</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr th:each="boardFree : ${boardFreeList}">
+
+        <div class="list" >
+        <td th:text="${boardFree.id}"></td>
+            <td>
+                <a th:href="@{/boardfree/{id}(id=${boardFree.id})}" th:text="${boardFree.title}"></a>
+            </td>
+        <td th:text="${boardFree.writer}"></td>
+        <td th:text="${boardFree.date}"></td>
+        <td th:text="${boardFree.like}"></td>
+        </div>
+
+
+    </tr>
+
+
+    </tbody>
+</table>
+
+<div>
+    <a href="#" th:href="@{/guestbook}" class="btn btn-secondary">뒤로가기</a>
+</div>
+
+    </th:block>
+</th:block>
+
+</body>
+</html>
