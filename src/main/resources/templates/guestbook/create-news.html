@@ -117,12 +117,12 @@
 <body>
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
     <th:block th:fragment="content">
-        <h1>게임 등록</h1>
-        <form action="/guestbook/boardgames" method="post" enctype="multipart/form-data">
+        <h1>뉴스 등록</h1>
+        <form action="/News/insert_news" method="post" enctype="multipart/form-data">
             <div class="main-container">
                 <div class="content-container">
-                    <label for="content">내용:</label>
-                    <textarea id="content" name="content"></textarea><br/>
+                    <label for="content">게시글 본문</label>
+                    <textarea id="content" name="content" required ></textarea><br/>
                 </div>
 
                 <div class="input-container">
@@ -130,15 +130,22 @@
                     <input type="text" id="title" name="title" required /><br/>
 
                     <label for="thumbnail">썸네일 사진 URL:</label>
-                    <input type="text" id="thumbnail" name="thumbnail" /><br/>
+                    <input type="text" id="thumbnail" name="thumbnail" required /><br/>
 
                     <label for="date">뉴스 개시일:</label>
-                    <input type="datetime-local" id="date" name="date" /><br/>
+                    <input type="datetime-local" id="date" name="date" required /><br/>
 
-                    <input type="hidden" id="selectedTags" name="tag" /><br/>
+                    <label>태그:</label>
+                    <div class="tag-container">
+                        <!-- 태그들 -->
+                        <div class="tag" data-tag="PC" onclick="selectTag(this)">PC</div>
+                        <div class="tag" data-tag="Console" onclick="selectTag(this)">Console</div>
+                        <div class="tag" data-tag="M" onclick="selectTag(this)">M</div>
+                    </div>
+                    <input type="hidden" id="selectedTags" name="tags" /><br/>
 
                     <button type="submit" class="btn-custom">Submit</button>
-                    <a href="/guestbook/News" class="btn-custom">Back to list</a>
+                    <a href="/News/MainNew" class="btn-custom">Back to list</a>
                     <button type="reset" class="btn-custom btn-custom-reset">Reset</button>
                 </div>
             </div>
@@ -168,6 +175,12 @@
           ['view', ['fullscreen', 'codeview', 'help']]
             ]
         });
+
+        window.selectTag = function(element) {
+            element.classList.toggle('selected');
+            const selectedTags = Array.from(document.querySelectorAll('.tag.selected')).map(tag => tag.getAttribute('data-tag'));
+            document.getElementById('selectedTags').value = selectedTags.join(',');
+        }
 
     });
 </script>

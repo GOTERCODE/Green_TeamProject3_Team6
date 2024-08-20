@@ -37,7 +37,7 @@ public class News {
     @Column(name = "B_N_DATE", nullable = false)
     private LocalDateTime date;
 
-    @Column(name = "B_N_LIKE", nullable = false)
+    @Column(name = "B_N_LIKE", nullable = true)
     private String like;
 
     @Column(name = "B_N_category", nullable = false)

@@ -96,5 +96,28 @@ public class NewsController {
         }
     }
 
+    @PostMapping("/insert_news")
+    public String insert_news(@RequestParam("content") String content,@RequestParam("title") String title,
+                              @RequestParam("thumbnail") String thumbnail,@RequestParam("date") String date,
+                              @RequestParam("tags") String tags,RedirectAttributes redirectAttributes,
+                              HttpSession session, Model model){
+
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+        model.addAttribute("loggedInUser", loggedInUser);
+        String writer = loggedInUser.getUsername();
+        String writer_num = loggedInUser.getId();
+        try{
+            System.out.println("나나나" + content + title + thumbnail + date + tags + writer + writer_num);
+            News insertnews = newsService.insert_news(content,title,thumbnail,date,tags,writer,writer_num);
+            System.out.println("나나나222" + content + title + thumbnail + date + tags + writer + writer_num);
+            redirectAttributes.addFlashAttribute("registration", "글쓰기를 성공했습니다");
+            System.out.println("나나나333" + content + title + thumbnail + date + tags + writer + writer_num);
+            return "redirect:/News/MainNew";
+        }catch(Exception e){
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("registrationError", "글쓰기를 실패하였습니다");
+            return "redirect:/News/news_create";
+        }
+    }
 
 }
