@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.zerock.guestbook.entity.News;
 import org.zerock.guestbook.repository.NewsRepository;
+import java.time.LocalDateTime;
 
 import java.time.LocalDateTime;
 
@@ -23,17 +24,23 @@ public class NewsService {
         return newsRepository.findByCategoryAndTitleContaining(category, keyword, pageable);
     }
 
-    public News insert_news(String content,String title,String thumbnail , String date, String tags, String writer, String writer_num){
+    public News insert_news(String content,String title,String thumbnail , String comment, String tags, String writer, String writer_num){
         News news = News.builder()
                 .title(title)
                 .content(content)
                 .thumbnail(thumbnail)
-                .date(LocalDateTime.parse(date)) // Convert String to LocalDateTime
+                .comment((comment)) // Convert String to LocalDateTime
                 .category(tags)
                 .writer(writer)
                 .writer_num(writer_num)
+                .date(LocalDateTime.now())
                 .build();
         return newsRepository.save(news);
+    }
+
+
+    public News NewsPage_loading(Long id){
+        return newsRepository.NewsPage_open(id);
     }
 }
 

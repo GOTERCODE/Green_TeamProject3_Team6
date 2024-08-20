@@ -34,6 +34,9 @@ public class News {
     @Column(name = "B_N_THUMBNAIL", nullable = false)
     private String thumbnail;
 
+    @Column(name = "one_comment", nullable = false)
+    private String comment;
+
     @Column(name = "B_N_DATE", nullable = false)
     private LocalDateTime date;
 

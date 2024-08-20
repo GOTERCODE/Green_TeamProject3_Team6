@@ -8,16 +8,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.guestbook.entity.Member;
 import org.zerock.guestbook.entity.News;
 import org.zerock.guestbook.service.MemberService;
 import org.zerock.guestbook.service.NewsService;
 
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RequestMapping("/News")
@@ -98,7 +97,7 @@ public class NewsController {
 
     @PostMapping("/insert_news")
     public String insert_news(@RequestParam("content") String content,@RequestParam("title") String title,
-                              @RequestParam("thumbnail") String thumbnail,@RequestParam("date") String date,
+                              @RequestParam("thumbnail") String thumbnail,@RequestParam("comment") String comment,
                               @RequestParam("tags") String tags,RedirectAttributes redirectAttributes,
                               HttpSession session, Model model){
 
@@ -107,17 +106,35 @@ public class NewsController {
         String writer = loggedInUser.getUsername();
         String writer_num = loggedInUser.getId();
         try{
-            System.out.println("나나나" + content + title + thumbnail + date + tags + writer + writer_num);
-            News insertnews = newsService.insert_news(content,title,thumbnail,date,tags,writer,writer_num);
-            System.out.println("나나나222" + content + title + thumbnail + date + tags + writer + writer_num);
+            News insertnews = newsService.insert_news(content,title,thumbnail,comment,tags,writer,writer_num);
             redirectAttributes.addFlashAttribute("registration", "글쓰기를 성공했습니다");
-            System.out.println("나나나333" + content + title + thumbnail + date + tags + writer + writer_num);
             return "redirect:/News/MainNew";
         }catch(Exception e){
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("registrationError", "글쓰기를 실패하였습니다");
             return "redirect:/News/news_create";
         }
+    }
+
+
+    @GetMapping("/NewsPage/{id}")
+    public String NewsPage(HttpSession session, Model model,@PathVariable Long id){
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+        model.addAttribute("loggedInUser", loggedInUser);
+
+       try {
+           News NewsPage_load = newsService.NewsPage_loading(id);
+           DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+           String formattedDate = NewsPage_load.getDate().format(formatter);
+           model.addAttribute("Date",formattedDate);
+           model.addAttribute("news", NewsPage_load);
+           return "guestbook/NewsPage";
+       }catch (Exception e){
+           e.printStackTrace();
+           System.out.println("시발먼데");
+           return "guestbook/newindex";
+       }
+
     }
 
 }

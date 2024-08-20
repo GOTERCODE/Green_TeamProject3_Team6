@@ -115,7 +115,7 @@
 <body>
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
     <th:block th:fragment="content">
-        <h2 class="news-item">역시 정상화는 신 창 섭</h2>
+        <h2 class="news-item">뉴스</h2>
         <!-- 관리자만 볼 수 있는 버튼 -->
         <div class="container mt-3">
             <div th:if="${loggedInUser != null and loggedInUser.isAdmin}">
@@ -138,8 +138,8 @@
                             <option value="M" th:selected="${gameOrder == 'M'}">모바일 게임</option>
                         </select>
                         <select class="custom-select" id="sortOrder" name="sortOrder">
-                            <option value="dateDesc" th:selected="${sortOrder == 'dateDesc'}">발매일 최근순</option>
-                            <option value="dateAsc" th:selected="${sortOrder == 'dateAsc'}">발매일 오래된순</option>
+                            <option value="dateDesc" th:selected="${sortOrder == 'dateDesc'}">최근순</option>
+                            <option value="dateAsc" th:selected="${sortOrder == 'dateAsc'}">오래된순</option>
                         </select>
                         <input type="hidden" id="selectedTags" name="tags" th:value="${tags}">
                         <div class="submit-container">
@@ -150,19 +150,24 @@
             </div>
             <div id="postsContainer" class="news-container">
                 <th:block th:each="news : ${newsList}">
-                    <div class="news-item-container post-title">
-                        <div class="news-item">
-                            <img th:src="${news.thumbnail}" alt="Thumbnail">
-                            <div class="news-details">
-                                <h3 class="news-title" th:text="${news.title}">뉴스 제목</h3>
-                                <div class="news-meta">
-                                    <span th:text="'작성자 : ' + ${news.writer}">작성자</span>
-                                    <span style="color: black; margin: 0 10px;">&nbsp;||&nbsp;</span>
-                                    <span th:text="${#temporals.format(news.date, 'yyyy-MM-dd')}">날짜</span>
-                                </div>
+                    <a th:href="@{/News/NewsPage/{id}(id=${news.id})}" class="news-item-container post-title" style="text-decoration: none; color: inherit;">
+                        <div class="news-item-container post-title">
+                            <div class="news-item">
+                                <img th:src="${news.thumbnail}" alt="Thumbnail">
+                                    <div class="news-details">
+                                        <h3 class="news-title" th:text="${news.title}">뉴스 제목</h3>
+                                        <div class="news-meta">
+                                            <span th:text="'소 제목 : ' + ${news.comment}"></span><br><br>
+                                            </div>
+                                        <div class="news-meta">
+                                            <span th:text="'작성자 : ' + ${news.writer}">작성자</span>
+                                            <span style="color: black; margin: 0 10px;">&nbsp;||&nbsp;</span>
+                                            <span th:text="${#temporals.format(news.date, 'yyyy-MM-dd')}">날짜</span>
+                                        </div>
+                                    </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </th:block>
             </div>
             <nav aria-label="Page navigation">

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <title>뉴스 상세 정보</title>
+    <link rel="stylesheet" href="/css/news.css">
+
+    <style>
+    .news-thumbnail {
+        border: 2px solid white;
+        max-width: 90%; /* 최대 가로 크기 */
+        max-height: 400px; /* 최대 세로 크기 */
+        width: auto; /* 자동 크기 조정 */
+        height: auto; /* 자동 크기 조정 */
+        margin-bottom: 20px;
+        object-fit: contain; /* 이미지 비율 유지 */
+    }
+
+    .news-title {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    </style>
+</head>
+<body>
+    <th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+        <th:block th:fragment="content">
+            <div class="main-container">
+                <div class="container-content">
+                    <h1 class="game-title" th:text="${news.title}"></h1>
+                    <h5 class="news-title" th:text="${news.comment}"></h5>
+                    <span th:utext="${news.content}"></span>
+                </div>
+
+                <div class="container-card">
+                    <span th:text="'작성자 : ' + ${news.writer}"></span><br>
+                    <img th:src="${news.thumbnail}" class="news-thumbnail" alt="게임 썸네일"><br>
+                    <p><strong>뉴스 작성일 : </strong> <span th:text="${Date}">N/A</span></p>
+                    <br><p><strong>Tags:</strong> <span th:text="${news.category}"></span></p>
+                    <a href="#" class="btn btn-secondary back-button" th:href="@{/News/MainNew}">Back to List</a>
+                </div>
+            </div>
+
+
+
+
+        </th:block>
+    </th:block>
+        <!--<span th:text="'게시글 시간 : ' + ${news.date}"></span>-->
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/js/swiper.min.js"></script>
+    </body>
+</html>
