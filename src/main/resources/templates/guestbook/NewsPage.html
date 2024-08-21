@@ -43,6 +43,15 @@
                     <p><strong>뉴스 작성일 : </strong> <span th:text="${Date}">N/A</span></p>
                     <br><p><strong>Tags:</strong> <span th:text="${news.category}"></span></p>
                     <a href="#" class="btn btn-secondary back-button" th:href="@{/News/MainNew}">Back to List</a>
+                    <br>
+                    <div th:if="${loggedInUser != null and loggedInUser.isAdmin}" style="display: flex; align-items: center;">
+                        <a th:href="@{/News/edit/{id}(id=${news.id})}"
+                           class="btn btn-primary" style="margin-right: 10px; background-color: black; color: white;">수정</a>
+                        <form th:action="@{/News/delete}" method="post" onsubmit="return confirm('게임 데이터를 삭제하시겠습니까?');">
+                            <input type="hidden" name="id" th:value="${news.id}">
+                            <button type="submit" class="btn btn-danger" style="background-color: black; color: white;">삭제</button>
+                        </form>
+                    </div>
                 </div>
             </div>
 

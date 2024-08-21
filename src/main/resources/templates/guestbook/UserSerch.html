@@ -152,7 +152,7 @@
                             <div id="postsContainer">
                                 <th:block th:each="boardGame, iterStat : ${boardGames}">
                                     <p class="post-title Dirty-Deeds-Done-Dirt-Cheap">
-                                        <a th:href="@{/guestbook/boardgames/{id}(id=${boardGame.id})}" th:text="${boardGame.title}">글 제목을 가져올 수 없습니다</a>
+                                        <a th:href="@{/boardfree/{id}(id=${boardGame.id})}" th:text="${boardGame.title}">글 제목을 가져올 수 없습니다</a>
                                     </p>
                                 </th:block>
                             </div>

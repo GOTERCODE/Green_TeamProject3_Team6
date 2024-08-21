@@ -38,6 +38,10 @@ public class NewsService {
         return newsRepository.save(news);
     }
 
+    public void deleteNews(Long id) {
+        newsRepository.deleteById(id);
+    }
+
 
     public News NewsPage_loading(Long id){
         return newsRepository.NewsPage_open(id);

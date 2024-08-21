@@ -101,9 +101,13 @@
             border-color: #007bff;
         }
 
-        .form-control, .custom-select {
+        .custom-select {
             width: auto; /* 너비를 콘텐츠에 맞게 자동으로 조절 */
             max-width: 150px; /* 최대 너비를 설정하여 너무 넓어지지 않도록 함 */
+        }
+        .form-control{
+            width: auto; /* 너비를 콘텐츠에 맞게 자동으로 조절 */
+            max-width: 300px; /* 최대 너비를 설정하여 너무 넓어지지 않도록 함 */
         }
 
         .d-flex {
@@ -154,17 +158,17 @@
                         <div class="news-item-container post-title">
                             <div class="news-item">
                                 <img th:src="${news.thumbnail}" alt="Thumbnail">
-                                    <div class="news-details">
-                                        <h3 class="news-title" th:text="${news.title}">뉴스 제목</h3>
-                                        <div class="news-meta">
-                                            <span th:text="'소 제목 : ' + ${news.comment}"></span><br><br>
-                                            </div>
-                                        <div class="news-meta">
-                                            <span th:text="'작성자 : ' + ${news.writer}">작성자</span>
-                                            <span style="color: black; margin: 0 10px;">&nbsp;||&nbsp;</span>
-                                            <span th:text="${#temporals.format(news.date, 'yyyy-MM-dd')}">날짜</span>
-                                        </div>
+                                <div class="news-details">
+                                    <h3 class="news-title" th:text="${news.title}">뉴스 제목</h3>
+                                    <div class="news-meta">
+                                        <span th:text="'소 제목 : ' + ${news.comment}"></span><br><br>
                                     </div>
+                                    <div>
+                                        <span th:text="'작성자 : ' + ${news.writer}">작성자</span>
+                                        <span style="color: black; margin: 0 10px;">&nbsp;||&nbsp;</span>
+                                        <span th:text="${#temporals.format(news.date, 'yyyy-MM-dd')}">날짜</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </a>

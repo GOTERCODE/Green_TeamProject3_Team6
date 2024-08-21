@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Entity
-@Table(name = "board_game")
+@Table(name = "board_free")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,16 +17,16 @@ public class BoardGameTest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "B_G_IDX")
+    @Column(name = "B_F_IDX")
     private Long id;
 
-    @Column(name = "B_G_WRITER", nullable = false)
+    @Column(name = "B_F_WRITER", nullable = false)
     private String writer;
 
-    @Column(name = "B_G_WRITERNUM", nullable = false)
+    @Column(name = "B_F_WRITERNUM", nullable = false)
     private String writerNum;
 
-    @Column(name = "B_G_TITLE", nullable = false)
+    @Column(name = "B_F_TITLE", nullable = false)
     private String title;
 
 }
