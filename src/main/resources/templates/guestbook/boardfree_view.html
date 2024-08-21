@@ -140,6 +140,7 @@
     <th:block th:fragment="content">
         <h1 class="game-title" th:text="${boardFree.title}">제목</h1>
         <div class="main-container">
+            <h1 class="game-title" th:text="${boardFree.writer}">작성자</h1>
 
             <div class="container-content">
                 <!-- Summernote에서 작성된 내용을 HTML로 안전하게 출력 -->
@@ -148,7 +149,7 @@
                 <div th:if="${loggedInUser != null and loggedInUser.isAdmin}" style="display: flex; align-items: center;" align="right">
                     <a th:href="@{/boardfree/edit/{id}(id=${boardFree.id})}"
                        class="btn btn-primary" style="margin-right: 10px; background-color: black; color: white;">수정</a>
-                    <form th:action="@{/boardfree/delete}" method="post" onsubmit="return confirm('게임 데이터를 삭제하시겠습니까?');">
+                    <form th:action="@{/boardfree/delete}" method="post" onsubmit="return confirm('게시물 데이터를 삭제하시겠습니까?');">
                         <input type="hidden" name="id" th:value="${boardFree.id}">
                         <button type="submit" class="btn btn-danger" style="background-color: black; color: white;">삭제</button>
                     </form>
@@ -182,7 +183,7 @@
 
                             <div th:if="${loggedInUser != null and (loggedInUser.id == comment.bfcWriternum or loggedInUser.isAdmin)}">
                                 <div class="comment-text" th:text="${comment.bfcContent}"></div><br>
-                                <form class="comment-form" th:action="@{/guestbook/boardfree/{id}/comments/edit/{commentId}(id=${boardFree.id}, commentId=${comment.bfcId})}" method="post" style="display: none;">
+                                <form class="comment-form" th:action="@{/boardfree/{id}/updatecomments/{commentId}(id=${boardFree.id}, commentId=${comment.bfcId})}" method="post" style="display: none;">
                                     <div class="form-group">
                                         <textarea name="content" rows="4" th:text="${comment.bfcContent}" required></textarea>
                                     </div>
@@ -191,7 +192,7 @@
                                 </form>
 
                                 <button class="btn btn-primary" onclick="startEdit(this);" style="background-color: black; color: white;">수정</button>
-                                <form th:action="@{/guestbook/boardfree/{id}/comments/{commentId}/delete(id=${boardFree.id}, commentId=${comment.bfcId})}" method="post" style="display: inline;">
+                                <form th:action="@{/boardfree/{id}/deletecomments/{commentId}(id=${boardFree.id}, commentId=${comment.bfcId})}" method="post" style="display: inline;">
                                     <input type="hidden" name="_method" value="delete"/>
                                     <button type="submit" class="btn btn-danger" style="background-color: black; color: white;">삭제</button>
                                 </form>
@@ -202,13 +203,14 @@
                             </div>
                             <hr>
                         </div>
+
                     </div>
 
 
 
                 <!-- 댓글 입력 폼 -->
                 <div th:if="${loggedInUser != null}">
-                    <form th:action="@{/guestbook/boardgames/{id}/comments(id=${boardGame.id})}" method="post">
+                    <form th:action="@{/boardfree/{id}/comments(id=${boardFree.id})}" method="post">
                         <div class="form-group">
                             <label for="commentContent">댓글 작성:</label>
                             <textarea id="commentContent" name="content" class="form-control" rows="4" required></textarea>

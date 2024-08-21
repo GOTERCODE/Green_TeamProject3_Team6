@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.guestbook.entity.BoardFree;
 import org.zerock.guestbook.entity.Comment;
 import org.zerock.guestbook.entity.Comment_F;
@@ -62,12 +63,12 @@ public class BoardFreeController {
     }
 
     @PostMapping("/create")
-    public String createBoardFree(@ModelAttribute BoardFree boardFree,@PathVariable Long id, HttpSession session) {
+    public String createBoardFree(@ModelAttribute BoardFree boardFree, HttpSession session) {
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
             return "redirect:/Member/loginpage";
         }
-        boardFree.setWriter(loggedInUser.getUsername());
+        boardFree.setWriter(loggedInUser.getNickname());
         boardFree.setWriter_num(loggedInUser.getId());
 
         boardFree.setDate(LocalDateTime.now());
@@ -76,20 +77,39 @@ public class BoardFreeController {
     }
 
     @GetMapping("/edit/{id}")
-    public String editBoardFreeForm(@PathVariable Long id, Model model,HttpSession session) {
+    public String editBoardFreeForm(@PathVariable Long id, Model model, HttpSession session) {
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
         BoardFree boardFree = boardFreeService.getBoardFreeById(id);
         model.addAttribute("boardFree", boardFree);
         model.addAttribute("loggedInUser", loggedInUser);
-        return "boardfree/edit";
+        return "guestbook/boardfree_update";
     }
 
-    @PostMapping("/edit")
-    public String editBoardFree(@ModelAttribute BoardFree boardFree,HttpSession session) {
-        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
-        boardFreeService.updateBoardFree(boardFree);
+    @PostMapping("/edit/{id}")
+    public String editBoardFree(
+            @PathVariable Long id,
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
 
-        return "redirect:/boardfree";
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            redirectAttributes.addFlashAttribute("error", "로그인 후 게시글을 수정할 수 있습니다.");
+            return "redirect:/Member/loginpage";
+        }
+
+        try {
+            BoardFree boardFree = boardFreeService.getBoardFreeById(id);
+            boardFree.setTitle(title);
+            boardFree.setContent(content);
+            boardFreeService.updateBoardFree(boardFree);
+            redirectAttributes.addFlashAttribute("message", "게시글이 수정되었습니다.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "게시글 수정 중 오류가 발생했습니다.");
+        }
+
+        return "redirect:/boardfree/" + id;
     }
 
     @PostMapping("/delete")
@@ -97,5 +117,103 @@ public class BoardFreeController {
         boardFreeService.deleteBoardFree(id);
         return "redirect:/boardfree";
     }
+
+    @PostMapping("/{id}/comments")
+    public String addComment(
+
+            @PathVariable("id") Long boardFreeId,
+            @RequestParam("content") String content,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+
+        // Get the logged-in user
+        String writerNum = (String) session.getAttribute("userNum");
+        String writer = (String) session.getAttribute("userName");
+
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+        try {
+
+            writerNum = String.valueOf(Long.valueOf(loggedInUser.getId()));
+            writer = String.valueOf((loggedInUser.getNickname()));
+        } catch (NumberFormatException e) {
+            redirectAttributes.addFlashAttribute("error", "잘못된 사용자 ID 형식입니다.");
+            return "redirect:/" + boardFreeId;
+        }
+
+        if (writerNum == null || writer == null) {
+            redirectAttributes.addFlashAttribute("error", "로그인 후 댓글을 작성할 수 있습니다.");
+            return "redirect:/Member/loginpage";
+        }
+
+        // Create a new comment entity
+        Comment_F comment_f = new Comment_F();
+        comment_f.setBfcBfid(boardFreeId.toString());
+        comment_f.setBfcWriternum(writerNum);
+        comment_f.setBfcWriter(writer);
+        comment_f.setBfcContent(content);
+
+        // Save the comment
+        try {
+            System.out.println("debug - " + content);
+            System.out.println("debug - " + writerNum);
+            comment_fService.addComment(comment_f);
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "댓글 작성 중 오류가 발생했습니다.");
+            return "redirect:/boardfree/" + boardFreeId;
+        }
+
+        redirectAttributes.addFlashAttribute("message", "댓글이 등록되었습니다.");
+        return "redirect:/boardfree/" + boardFreeId;
+    }
+    @PostMapping("/{id}/deletecomments/{commentId}")
+    public String deleteComment(
+            @PathVariable("id") Long boardFreeId,  // boardFreeId 수정
+            @PathVariable("commentId") Long commentId,
+            RedirectAttributes redirectAttributes,
+            HttpSession session) {
+
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+
+        if (loggedInUser == null) {
+            redirectAttributes.addFlashAttribute("error", "로그인 후 댓글을 삭제할 수 있습니다.");
+            return "redirect:/Member/loginpage";
+        }
+
+        try {
+            comment_fService.deleteComment(commentId);
+            redirectAttributes.addFlashAttribute("message", "댓글이 삭제되었습니다.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "댓글 삭제 중 오류가 발생했습니다.");
+        }
+
+        return "redirect:/boardfree/" + boardFreeId;
+    }
+
+    @PostMapping("/{id}/updatecomments/{commentId}")
+    public String updateComment(
+            @PathVariable("id") Long boardFreeId,
+            @PathVariable("commentId") Long commentId,
+            @RequestParam("content") String content,
+            RedirectAttributes redirectAttributes,
+            HttpSession session) {
+
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+
+        if (loggedInUser == null) {
+            redirectAttributes.addFlashAttribute("error", "로그인 후 댓글을 수정할 수 있습니다.");
+            return "redirect:/Member/loginpage";
+        }
+
+        try {
+            comment_fService.updateComment(commentId, content);
+            redirectAttributes.addFlashAttribute("message", "댓글이 수정되었습니다.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "댓글 수정 중 오류가 발생했습니다.");
+        }
+
+        return "redirect:/boardfree/" + boardFreeId;
+    }
+
+
 
 }

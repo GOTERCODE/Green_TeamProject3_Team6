@@ -44,7 +44,7 @@ public class Comment_F {
         return bfcBfid;
     }
 
-    public void setBfcBfid(String bgcBfid) {
+    public void setBfcBfid(String bfcBfid) {
         this.bfcBfid = bfcBfid;
     }
 
