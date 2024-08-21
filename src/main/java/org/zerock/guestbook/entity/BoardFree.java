@@ -34,7 +34,6 @@ public class BoardFree {
     @Column(name = "B_F_CONTENT", nullable = false)
     private String content;
 
-
     @Column(name = "B_F_DATE", nullable = false)
     private LocalDateTime date;
 

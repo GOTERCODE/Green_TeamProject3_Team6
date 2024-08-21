@@ -103,7 +103,7 @@ public class NewsController {
 
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
         model.addAttribute("loggedInUser", loggedInUser);
-        String writer = loggedInUser.getUsername();
+        String writer = loggedInUser.getNickname();
         String writer_num = loggedInUser.getId();
         try{
             News insertnews = newsService.insert_news(content,title,thumbnail,comment,tags,writer,writer_num);
@@ -131,10 +131,21 @@ public class NewsController {
            return "guestbook/NewsPage";
        }catch (Exception e){
            e.printStackTrace();
-           System.out.println("시발먼데");
            return "guestbook/newindex";
        }
 
+    }
+
+    @PostMapping("/delete")
+    public String deleteNews(@RequestParam Long id, RedirectAttributes redirectAttributes) {
+        newsService.deleteNews(id);
+        redirectAttributes.addFlashAttribute("message", "뉴스 삭제 완료");
+        return "redirect:/News/MainNew"; // 리다이렉트를 통해 News 페이지로 이동
+    }
+
+    @GetMapping("/edit")
+    public String NewsEdit(){
+        return "guestbook/Newsedit";
     }
 
 }
