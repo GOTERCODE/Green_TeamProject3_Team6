@@ -24,6 +24,7 @@
             color: white;
             text-align: center;
         }
+
         table {
     color: white !important;
     background-color: transparent; /* 배경을 투명하게 설정 */
@@ -41,9 +42,13 @@ td, th {
     <th:block th:fragment="content">
 <h1>자유게시판</h1>
 
-<div>
-    <a href="#" th:href="@{/boardfree/create}" class="btn btn-primary">새 글 작성</a>
-</div>
+
+
+        <div class="container mt-5">
+
+            <div th:if="${loggedInUser != null}">
+                <a href="#" th:href="@{/boardfree/create}" class="btn btn-primary">새 글 작성</a>
+            </div>
 
 <table class="table">
     <thead>
@@ -79,7 +84,7 @@ td, th {
 <div>
     <a href="#" th:href="@{/guestbook}" class="btn btn-secondary">뒤로가기</a>
 </div>
-
+        </div>
     </th:block>
 </th:block>
 

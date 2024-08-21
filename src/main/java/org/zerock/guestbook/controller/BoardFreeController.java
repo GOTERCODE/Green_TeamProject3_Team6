@@ -6,8 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.zerock.guestbook.entity.BoardFree;
+import org.zerock.guestbook.entity.Comment;
+import org.zerock.guestbook.entity.Comment_F;
 import org.zerock.guestbook.entity.Member;
 import org.zerock.guestbook.service.BoardFreeService;
+import org.zerock.guestbook.service.Comment_FService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,8 +19,14 @@ import java.util.List;
 @RequestMapping("/boardfree")
 public class BoardFreeController {
 
-    @Autowired
-    private BoardFreeService boardFreeService;
+
+    private final BoardFreeService boardFreeService;
+    private final Comment_FService comment_fService;
+
+    public BoardFreeController(BoardFreeService boardFreeService,Comment_FService comment_fService){
+        this.boardFreeService = boardFreeService;
+        this.comment_fService = comment_fService;
+    }
 
     @GetMapping
     public String getAllBoardFree(Model model,HttpSession session) {
@@ -29,13 +38,20 @@ public class BoardFreeController {
     }
 
     @GetMapping("/{id}")
-    public String getBoardFreeDetails(@PathVariable Long id, Model model,HttpSession session) {
+    public String getBoardFreeDetails(@PathVariable Long id, Model model, HttpSession session) {
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
         BoardFree boardFree = boardFreeService.getBoardFreeById(id);
+
+        // Comment_FService를 통해 댓글 리스트를 가져옵니다.
+        List<Comment_F> comments = comment_fService.getCommentsByBoardFreeId(id);
+
         model.addAttribute("boardFree", boardFree);
+        model.addAttribute("comments", comments); // 댓글 리스트를 모델에 추가합니다.
         model.addAttribute("loggedInUser", loggedInUser);
+
         return "guestbook/boardfree_view";
     }
+
 
     @GetMapping("/create")
     public String createBoardFreeForm(Model model,HttpSession session) {
@@ -46,8 +62,7 @@ public class BoardFreeController {
     }
 
     @PostMapping("/create")
-    public String createBoardFree(@ModelAttribute BoardFree boardFree, HttpSession session) {
-
+    public String createBoardFree(@ModelAttribute BoardFree boardFree,@PathVariable Long id, HttpSession session) {
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
             return "redirect:/Member/loginpage";
