@@ -135,7 +135,7 @@
 
                     <button type="submit" class="btn-custom">Submit</button>
                     <a href="/News/MainNew" class="btn-custom">Back to list</a>
-                    <button type="reset" class="btn-custom btn-custom-reset">Reset</button>
+                    <button type="button" class="btn-custom btn-custom-reset" onclick="resetForm()">Reset</button>
                 </div>
             </div>
         </form>
@@ -172,6 +172,21 @@
         }
 
     });
+
+
+     function resetForm() {
+     // 폼 필드 리셋
+     document.getElementById('title').value = '';
+
+
+     // Summernote 에디터 내용 리셋
+     $('#content').summernote('code', '');
+
+     // 태그 컨테이너에서 선택 상태를 리셋
+
+ }
+
+
 </script>
 </body>
 
