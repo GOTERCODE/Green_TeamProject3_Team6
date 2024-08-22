@@ -2,7 +2,10 @@ package org.zerock.guestbook.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.zerock.guestbook.entity.BoardFree;
 import org.zerock.guestbook.entity.Member;
+import org.zerock.guestbook.repository.BoardFreeRepository;
+import org.zerock.guestbook.repository.BoardFreeRepository2;
 import org.zerock.guestbook.repository.MemberRepository;
 import org.zerock.guestbook.repository.MemberRepository_Register;
 
@@ -15,6 +18,9 @@ public class MemberService {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private BoardFreeRepository2 boardFreeRepository2;
 
     @Autowired
     private MemberRepository_Register memberRepository_register;
@@ -175,4 +181,10 @@ public class MemberService {
 
         return memberRepository.save(member);
     }
+
+
+    public void updateBoard(String oldNick, String newNick) {
+        boardFreeRepository2.updateWriter(oldNick, newNick);
+    }
+
 }

@@ -96,17 +96,6 @@ public class MemberController {
 
     }
 
-
-//    @GetMapping("/getUserById")
-//    public ResponseEntity<BoardGame> getUserById(@RequestParam("id") String id) {
-//        List<BoardGame> BG = userboardgameservice.findByUsername(id);
-//        if (BG != null) {
-//            return ResponseEntity.ok(BG);
-//        } else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-//        }
-//    }
-
     @PostMapping("/userserch")
     public String userSerch(HttpSession session, Model model, HttpServletRequest request,
                             @RequestParam("userserchid") String userserchid,RedirectAttributes redirectAttributes) {
@@ -139,6 +128,8 @@ public class MemberController {
                                 HttpSession session) {
         try {
             Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+            System.out.println(loggedInUser.getNickname());
+            String oldnick = loggedInUser.getNickname();
             String currentPassword = loggedInUser.getPassword();
             System.out.println(currentPassword);
             if(password == null || password.isEmpty() || password2 == null || password2.isEmpty()) {
@@ -149,7 +140,7 @@ public class MemberController {
                 Member updatedMember = memberService.updateMember(email, nickname, username, password);
                 session.setAttribute("loggedInUser", updatedMember);
             }
-            // 성공 메시지와 함께 리다이렉트
+            memberService.updateBoard(oldnick, nickname);
             redirectAttributes.addFlashAttribute("updateSuccess", "회원정보가 성공적으로 수정되었습니다.");
             return "redirect:/Member/MyPage";
         } catch (IllegalArgumentException e) {

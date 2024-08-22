@@ -1,7 +1,6 @@
 package org.zerock.guestbook.controller;
 
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -10,14 +9,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.zerock.guestbook.entity.BoardGame;
 import org.zerock.guestbook.entity.Member;
 import org.zerock.guestbook.entity.News;
-import org.zerock.guestbook.service.MemberService;
 import org.zerock.guestbook.service.NewsService;
 
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+
 
 @RequestMapping("/News")
 @Controller
@@ -130,7 +128,6 @@ public class NewsController {
            model.addAttribute("news", NewsPage_load);
            return "guestbook/NewsPage";
        }catch (Exception e){
-           e.printStackTrace();
            return "guestbook/newindex";
        }
 
@@ -143,9 +140,44 @@ public class NewsController {
         return "redirect:/News/MainNew"; // 리다이렉트를 통해 News 페이지로 이동
     }
 
-    @GetMapping("/edit")
-    public String NewsEdit(){
-        return "guestbook/Newsedit";
+    @GetMapping("/edit/{id}")
+    public String NewsEdit(HttpSession session,@PathVariable Long id,RedirectAttributes redirectAttributes,Model model){
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/Member/loginpage";
+        }
+        if(!loggedInUser.isAdmin()){
+            return "redirect:/News/MainNew";
+        }
+        News news = newsService.News_re_edit(id);
+        if(news == null){
+            redirectAttributes.addFlashAttribute("message", "해당 뉴스는 수정 할 수 없습니다");
+            return "redirect:/News/MainNew";
+        }
+        model.addAttribute("loggedInUser", loggedInUser);
+        model.addAttribute("news", news);
+        return "guestbook/news_re_edit";
+    }
+
+    @PostMapping("/update_news")
+    public String Update_News(HttpSession session,Model model,@RequestParam("id") Long id,@RequestParam("title") String title,
+                              @RequestParam("content") String content,
+                              @RequestParam("thumbnail") String thumbnail,@RequestParam("comment") String comment,
+                              @RequestParam("tags") String category,RedirectAttributes redirectAttributes){
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/Member/loginpage";
+        }
+        News news = newsService.News_update(id,title,content,thumbnail,comment,category);
+        if (news != null) {
+            redirectAttributes.addFlashAttribute("message", "뉴스가 성공적으로 업데이트되었습니다.");
+        } else {
+            redirectAttributes.addFlashAttribute("message", "뉴스 업데이트 실패.");
+        }
+
+        model.addAttribute("loggedInUser", loggedInUser);
+        model.addAttribute("news", news);
+        return "redirect:/News/NewsPage/" +id;
     }
 
 }
