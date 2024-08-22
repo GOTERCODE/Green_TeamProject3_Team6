@@ -222,7 +222,7 @@ public class BoardFreeController {
 
 
     @PostMapping("/{id}/like")
-    public String likePost(@PathVariable("id") Long id, HttpSession session) {
+    public String likePost(@PathVariable("id") Long id, HttpSession session, RedirectAttributes redirectAttributes) {
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
 
         if (loggedInUser == null) {
@@ -231,10 +231,18 @@ public class BoardFreeController {
 
         Long memberNum = Long.valueOf(loggedInUser.getId());
 
-        boardFreeLikeService.toggleLike(memberNum, id);
+        boolean isLiked = boardFreeLikeService.toggleLike(memberNum, id);
 
-        return "redirect:/boardfree/" + id;
+        if (isLiked) {
+            redirectAttributes.addFlashAttribute("message", "추천되었습니다.");
+        } else {
+            redirectAttributes.addFlashAttribute("message", "추천이 취소되었습니다.");
+        }
+
+        return "redirect:/boardfree/" + id; // 리다이렉트 URL이 정확한지 확인
     }
+
+
 
 
 
