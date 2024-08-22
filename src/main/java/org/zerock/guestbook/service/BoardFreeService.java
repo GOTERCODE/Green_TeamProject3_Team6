@@ -2,6 +2,7 @@ package org.zerock.guestbook.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.zerock.guestbook.entity.BoardFree;
 import org.zerock.guestbook.repository.BoardFreeRepository;
 
@@ -18,7 +19,8 @@ public class BoardFreeService {
     }
 
     public BoardFree getBoardFreeById(Long id) {
-        return boardFreeRepository.findById(id).orElse(null);
+        return boardFreeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
     }
 
     public void createBoardFree(BoardFree boardFree) {

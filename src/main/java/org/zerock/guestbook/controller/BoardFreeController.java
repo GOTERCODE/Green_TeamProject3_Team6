@@ -10,6 +10,7 @@ import org.zerock.guestbook.entity.BoardFree;
 import org.zerock.guestbook.entity.Comment;
 import org.zerock.guestbook.entity.Comment_F;
 import org.zerock.guestbook.entity.Member;
+import org.zerock.guestbook.service.BoardFreeLikeService;
 import org.zerock.guestbook.service.BoardFreeService;
 import org.zerock.guestbook.service.Comment_FService;
 
@@ -23,16 +24,19 @@ public class BoardFreeController {
 
     private final BoardFreeService boardFreeService;
     private final Comment_FService comment_fService;
+    private final BoardFreeLikeService boardFreeLikeService;
 
-    public BoardFreeController(BoardFreeService boardFreeService,Comment_FService comment_fService){
+    public BoardFreeController(BoardFreeService boardFreeService,Comment_FService comment_fService,BoardFreeLikeService boardFreeLikeService){
         this.boardFreeService = boardFreeService;
         this.comment_fService = comment_fService;
+        this.boardFreeLikeService = boardFreeLikeService;
     }
 
     @GetMapping
     public String getAllBoardFree(Model model,HttpSession session) {
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
         List<BoardFree> boardFreeList = boardFreeService.getAllBoardFree();
+
         model.addAttribute("boardFreeList", boardFreeList);
         model.addAttribute("loggedInUser", loggedInUser);
         return "guestbook/boardfree_list";
@@ -42,6 +46,7 @@ public class BoardFreeController {
     public String getBoardFreeDetails(@PathVariable Long id, Model model, HttpSession session) {
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
         BoardFree boardFree = boardFreeService.getBoardFreeById(id);
+        Long likeCount = boardFreeLikeService.countLikes(id);
 
         // Comment_FService를 통해 댓글 리스트를 가져옵니다.
         List<Comment_F> comments = comment_fService.getCommentsByBoardFreeId(id);
@@ -49,6 +54,7 @@ public class BoardFreeController {
         model.addAttribute("boardFree", boardFree);
         model.addAttribute("comments", comments); // 댓글 리스트를 모델에 추가합니다.
         model.addAttribute("loggedInUser", loggedInUser);
+        model.addAttribute("likeCount", likeCount);
 
         return "guestbook/boardfree_view";
     }
@@ -213,6 +219,26 @@ public class BoardFreeController {
 
         return "redirect:/boardfree/" + boardFreeId;
     }
+
+
+    @PostMapping("/{id}/like")
+    public String likePost(@PathVariable("id") Long id, HttpSession session) {
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+
+        if (loggedInUser == null) {
+            return "redirect:/login"; // 로그인이 필요할 경우 리다이렉트
+        }
+
+        Long memberNum = Long.valueOf(loggedInUser.getId());
+
+        boardFreeLikeService.toggleLike(memberNum, id);
+
+        return "redirect:/boardfree/" + id;
+    }
+
+
+
+
 
 
 

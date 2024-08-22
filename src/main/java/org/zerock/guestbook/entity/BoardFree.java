@@ -38,7 +38,7 @@ public class BoardFree {
     private LocalDateTime date;
 
     @Column(name = "B_F_LIKE", nullable = true)
-    private String like;
+    private long like;
 
 
 }
