@@ -11,6 +11,8 @@ import org.zerock.guestbook.dto.GuestbookDTO;
 import org.zerock.guestbook.dto.PageRequestDTO;
 import org.zerock.guestbook.service.GuestbookService;
 import org.zerock.guestbook.entity.Member;
+import org.zerock.guestbook.service.NewsService;
+import org.zerock.guestbook.service.BoardFreeService;
 import java.util.List;
 
 @Controller
@@ -20,8 +22,8 @@ import java.util.List;
 public class GuestbookController {
 
     private final GuestbookService service;
-
-
+    private final NewsService newsService;
+    private final BoardFreeService boardFreeService;
 
 
     @GetMapping("/")
@@ -42,8 +44,8 @@ public class GuestbookController {
 
         model.addAttribute("bestScoreGames", service.getBestScoreGames());
         model.addAttribute("newGames", service.getNewGames());
-
-
+        model.addAttribute("latestNews", newsService.getLatestNews());
+        model.addAttribute("top5Posts", boardFreeService.getTop5BoardFree());
 
 
         return "guestbook/newindex"; // Thymeleaf 템플릿 이름

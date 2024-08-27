@@ -52,4 +52,8 @@ public class BoardFreeService {
     public Page<BoardFree> searchByWriter(String keyword, Pageable pageable) {
         return boardFreeRepository.findByWriterContaining(keyword, pageable);
     }
+
+    public List<BoardFree> getTop5BoardFree() {
+        return boardFreeRepository.findTop5ByOrderByDateDesc();
+    }
 }

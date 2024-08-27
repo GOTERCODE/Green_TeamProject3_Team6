@@ -3,7 +3,11 @@ package org.zerock.guestbook.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.zerock.guestbook.entity.BoardFree;
 import org.zerock.guestbook.entity.BoardGame;
+
+import java.util.List;
 
 public interface BoardGameService {
     Page<BoardGame> findAll(Pageable pageable);
@@ -19,4 +23,6 @@ public interface BoardGameService {
     void deleteBoardGame(Long id);
 
     void updateBoardGameScore(Long boardGameId, Double newScore, boolean isNew);
+
+
 }

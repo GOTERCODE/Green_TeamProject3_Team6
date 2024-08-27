@@ -9,6 +9,7 @@ import org.zerock.guestbook.entity.News;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface NewsRepository extends JpaRepository<News, Long> {
@@ -35,4 +36,6 @@ public interface NewsRepository extends JpaRepository<News, Long> {
                     @Param("category") String category);
 
     Optional<News> findById(Long id);
+
+    List<News> findTop4ByOrderByDateDesc();
 }

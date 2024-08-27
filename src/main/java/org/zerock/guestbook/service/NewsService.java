@@ -10,6 +10,7 @@ import org.zerock.guestbook.repository.NewsRepository;
 import java.time.LocalDateTime;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class NewsService {
@@ -56,6 +57,10 @@ public class NewsService {
     public News News_update(Long id, String title, String content, String thumbnail, String comment, String category) {
         newsRepository.update_news(id,title, content, thumbnail, comment, category);
         return newsRepository.NewsPage_open(id);
+    }
+
+    public List<News> getLatestNews() {
+        return newsRepository.findTop4ByOrderByDateDesc();
     }
 
 }
