@@ -1,6 +1,8 @@
 package org.zerock.guestbook.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.zerock.guestbook.entity.BoardFree;
@@ -33,5 +35,21 @@ public class BoardFreeService {
 
     public void deleteBoardFree(Long id) {
         boardFreeRepository.deleteById(id);
+    }
+
+    public Page<BoardFree> getAllBoardFree(Pageable pageable) {
+        return boardFreeRepository.findAll(pageable);
+    }
+
+    public Page<BoardFree> searchByTitle(String keyword, Pageable pageable) {
+        return boardFreeRepository.findByTitleContaining(keyword, pageable);
+    }
+
+    public Page<BoardFree> searchByContent(String keyword, Pageable pageable) {
+        return boardFreeRepository.findByContentContaining(keyword, pageable);
+    }
+
+    public Page<BoardFree> searchByWriter(String keyword, Pageable pageable) {
+        return boardFreeRepository.findByWriterContaining(keyword, pageable);
     }
 }

@@ -2,6 +2,10 @@ package org.zerock.guestbook.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,14 +37,45 @@ public class BoardFreeController {
     }
 
     @GetMapping
-    public String getAllBoardFree(Model model,HttpSession session) {
-        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
-        List<BoardFree> boardFreeList = boardFreeService.getAllBoardFree();
+    public String getAllBoardFree(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "searchType", required = false, defaultValue = "title") String searchType,
+            Model model,
+            HttpSession session) {
 
-        model.addAttribute("boardFreeList", boardFreeList);
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+
+        int pageSize = 10; // 한 페이지에 표시할 게시글 수
+        Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by("id").descending());
+
+        Page<BoardFree> boardFreePage;
+
+        if (keyword != null && !keyword.isEmpty()) {
+            switch (searchType) {
+                case "content":
+                    boardFreePage = boardFreeService.searchByContent(keyword, pageable);
+                    break;
+                case "writer":
+                    boardFreePage = boardFreeService.searchByWriter(keyword, pageable);
+                    break;
+                case "title":
+                default:
+                    boardFreePage = boardFreeService.searchByTitle(keyword, pageable);
+                    break;
+            }
+        } else {
+            boardFreePage = boardFreeService.getAllBoardFree(pageable);
+        }
+
+        model.addAttribute("boardFreePage", boardFreePage);
         model.addAttribute("loggedInUser", loggedInUser);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("searchType", searchType);
+
         return "guestbook/boardfree_list";
     }
+
 
     @GetMapping("/{id}")
     public String getBoardFreeDetails(@PathVariable Long id, Model model, HttpSession session) {
