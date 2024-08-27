@@ -144,9 +144,11 @@ public class NewsController {
     public String NewsEdit(HttpSession session,@PathVariable Long id,RedirectAttributes redirectAttributes,Model model){
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
+            redirectAttributes.addFlashAttribute("message", "로그인 해주세요");
             return "redirect:/Member/loginpage";
         }
         if(!loggedInUser.isAdmin()){
+            redirectAttributes.addFlashAttribute("message", "뉴스의 수정은 관리자만 가능합니다");
             return "redirect:/News/MainNew";
         }
         News news = newsService.News_re_edit(id);
@@ -154,6 +156,7 @@ public class NewsController {
             redirectAttributes.addFlashAttribute("message", "해당 뉴스는 수정 할 수 없습니다");
             return "redirect:/News/MainNew";
         }
+        model.addAttribute("tags", news.getCategory() != null ? news.getCategory().split(",") : new String[]{});
         model.addAttribute("loggedInUser", loggedInUser);
         model.addAttribute("news", news);
         return "guestbook/news_re_edit";
