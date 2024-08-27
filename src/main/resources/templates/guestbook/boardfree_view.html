@@ -50,6 +50,7 @@
             padding: 20px;
             background-color: #333;
             width: 100%;
+
         }
 
         .button-container {
@@ -138,12 +139,16 @@
 <body>
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
     <th:block th:fragment="content">
-        <h1 class="game-title" th:text="${boardFree.title}">제목</h1>
+
         <div class="main-container">
-            <h1 class="game-title" th:text="${boardFree.writer}">작성자</h1>
+
 
 
             <div class="container-content">
+                <h1 class="game-title" th:text="${boardFree.title}">제목</h1>
+                <p class="game-writer" th:text="'작성자 : '+ ${boardFree.writer}" align="right">작성자</p>
+                <p class="game-date" th:text="'작성자 : '+ ${boardFree.date}" align="right">작성일</p>
+                <br>
                 <!-- Summernote에서 작성된 내용을 HTML로 안전하게 출력 -->
                 <div th:utext="${boardFree.content}">내용이 여기에 출력됩니다.</div>
                 <a href="#" class="btn btn-secondary back-button" th:href="@{/boardfree}">Back to List</a>
@@ -159,8 +164,16 @@
                 <div align="center">
 
                     <form th:action="@{/boardfree/{id}/like(id=${boardFree.id})}" method="post" style="display: inline;">
-                        <button type="submit" class="btn btn-primary" style="background-color: black; color: white;">Like</button>
-                        <br><h4 class="like" th:text="${boardFree.like}">추천수</h4>
+                        <!-- 로그인된 사용자가 있을 때 -->
+                        <button type="submit" class="btn btn-primary" style="background-color: black; color: white;"
+                                th:if="${loggedInUser != null}">Like</button>
+
+                        <!-- 로그인된 사용자가 없을 때 -->
+                        <button type="submit" class="btn btn-primary" style="background-color: black; color: white;"
+                                th:if="${loggedInUser == null}">로그인 후 추천</button>
+
+                        <br>
+                        <h4 class="like" th:text="${boardFree.like}">추천수</h4>
                     </form>
 
 

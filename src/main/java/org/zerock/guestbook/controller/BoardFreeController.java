@@ -261,7 +261,7 @@ public class BoardFreeController {
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
 
         if (loggedInUser == null) {
-            return "redirect:/login"; // 로그인이 필요할 경우 리다이렉트
+            return "redirect:/Member/loginpage"; // 로그인이 필요할 경우 리다이렉트
         }
 
         Long memberNum = Long.valueOf(loggedInUser.getId());

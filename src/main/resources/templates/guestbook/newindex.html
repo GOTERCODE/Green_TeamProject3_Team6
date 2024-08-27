@@ -374,7 +374,9 @@
                                 <div class="post-title" th:text="${post.title}">Freeboard Post Title</div>
                                 <div class="post-details">
                                     <span class="post-author" th:text="'작성자: ' + ${post.writer}"></span>
-                                    <span class="post-date" th:text="'작성일: ' + ${post.date}"></span>
+                                    <span style="color: black; margin: 0 10px;">&nbsp;||&nbsp;</span>
+                                    <span class="post-date" th:text="${post.date}"></span>
+                                    <span style="color: black; margin: 0 10px;">&nbsp;||&nbsp;</span>
                                     <span class="post-likes" th:text="'추천 수: ' + ${post.like}"></span>
                                 </div>
                             </a>
