@@ -38,7 +38,7 @@ public class BoardFreeController {
 
     @GetMapping
     public String getAllBoardFree(
-            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "keyword", required = false) String keyword,
             @RequestParam(value = "searchType", required = false, defaultValue = "title") String searchType,
             Model model,
@@ -47,7 +47,7 @@ public class BoardFreeController {
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
 
         int pageSize = 10; // 한 페이지에 표시할 게시글 수
-        Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by("id").descending());
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("id").descending());
 
         Page<BoardFree> boardFreePage;
 
