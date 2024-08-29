@@ -14,4 +14,9 @@ public interface BoardFreeLikeRepository extends JpaRepository<BoardFreeLike, Bo
     void deleteById(BoardFreeLikeId id);
 
     Long countByBoardFreeId(Long boardFreeId);
+
+
+    // 특정 사용자가 특정 게시글에 대해 추천했는지 여부를 확인하는 메서드
+    boolean existsByMemberNumAndBoardIdx(Long memberNum, Long boardIdx);
+
 }

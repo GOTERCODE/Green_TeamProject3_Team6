@@ -55,4 +55,10 @@ public class BoardFreeLikeService {
         boardFree.setLike(Math.max(0, boardFree.getLike() - 1)); // 추천 수가 0보다 작아지지 않도록
         boardFreeRepository.save(boardFree);
     }
+
+    public boolean hasLiked(Long memberNum, Long boardIdx) {
+        return boardFreeLikeRepository.existsByMemberNumAndBoardIdx(memberNum, boardIdx);
+    }
+
+
 }

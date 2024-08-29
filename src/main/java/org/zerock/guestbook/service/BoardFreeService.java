@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.zerock.guestbook.entity.BoardFree;
+import org.zerock.guestbook.entity.Member;
 import org.zerock.guestbook.repository.BoardFreeRepository;
 
 import java.util.List;
@@ -56,4 +57,6 @@ public class BoardFreeService {
     public List<BoardFree> getTop5BoardFree() {
         return boardFreeRepository.findTop5ByOrderByDateDesc();
     }
+
+
 }

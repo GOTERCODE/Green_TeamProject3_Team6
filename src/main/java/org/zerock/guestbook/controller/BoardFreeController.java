@@ -83,6 +83,14 @@ public class BoardFreeController {
         BoardFree boardFree = boardFreeService.getBoardFreeById(id);
         Long likeCount = boardFreeLikeService.countLikes(id);
 
+        // 로그인한 사용자의 ID를 가져와서 추천 여부 확인
+        boolean hasLiked = false;
+        if (loggedInUser != null) {
+            // getId()가 Long 타입이라면 직접 사용
+            Long userId = Long.valueOf(loggedInUser.getId());
+            hasLiked = boardFreeLikeService.hasLiked(userId, id);
+        }
+
         // Comment_FService를 통해 댓글 리스트를 가져옵니다.
         List<Comment_F> comments = comment_fService.getCommentsByBoardFreeId(id);
 
@@ -90,9 +98,11 @@ public class BoardFreeController {
         model.addAttribute("comments", comments); // 댓글 리스트를 모델에 추가합니다.
         model.addAttribute("loggedInUser", loggedInUser);
         model.addAttribute("likeCount", likeCount);
+        model.addAttribute("hasLiked", hasLiked); // 추천 여부를 모델에 추가합니다.
 
         return "guestbook/boardfree_view";
     }
+
 
 
     @GetMapping("/create")
@@ -257,7 +267,7 @@ public class BoardFreeController {
 
 
     @PostMapping("/{id}/like")
-    public String likePost(@PathVariable("id") Long id, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String likePost(@PathVariable("id") Long id, HttpSession session, RedirectAttributes redirectAttributes, Model model) {
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
 
         if (loggedInUser == null) {
@@ -274,8 +284,14 @@ public class BoardFreeController {
             redirectAttributes.addFlashAttribute("message", "추천이 취소되었습니다.");
         }
 
+        model.addAttribute("isLiked", isLiked); // 추천 상태를 뷰로 전달
+
         return "redirect:/boardfree/" + id; // 리다이렉트 URL이 정확한지 확인
     }
+
+
+
+
 
 
 
