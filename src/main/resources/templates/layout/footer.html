@@ -1,0 +1,86 @@
+<style>
+        /* 전체 페이지 높이와 여백 설정 */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 페이지 전체를 감싸는 컨테이너 */
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* 뷰포트의 높이와 같게 설정 */
+        }
+
+        /* 페이지 내용 스타일 */
+        .content {
+            flex: 1; /* 가능한 모든 공간을 차지하도록 설정 */
+        }
+
+        /* Footer 스타일 */
+        footer {
+        margin-top : 30px;
+            margin-left: -380px;
+            color: white; /* 텍스트 색상 설정 (예시) */
+            width: calc(100% + 380px);
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Copyright 스타일 */
+        .copyright {
+            margin-left: -380px;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            width: calc(100% + 380px);
+        }
+    </style>
+
+</head>
+<!-- footer.html -->
+<footer class="footer text-center">
+    <div class="container">
+        <div class="row">
+            <!-- Footer Location-->
+            <div class="col-lg-4 mb-5 mb-lg-0">
+                <h4 class="text-uppercase mb-4 text-white">who made it?</h4>
+                <br>
+                <p class="lead mb-0 text-white">
+                    이진규, 안상환
+                    <br />
+                    <br />
+                    Started from 2024.08
+                    <br>
+                    to 2024.09.05
+                </p>
+            </div>
+            <!-- Footer Social Icons-->
+            <div class="col-lg-4 mb-5 mb-lg-0">
+                <h4 class="text-uppercase mb-4 text-white">visit our github</h4>
+                <br>
+                <a class="btn btn-outline-light btn-social text-white mx-1" href="https://github.com/poong1125">
+                    <i class="fab fa-fw fa-linkedin-in"></i>
+                </a>
+                <a class="btn btn-outline-light btn-social text-white mx-1" href="https://github.com/GOTERCODE">
+                    <i class="fab fa-fw fa-twitter"></i>
+                </a>
+            </div>
+            <!-- Footer About Text-->
+            <div class="col-lg-4">
+                <h4 class="text-uppercase mb-4 text-white">About Us</h4>
+                <p class="lead mb-0 text-white">
+                    팀 "진상" 은<br>Spring Boot 기반 팀 프로젝트입니다.<br> <br>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Copyright Section-->
+<div class="copyright py-4 text-center text-white">
+    <div class="container text-white">
+        <small>Copyright &copy; Team 진상</small>
+    </div>
+</div>
