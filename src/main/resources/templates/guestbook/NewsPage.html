@@ -25,6 +25,15 @@
         margin-bottom: 20px;
         text-align: center;
     }
+
+    hr {
+       border: 0; /* 기본 border 제거 */
+       height: 1px; /* 선의 두께 설정 */
+       background: #fff; /* 선의 색상 설정 */
+       margin: 20px 0; /* 선의 위와 아래 여백 설정 */
+    }
+
+
     </style>
 </head>
 <body>
@@ -41,7 +50,7 @@
                     <span th:text="'작성자 : ' + ${news.writer}"></span><br>
                     <img th:src="${news.thumbnail}" class="news-thumbnail" alt="게임 썸네일"><br>
                     <p><strong>뉴스 작성일 : </strong> <span th:text="${Date}">N/A</span></p>
-                    <br><p><strong>Tags:</strong> <span th:text="${news.category}"></span></p>
+                    <br><p><strong>카테고리:</strong> <span th:text="${news.category}"></span></p>
                     <a href="#" class="btn btn-secondary back-button" th:href="@{/News/MainNew}">Back to List</a>
                     <br>
                     <div th:if="${loggedInUser != null and loggedInUser.isAdmin}" style="display: flex; align-items: center;">
@@ -54,7 +63,10 @@
                     </div>
                 </div>
             </div>
-            <th:block th:replace="~{/layout/footer}" />
+            <br> <br>
+            <hr>
+            <br> <br>
+            <th:block th:replace="~{/layout/footer}"/>
         </th:block>
     </th:block>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/js/swiper.min.js"></script>

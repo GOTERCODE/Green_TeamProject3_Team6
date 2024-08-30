@@ -187,4 +187,8 @@ public class MemberService {
         boardFreeRepository2.updateWriter(oldNick, newNick);
     }
 
+    public Member like_serch(String username) {
+        return memberRepository.findByUsername2(username);
+    }
+
 }

@@ -18,7 +18,9 @@
 
         .main-body {
             padding: 15px;
-            display: flex; /* Flexbox를 사용하여 자식 요소를 중앙 정렬 */
+            /* display: flex;  Flexbox를 사용하여 자식 요소를 중앙 정렬 */
+            margin-top : 100px;
+            margin-left : 85px;
             justify-content: center; /* 수평 중앙 정렬 */
             align-items: center; /* 수직 중앙 정렬 (높이 설정이 필요할 수 있음) */
             min-height: 100vh; /* 전체 화면 높이 */
@@ -39,7 +41,7 @@
 
         .custom-card {
             height: 780px;
-            width: 700px;
+            width: 400px;
         }
 
         .card-body {
@@ -49,14 +51,14 @@
             position: relative; /* 자식 요소를 카드 바디에 상대적으로 위치시키기 위해 추가 */
             display: flex;
             flex-direction: column;
-            background-color: #ffffff; /* 카드 본문 배경색을 흰색으로 설정 */
+            background-color: #555; /* 카드 본문 배경색을 흰색으로 설정 */
         }
 
         /* 유저 아이디와 총 게시글 수를 묶는 박스 스타일 */
             .info-box {
                 display: flex; /* Flexbox 레이아웃 사용 */
                 justify-content: space-between; /* 항목을 좌우로 배치 */
-                background-color: #f8f9fa; /* 박스의 배경색 */
+                background-color: #555; /* 박스의 배경색 */
                 border: 3px solid #dee2e6; /* 박스의 테두리 색 */
                 border-radius: 0.25rem; /* 테두리의 둥근 정도 */
                 padding: 15px; /* 내부 여백 */
@@ -72,7 +74,7 @@
             width: 100%; /* 너비를 카드 바디에 맞춤 */
             text-align: center; /* 가운데 정렬 */
             padding: 10px 0; /* 상하 여백 추가 */
-            background-color: #fff; /* 카드 바디와의 구분을 위해 배경색 추가 */
+            background-color: #555; /* 카드 바디와의 구분을 위해 배경색 추가 */
         }
 
         .pagination {
@@ -88,8 +90,8 @@
             margin: 0;
             font-size: 1rem;
             line-height: 1.25;
-            color: #007bff;
-            background-color: #fff;
+            color: #555;
+            background-color: #555;
             border: 1px solid #dee2e6;
             border-radius: 0.25rem;
         }
@@ -101,24 +103,24 @@
         }
 
         .active .page-link {
-            color: #fff;
-            background-color: #007bff;
-            border-color: #007bff;
+            color: #555;
+            background-color: #000000;
+            border-color: #000000;
         }
 
-        .text-black {
-            color: black;
+        .text-white {
+            color: white;
         }
 
         .Dirty-Deeds-Done-Dirt-Cheap {
             display: block;
             padding: 10px;
             margin-bottom: 10px;
-            background-color: #f8f9fa; /* 박스의 배경색 */
+            background-color: #555; /* 박스의 배경색 */
             border: 1px solid #dee2e6; /* 박스의 테두리 색 */
             border-radius: 0.25rem; /* 테두리의 둥근 정도 */
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* 박스의 그림자 */
-            color: #333; /* 텍스트 색상 */
+            color: #ffffff; /* 텍스트 색상 */
             text-decoration: none; /* 링크 밑줄 제거 */
             transition: background-color 0.3s, color 0.3s; /* 배경색과 텍스트 색상 변경 시 부드러운 전환 효과 */
         }
@@ -129,7 +131,12 @@
         }
 
         .post-title a {
-            color: #333; /* 검은색으로 설정 */
+            color: #ffffff;
+        }
+
+        .card-container {
+            display: flex; /* Flexbox 레이아웃을 사용하여 카드들을 나란히 배치 */
+            gap: 20px; /* 카드들 사이의 간격 */
         }
     </style>
     <title th:text="${serchuserid} + '님의 게시글'">유저 정보</title>
@@ -138,15 +145,16 @@
 <body>
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
     <th:block th:fragment="content">
+        <div> <h1 class="info-item" style="margin-left:500px; margin-top: 30px;" th:text="'유저 닉네임: ' + ${serchuserid}">>검색한 유저 아이디를 가져올 수 없습니다</h1></div>
         <div class="main-body">
-            <div class="row gutters-sm">
+            <div class=" card-container">
                 <div class="col-md-4 mb-3">
                     <div class="card custom-card">
-                        <div class="card-body text-black">
+                        <div class="card-body text-white">
                             <div class="info-box">
-                                <div class="info-item" th:text="'유저 아이디: ' + ${serchuserid}">검색한 유저 아이디를 가져올 수 없습니다</div>
+                                <div class="info-item">작성한 게시글</div>
                                 <div class="info-item">
-                                    <p>총 게시글 수: <span th:text="${#lists.size(boardGames)}">게시글 수를 가져올 수 없습니다</span></p>
+                                        총 게시글 수: <span th:text="${boardGames.size()}">게시글 수를 가져올 수 없습니다</span>
                                 </div>
                             </div>
                             <div id="postsContainer">
@@ -166,6 +174,34 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card custom-card">
+                        <div class="card-body text-white">
+                            <div class="info-box">
+                                <div class="info-item">작성한 댓글</div>
+                                <div class="info-item">
+                                    <p>총 댓글 수: <span th:text="${#lists.size(bf_comment)}">댓글 수를 가져올 수 없습니다</span></p>
+                                </div>
+                            </div>
+                            <div id="postsContainer2">
+                                <th:block th:each="bf_comment, iterStat : ${bf_comment}">
+                                    <p class="post-title Dirty-Deeds-Done-Dirt-Cheap">
+                                        <a th:href="@{/boardfree/{id}(id=${bf_comment.bfcBfid})}" th:text="${bf_comment.bfcContent}">댓글 내용을 가져올 수 없습니다</a>
+                                    </p>
+                                </th:block>
+                            </div>
+                            <div class="pagination-container">
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination" id="pagination2">
+                                        <!-- 페이지네이션 버튼이 자바스크립트로 동적으로 생성됩니다. -->
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </th:block>
@@ -209,6 +245,84 @@
         }
 
         setupPagination();
+        showPage(1); // 기본적으로 첫 페이지를 표시합니다.
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const postsPerPage = 10;
+        const postsContainer2 = document.getElementById('postsContainer2');
+        const pagination2 = document.getElementById('pagination2');
+        const posts = postsContainer2.getElementsByClassName('post-title');
+        const totalPosts = posts.length;
+        const totalPages = Math.ceil(totalPosts / postsPerPage);
+
+        function showPage(page) {
+            for (let i = 0; i < totalPosts; i++) {
+                posts[i].style.display = (i >= (page - 1) * postsPerPage && i < page * postsPerPage) ? 'block' : 'none';
+            }
+        }
+
+        function setupPagination2() {
+            for (let i = 1; i <= totalPages; i++) {
+                const li = document.createElement('li');
+                li.className = 'page-item';
+                if (i === 1) li.classList.add('active');
+                const a = document.createElement('a');
+                a.className = 'page-link';
+                a.href = '#';
+                a.textContent = i;
+                a.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    showPage(i);
+                    document.querySelector('.pagination2 .active').classList.remove('active');
+                    li.classList.add('active');
+                });
+                li.appendChild(a);
+                pagination2.appendChild(li);
+            }
+        }
+
+        setupPagination2();
+        showPage(1); // 기본적으로 첫 페이지를 표시합니다.
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const postsPerPage = 10;
+        const postsContainer3 = document.getElementById('postsContainer3');
+        const pagination3 = document.getElementById('pagination3');
+        const posts = postsContainer3.getElementsByClassName('post-title');
+        const totalPosts = posts.length;
+        const totalPages = Math.ceil(totalPosts / postsPerPage);
+
+        function showPage(page) {
+            for (let i = 0; i < totalPosts; i++) {
+                posts[i].style.display = (i >= (page - 1) * postsPerPage && i < page * postsPerPage) ? 'block' : 'none';
+            }
+        }
+
+        function setupPagination3() {
+            for (let i = 1; i <= totalPages; i++) {
+                const li = document.createElement('li');
+                li.className = 'page-item';
+                if (i === 1) li.classList.add('active');
+                const a = document.createElement('a');
+                a.className = 'page-link';
+                a.href = '#';
+                a.textContent = i;
+                a.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    showPage(i);
+                    document.querySelector('.pagination3 .active').classList.remove('active');
+                    li.classList.add('active');
+                });
+                li.appendChild(a);
+                pagination3.appendChild(li);
+            }
+        }
+
+        setupPagination3();
         showPage(1); // 기본적으로 첫 페이지를 표시합니다.
     });
 </script>

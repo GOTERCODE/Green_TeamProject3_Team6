@@ -120,6 +120,14 @@
             text-align: center;
         }
 
+        hr {
+            border: 0; /* 기본 border 제거 */
+            height: 1px; /* 선의 두께 설정 */
+            background: #fff; /* 선의 색상 설정 */
+            margin: 20px 0; /* 선의 위와 아래 여백 설정 */
+        }
+
+
     </style>
 </head>
 <body>
@@ -135,11 +143,10 @@
             </div>
         </div>
 
-        <!-- 뉴스 항목 표시 -->
+
         <div class="container mt-4">
             <div class="search-sort-container">
-                <!-- 검색 및 정렬 폼 -->
-                <!-- 제대로 안 했음 -->
+
                 <form id="searchForm" th:action="@{/News/MainNew}" method="get">
                     <div class="d-flex mb-3 gap-2">
                         <input type="text" name="keyword" class="form-control" placeholder="제목으로 검색" th:value="${keyword}">
@@ -147,7 +154,7 @@
                             <option value="Allgame" th:selected="${gameOrder == 'Allgame'}">전체 게임</option>
                             <option value="PC" th:selected="${gameOrder == 'PC'}">PC 게임</option>
                             <option value="ConSole" th:selected="${gameOrder == 'ConSole'}">콘솔 게임</option>
-                            <option value="M" th:selected="${gameOrder == 'M'}">모바일 게임</option>
+                            <option value="M" th:selected="${gameOrder == 'Mobile'}">모바일 게임</option>
                         </select>
                         <select class="custom-select" id="sortOrder" name="sortOrder">
                             <option value="dateDesc" th:selected="${sortOrder == 'dateDesc'}">최근순</option>
@@ -200,7 +207,10 @@
                 </ul>
             </nav>
         </div>
-        <th:block th:replace="~{/layout/footer}" />
+        <br> <br>
+        <hr>
+        <br> <br>
+        <th:block th:replace="~{/layout/footer}"/>
     </th:block>
 </th:block>
 

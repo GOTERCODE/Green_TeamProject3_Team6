@@ -8,7 +8,6 @@
 
         /* 페이지 전체를 감싸는 컨테이너 */
         .wrapper {
-            display: flex;
             flex-direction: column;
             min-height: 100vh; /* 뷰포트의 높이와 같게 설정 */
         }
@@ -18,24 +17,7 @@
             flex: 1; /* 가능한 모든 공간을 차지하도록 설정 */
         }
 
-        /* Footer 스타일 */
-        footer {
-        margin-top : 30px;
-            margin-left: -380px;
-            color: white; /* 텍스트 색상 설정 (예시) */
-            width: calc(100% + 380px);
-            padding: 20px;
-            text-align: center;
-        }
 
-        /* Copyright 스타일 */
-        .copyright {
-            margin-left: -380px;
-            color: white;
-            padding: 10px 0;
-            text-align: center;
-            width: calc(100% + 380px);
-        }
     </style>
 
 </head>
@@ -61,10 +43,10 @@
                 <h4 class="text-uppercase mb-4 text-white">visit our github</h4>
                 <br>
                 <a class="btn btn-outline-light btn-social text-white mx-1" href="https://github.com/poong1125">
-                    <i class="fab fa-fw fa-linkedin-in"></i>
+                    <i class="fab fa-fw fa-linkedin-in" >안상환</i>
                 </a>
                 <a class="btn btn-outline-light btn-social text-white mx-1" href="https://github.com/GOTERCODE">
-                    <i class="fab fa-fw fa-twitter"></i>
+                    <i class="fab fa-fw fa-twitter" >이진규</i>
                 </a>
             </div>
             <!-- Footer About Text-->
@@ -78,7 +60,6 @@
     </div>
 </footer>
 
-<!-- Copyright Section-->
 <div class="copyright py-4 text-center text-white">
     <div class="container text-white">
         <small>Copyright &copy; Team 진상</small>

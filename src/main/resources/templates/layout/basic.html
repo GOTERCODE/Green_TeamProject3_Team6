@@ -52,8 +52,8 @@
             <a th:if="${loggedInUser != null}" href="#" class="list-group-item list-group-item-action bg-dark profileBtn" style="color: white;">Profile</a>
             <a th:if="${loggedInUser == null}" href="#" class="list-group-item list-group-item-action bg-dark loginBtn" style="color: white;">Login</a>
             <a th:if="${loggedInUser != null}" href="#" class="list-group-item list-group-item-action bg-dark logoutBtn" style="color: white;">LogOut</a>
-            <form id="searchForm" th:action="@{/Member/userserch}" method="post">
-                <div th:if="${loggedInUser != null}" class="list-group-item list-group-item-action bg-dark">
+            <form id="searchForm" th:action="@{/Member/userserch}" method="get">
+                <div th:if="${loggedInUser != null and loggedInUser.isAdmin}" class="list-group-item list-group-item-action bg-dark">
                     <div id="columbiaContainer" class="form_field" style="color: white; position: relative; display: inline-block;">
                         <input type="text" id="inputText" name="userserchid" placeholder="유저 아이디" style="width: 200px; color: black; padding-right: 50px;" />
                         <button type="submit" class="btn btn-primary"

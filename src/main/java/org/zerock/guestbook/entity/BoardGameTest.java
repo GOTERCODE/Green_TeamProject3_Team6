@@ -2,10 +2,7 @@ package org.zerock.guestbook.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+
 
 @Entity
 @Table(name = "board_free")

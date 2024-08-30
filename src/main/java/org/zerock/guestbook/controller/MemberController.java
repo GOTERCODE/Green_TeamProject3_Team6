@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.guestbook.entity.BoardGameTest;
+import org.zerock.guestbook.entity.Comment_F;
 import org.zerock.guestbook.entity.Member;
 import org.zerock.guestbook.service.MemberService;
 import org.zerock.guestbook.service.UserBoardGameService;
@@ -96,25 +97,29 @@ public class MemberController {
 
     }
 
-    @PostMapping("/userserch")
+    @GetMapping("/userserch")
     public String userSerch(HttpSession session, Model model, HttpServletRequest request,
                             @RequestParam("userserchid") String userserchid,RedirectAttributes redirectAttributes) {
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
-        model.addAttribute("loggedInUser", loggedInUser);
-        model.addAttribute("serchuserid", userserchid);
+        model.addAttribute("loggedInUser", loggedInUser); //세션정보
+        model.addAttribute("serchuserid", userserchid); //찾으려는 유저 닉네임
 
-        if (loggedInUser == null) {
+        if (loggedInUser == null) { // 비 로그인 시 메인메뉴
             return "redirect:/Member/loginpage";
         }
-
-        List<BoardGameTest> boardGames = userboardgameservice.findByUsername(userserchid);
-        if (boardGames.isEmpty()) {
-            redirectAttributes.addFlashAttribute("NoUser", "해당 아이디의 유저가 등록한 글이 없습니다");
-            return "redirect:" + request.getHeader("Referer");
-        } else {
-            model.addAttribute("boardGames", boardGames);
-            // 현재 페이지로 유지
+        try {
+            List<BoardGameTest> boardFree = userboardgameservice.findByUsername(userserchid);
+            model.addAttribute("boardGames", boardFree);
+            List<Comment_F> bf_comment = userboardgameservice.findByUsername2(userserchid);
+            model.addAttribute("bf_comment", bf_comment);
+            Member member_num = memberService.like_serch(userserchid);
+            // 이거 하려다가 너무 불러오는게 많아서 일단 중지
+                // 현재 페이지로 유지
             return "/guestbook/UserSerch";
+        }catch(Exception e){
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "문제가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+            return "redirect:" + request.getHeader("Referer");
         }
     }
 
