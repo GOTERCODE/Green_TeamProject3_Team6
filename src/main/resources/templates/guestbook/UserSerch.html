@@ -5,139 +5,163 @@
     <link href="css/simple-sidebar.css" rel="stylesheet">
 
     <style type="text/css">
-        body {
-            margin-top: 20px;
-            color: #1a202c;
-            text-align: center;
-            background-color: #2c3e50;
-            background-image: url('../images/창구.png'); /* 여기에 배경 이미지 경로를 입력하세요 */
-            background-size: cover; /* 배경 이미지가 요소 전체를 덮도록 */
-            background-position: center; /* 배경 이미지의 중심을 맞추기 */
-            background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
-        }
 
-        .main-body {
-            padding: 15px;
-            /* display: flex;  Flexbox를 사용하여 자식 요소를 중앙 정렬 */
-            margin-top : 100px;
-            margin-left : 85px;
-            justify-content: center; /* 수평 중앙 정렬 */
-            align-items: center; /* 수직 중앙 정렬 (높이 설정이 필요할 수 있음) */
-            min-height: 100vh; /* 전체 화면 높이 */
-        }
-
-        .card {
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06);
-            position: relative;
+        .custom-button-cancel {
+            position: absolute; /* 절대 위치 설정 */
+            top: 70px; /* 상단에서 20px 떨어진 위치 */
+            right: 100px; /* 우측에서 20px 떨어진 위치 */
+            width: 100px; /* 버튼 너비 30px */
+            height: 40px; /* 버튼 높이 30px */
+            background-color: #000000; /* 버튼 배경색 */
+            color: #fff; /* 버튼 텍스트 색상 */
+            border: 3px solid #ffffff;
+            border-radius: .75rem;
             display: flex;
-            flex-direction: column;
-            min-width: 0;
-            word-wrap: break-word;
-            background-color: #003366; /* 남색으로 설정 */
-            background-clip: border-box;
-            border: 3px solid #ffffff; /* 박스의 테두리 색 */
-            border-radius: .25rem;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px; /* 버튼 텍스트 크기 */
         }
 
-        .custom-card {
-            height: 780px;
-            width: 400px;
+        .custom-button-cancel:hover {
+            background-color: #0056b3; /* 버튼 호버 색상 */
         }
 
-        .card-body {
-            flex: 1 1 auto;
-            min-height: 1px;
-            padding: 1rem;
-            position: relative; /* 자식 요소를 카드 바디에 상대적으로 위치시키기 위해 추가 */
-            display: flex;
-            flex-direction: column;
-            background-color: #555; /* 카드 본문 배경색을 흰색으로 설정 */
+        .custom-button-cancel:focus {
+            outline: none; /* 포커스 시 기본 테두리 제거 */
         }
+body {
+    margin-top: 20px;
+    color: #1a202c;
+    text-align: center;
+    background-color: #2c3e50;
+    background-image: url('../images/창구.png'); /* 여기에 배경 이미지 경로를 입력하세요 */
+    background-size: cover; /* 배경 이미지가 요소 전체를 덮도록 */
+    background-position: center; /* 배경 이미지의 중심을 맞추기 */
+    background-repeat: no-repeat; /* 배경 이미지 반복 방지 */
+}
 
-        /* 유저 아이디와 총 게시글 수를 묶는 박스 스타일 */
-            .info-box {
-                display: flex; /* Flexbox 레이아웃 사용 */
-                justify-content: space-between; /* 항목을 좌우로 배치 */
-                background-color: #555; /* 박스의 배경색 */
-                border: 3px solid #dee2e6; /* 박스의 테두리 색 */
-                border-radius: 0.25rem; /* 테두리의 둥근 정도 */
-                padding: 15px; /* 내부 여백 */
-                margin-bottom: 15px; /* 하단 여백 */
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* 박스의 그림자 */
-            }
+.main-body {
+    padding: 15px;
+    /* display: flex;  Flexbox를 사용하여 자식 요소를 중앙 정렬 */
+    margin-top : 100px;
+    margin-left : 85px;
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 (높이 설정이 필요할 수 있음) */
+    min-height: 100vh; /* 전체 화면 높이 */
+}
 
-        .pagination-container {
-            position: absolute;
-            bottom: 0px; /* 카드 바디 하단에서의 여백 */
-            left: 50%; /* 가운데 정렬을 위한 위치 설정 */
-            transform: translateX(-50%); /* 가운데 정렬을 위한 이동 */
-            width: 100%; /* 너비를 카드 바디에 맞춤 */
-            text-align: center; /* 가운데 정렬 */
-            padding: 10px 0; /* 상하 여백 추가 */
-            background-color: #555; /* 카드 바디와의 구분을 위해 배경색 추가 */
-        }
+.card {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #003366; /* 남색으로 설정 */
+    background-clip: border-box;
+    border: 3px solid #ffffff; /* 박스의 테두리 색 */
+    border-radius: .25rem;
+}
 
-        .pagination {
-            justify-content: center; /* 가운데 정렬 */
-        }
+.custom-card {
+    height: 780px;
+    width: 400px;
+}
 
-        .page-item {
-            display: inline;
-        }
+.card-body {
+    flex: 1 1 auto;
+    min-height: 1px;
+    padding: 1rem;
+    position: relative; /* 자식 요소를 카드 바디에 상대적으로 위치시키기 위해 추가 */
+    display: flex;
+    flex-direction: column;
+    background-color: #555; /* 카드 본문 배경색을 흰색으로 설정 */
+}
 
-        .page-link {
-            padding: 0.5rem 0.75rem;
-            margin: 0;
-            font-size: 1rem;
-            line-height: 1.25;
-            color: #555;
-            background-color: #555;
-            border: 1px solid #dee2e6;
-            border-radius: 0.25rem;
-        }
+/* 유저 아이디와 총 게시글 수를 묶는 박스 스타일 */
+    .info-box {
+        display: flex; /* Flexbox 레이아웃 사용 */
+        justify-content: space-between; /* 항목을 좌우로 배치 */
+        background-color: #555; /* 박스의 배경색 */
+        border: 3px solid #dee2e6; /* 박스의 테두리 색 */
+        border-radius: 0.25rem; /* 테두리의 둥근 정도 */
+        padding: 15px; /* 내부 여백 */
+        margin-bottom: 15px; /* 하단 여백 */
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* 박스의 그림자 */
+    }
 
-        .page-link:hover {
-            color: #0056b3;
-            background-color: #e9ecef;
-            border-color: #dee2e6;
-        }
+.pagination-container {
+    position: absolute;
+    bottom: 0px; /* 카드 바디 하단에서의 여백 */
+    left: 50%; /* 가운데 정렬을 위한 위치 설정 */
+    transform: translateX(-50%); /* 가운데 정렬을 위한 이동 */
+    width: 100%; /* 너비를 카드 바디에 맞춤 */
+    text-align: center; /* 가운데 정렬 */
+    padding: 10px 0; /* 상하 여백 추가 */
+    background-color: #555; /* 카드 바디와의 구분을 위해 배경색 추가 */
+}
 
-        .active .page-link {
-            color: #555;
-            background-color: #000000;
-            border-color: #000000;
-        }
+.pagination {
+    justify-content: center; /* 가운데 정렬 */
+}
 
-        .text-white {
-            color: white;
-        }
+.page-item {
+    display: inline;
+}
 
-        .Dirty-Deeds-Done-Dirt-Cheap {
-            display: block;
-            padding: 10px;
-            margin-bottom: 10px;
-            background-color: #555; /* 박스의 배경색 */
-            border: 1px solid #dee2e6; /* 박스의 테두리 색 */
-            border-radius: 0.25rem; /* 테두리의 둥근 정도 */
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* 박스의 그림자 */
-            color: #ffffff; /* 텍스트 색상 */
-            text-decoration: none; /* 링크 밑줄 제거 */
-            transition: background-color 0.3s, color 0.3s; /* 배경색과 텍스트 색상 변경 시 부드러운 전환 효과 */
-        }
+.page-link {
+    padding: 0.5rem 0.75rem;
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.25;
+    color: #555;
+    background-color: #555;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+}
 
-        /* 개별 항목 스타일 */
-        .info-box .info-item {
-             margin: 0; /* 여백 제거 */
-        }
+.page-link:hover {
+    color: #0056b3;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
 
-        .post-title a {
-            color: #ffffff;
-        }
+.active .page-link {
+    color: #555;
+    background-color: #000000;
+    border-color: #000000;
+}
 
-        .card-container {
-            display: flex; /* Flexbox 레이아웃을 사용하여 카드들을 나란히 배치 */
-            gap: 20px; /* 카드들 사이의 간격 */
-        }
+.text-white {
+    color: white;
+}
+
+.Dirty-Deeds-Done-Dirt-Cheap {
+    display: block;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #555; /* 박스의 배경색 */
+    border: 1px solid #dee2e6; /* 박스의 테두리 색 */
+    border-radius: 0.25rem; /* 테두리의 둥근 정도 */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* 박스의 그림자 */
+    color: #ffffff; /* 텍스트 색상 */
+    text-decoration: none; /* 링크 밑줄 제거 */
+    transition: background-color 0.3s, color 0.3s; /* 배경색과 텍스트 색상 변경 시 부드러운 전환 효과 */
+}
+
+/* 개별 항목 스타일 */
+.info-box .info-item {
+     margin: 0; /* 여백 제거 */
+}
+
+.post-title a {
+    color: #ffffff;
+}
+
+.card-container {
+    display: flex; /* Flexbox 레이아웃을 사용하여 카드들을 나란히 배치 */
+    gap: 20px; /* 카드들 사이의 간격 */
+}
     </style>
     <title th:text="${serchuserid} + '님의 게시글'">유저 정보</title>
 </head>
@@ -148,6 +172,11 @@
         <div> <h1 class="info-item" style="margin-left:600px; margin-top: 30px;" th:text="'유저 닉네임: ' + ${serchuserid}">>검색한 유저 아이디를 가져올 수 없습니다</h1></div>
         <div class="main-body">
             <div class=" card-container">
+                <form th:action="@{/Member/cancel}" method="post" onsubmit="return confirm('해당 유저를 정지 시키시겠습니까?');">
+                    <input type="hidden" name="serchuserid" th:value="${serchuserid}">
+                    <button class="custom-button-cancel">유저 정지</button>
+                </form>
+
                 <div class="col-md-4 mb-3">
                     <div class="card custom-card">
                         <div class="card-body text-white">

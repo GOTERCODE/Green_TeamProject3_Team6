@@ -21,7 +21,8 @@
             height: 40px;
             border: 1px solid #ced4da;
             border-radius: .25rem;
-            color: #495057;
+            color: #000000;
+            background-color : #555;
         }
 
         .main-body {
@@ -41,6 +42,7 @@
             flex: 1 1 auto;
             min-height: 1px;
             padding: 1rem;
+            background-color: #555;
         }
 
         .gutters-sm {
@@ -58,7 +60,7 @@
         }
 
         .bg-gray-300 {
-            background-color: #e2e8f0;
+            background-color: #555;
         }
 
         .h-100 {
@@ -75,8 +77,8 @@
             width: auto;
         }
 
-        .text-black {
-            color: black;
+        .text-white {
+            color: white;
         }
 
         .btn-primary2
@@ -99,7 +101,7 @@
             display: flex; /* Flexbox 레이아웃 사용 */
             flex-direction: column; /* 세로 방향으로 배치 */
             align-items: center; /* 가로 방향 중앙 정렬 */
-            background-color: #f8f9fa; /* 박스의 배경색 */
+            background-color: #555; /* 박스의 배경색 */
             border: 3px solid #dee2e6; /* 박스의 테두리 색 */
             border-radius: 0.25rem; /* 테두리의 둥근 정도 */
             padding: 15px; /* 내부 여백 */
@@ -139,7 +141,7 @@
         }
 
         .text-color {
-            color: #333; /* 검은색으로 설정 */
+            color: #ffffff;
         }
 
 

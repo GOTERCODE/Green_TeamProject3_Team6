@@ -35,8 +35,14 @@ public class MemberController {
         Member member = memberService.login(username, password);
         // 로그인 실패 시 로그인 페이지로 다시 이동합니다.
         if (member != null) {
-            session.setAttribute("loggedInUser", member);
-            return "redirect:/guestbook/newindex"; // 로그인 성공 시 홈 페이지로 리다이렉트합니다.
+            if (member.isMute()) {
+                // mute가 true인 경우, 로그인 실패 처리
+                redirectAttributes.addFlashAttribute("loginError", "사용자 계정이 정지되었습니다.");
+                return "redirect:/Member/loginpage";
+            }else {
+                session.setAttribute("loggedInUser", member);
+                return "redirect:/guestbook/newindex"; // 로그인 성공 시 홈 페이지로 리다이렉트합니다.
+            }
         }else{
             redirectAttributes.addFlashAttribute("loginError", "사용자 정보가 틀렸습니다");
             return "redirect:/Member/loginpage";
@@ -115,6 +121,10 @@ public class MemberController {
             List<BoardGameTest> boardfreelike = userboardgameservice.findByUsername3(userserchid);
             model.addAttribute("boardfreelike", boardfreelike);
 
+            Member asd = memberService.admin_user_serch(userserchid);
+            if(asd == null){
+                return "redirect:" + request.getHeader("Referer");
+            }
             return "/guestbook/UserSerch";
         }catch(Exception e){
             e.printStackTrace();
@@ -157,6 +167,14 @@ public class MemberController {
             redirectAttributes.addFlashAttribute("updateError", e.getMessage());
             return "redirect:/Member/MyPage";
         }
+    }
+
+    @PostMapping("/cancel")
+    public String cancel(HttpSession session,@RequestParam("serchuserid") String username){
+        Member loggedInUser = (Member) session.getAttribute("loggedInUser");
+        memberService.mute(username);
+        session.setAttribute("loggedInUser", loggedInUser);
+        return "redirect:/guestbook/newindex";
     }
 
 }

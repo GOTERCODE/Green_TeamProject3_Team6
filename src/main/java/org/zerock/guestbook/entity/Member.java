@@ -33,4 +33,7 @@ public class Member {
     @Column(name = "M_ISADMIN", nullable = false)
     private boolean isAdmin; // M_ISADMIN column
 
+    @Column(name = "mute", nullable = false)
+    private boolean  mute; // 정지여부
+
 }

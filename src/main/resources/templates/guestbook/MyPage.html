@@ -12,6 +12,17 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <title>마이페이지</title>
     <link rel="stylesheet" href="/css/MyPage.css">
+    <style>
+        .btn-custom {
+            background-color: black; /* 버튼 배경색을 검정색으로 설정 */
+            color: white;            /* 버튼 텍스트 색상을 흰색으로 설정 */
+            border: 1px solid white; /* 버튼 테두리를 1px 흰색으로 설정 */
+        }
+        .btn-custom:hover {
+            background-color: #333; /* 호버 시 버튼 배경색을 어두운 회색으로 설정 */
+            border-color: #fff;     /* 호버 시 버튼 테두리 색상을 흰색으로 유지 */
+        }
+    </style>
 </head>
 
 <body>
@@ -43,7 +54,7 @@
                             <div class="card-body">
                                 <form id="updateProfileForm" th:action="@{/Member/updateProfile}" method="post" onsubmit="return validateForm()">
                                     <div class="info-box">
-                                        <h4 class="text-center mb-4 text-black">회원 정보 수정</h4>
+                                        <h4 class="text-center mb-4 text-white">회원 정보 수정</h4>
                                         <p class="form_field2 text-black" id="Correction_id" th:text="'아이디: ' + ${loggedInUser.username}"></p>
                                     </div>
                                     <div class="form_field2">
@@ -53,13 +64,13 @@
                                     <!-- 닉네임 필드 -->
                                     <p class="form_field2 text-black" id="Correction_nickname" th:text="'닉네임: ' + ${loggedInUser.nickname}"></p>
                                     <div class="form_field2">
-                                        <input type="text" placeholder="New Nickname" id="newuser_nick" name="newuser_nick" th:value="${loggedInUser.nickname}" />
+                                        <input type="text" style="color : white;" placeholder="New Nickname" id="newuser_nick" name="newuser_nick" th:value="${loggedInUser.nickname}" />
                                     </div>
 
                                     <!-- 이메일 필드 -->
                                     <p class="form_field2 text-black" id="Correction_email" th:text="'이메일: ' + ${loggedInUser.email}"></p>
                                     <div class="form_field2">
-                                        <input type="email" placeholder="New Email" id="newuser_email" name="newuser_email" th:value="${loggedInUser.email}" />
+                                        <input type="email" style="color : white;" placeholder="New Email" id="newuser_email" name="newuser_email" th:value="${loggedInUser.email}" />
                                     </div>
 
                                     <!-- 비밀번호 변경 체크박스 -->
@@ -74,20 +85,16 @@
                                     <div id="passwordFields" style="display: none;">
                                         <p class="form_field2 text-black" id="Correction_pass">비밀번호를 변경하시려면 새로운 비밀번호를 입력하여 주십시오</p>
                                         <div class="form_field2">
-                                            <input type="password" placeholder="New Password" id="newuser_password" name="newuser_password" onkeyup="checkPasswordMatch();" />
+                                                <input type="password" class="text-color" placeholder="New Password" id="newuser_password" name="newuser_password" onkeyup="checkPasswordMatch();" />
                                         </div>
                                         <div class="form_field2">
-                                            <input type="password" placeholder="Confirm Password" id="newuser_password2" name="newuser_password2" onkeyup="checkPasswordMatch();" />
+                                            <input type="password" class="text-color" placeholder="Confirm Password" id="newuser_password2" name="newuser_password2" onkeyup="checkPasswordMatch();" />
                                         </div>
                                     </div>
 
                                     <!-- 버튼 및 메시지 -->
                                     <div class="form-footer">
-                                        <button class="btn btn-primary2 btn-primary" type="submit">수정하기</button>
-                                        <form th:action="@{/Member/Cancel}" method="post" onsubmit="return confirm('회원 탈퇴하시겠습니까?');">
-                                            <input type="hidden" name="id" th:value="${loggedInUser.username}">
-                                            <button type="submit" class="btn btn-primary2 btn-primary" style="background-color: black; color: white;">탈퇴하기</button>
-                                        </form>
+                                        <button class="btn btn-primary my-2 my-sm-0" type="submit">수정하기</button>
                                         <div id="MatchMessage"></div>
                                     </div>
                                 </form>
@@ -126,31 +133,31 @@
         // 이메일 형식 검증
         if (newUserEmail && !emailPattern.test(newUserEmail)) {
             message.innerHTML = "이메일 형식이 맞지 않습니다";
-            message.style.color = "red";
+            message.style.color = "white";
             return false;
         }
 
         if (!pattern.test(newUserNick)) {
             message.innerHTML = "닉네임은 한글과 영문 또는 한글과 영문 혼합만 가능합니다.";
-            message.style.color = "red";
+            message.style.color = "white";
             return false;
         }
 
         if(newUserId.length < 5){
             message.innerHTML = "ID 는 5글자 이상이어야합니다.";
-            message.style.color = "red";
+            message.style.color = "white";
             return false;
         }
     if (newUserPassword || newUserPassword2) {
         if (newUserPassword !== newUserPassword2) {
             message.innerHTML = "비밀번호가 일치하지 않습니다";
-            message.style.color = "red";
+            message.style.color = "white";
             return false;
         }
 
         if (newUserPassword.length < 6) {
             message.innerHTML = "비밀번호는 6글자 이상이어야 합니다";
-            message.style.color = "red";
+            message.style.color = "white";
             return false;
         }
     }
@@ -169,13 +176,13 @@
         }else{
             if (newUserPassword.length < 6) {
                 message.innerHTML = "비밀번호는 6글자 이상이어야 합니다.";
-                message.style.color = "red";
+                message.style.color = "white";
             } else if (newUserPassword === newUserPassword2) {
                 message.innerHTML = "비밀번호가 일치합니다.";
-                message.style.color = "green";
+                message.style.color = "white";
             } else {
                 message.innerHTML = "비밀번호가 일치하지 않습니다.";
-                message.style.color = "red";
+                message.style.color = "white";
             }
         }
     }

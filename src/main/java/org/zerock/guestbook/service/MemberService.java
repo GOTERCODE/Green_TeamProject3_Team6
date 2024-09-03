@@ -2,7 +2,6 @@ package org.zerock.guestbook.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.zerock.guestbook.entity.BoardFree;
 import org.zerock.guestbook.entity.Member;
 import org.zerock.guestbook.repository.*;
 
@@ -189,5 +188,14 @@ public class MemberService {
 
     public Member like_serch(String username) {
         return memberRepository.findByUsername2(username);
+    }
+
+
+    public void mute(String username) {
+        memberRepository.mute(username);
+    }
+
+    public Member admin_user_serch(String username){
+        return memberRepository.findByUsername3(username);
     }
 }
