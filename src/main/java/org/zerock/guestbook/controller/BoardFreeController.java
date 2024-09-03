@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.guestbook.entity.BoardFree;
-import org.zerock.guestbook.entity.Comment;
 import org.zerock.guestbook.entity.Comment_F;
 import org.zerock.guestbook.entity.Member;
 import org.zerock.guestbook.service.BoardFreeLikeService;
@@ -25,12 +24,11 @@ import java.util.List;
 @RequestMapping("/boardfree")
 public class BoardFreeController {
 
-
     private final BoardFreeService boardFreeService;
     private final Comment_FService comment_fService;
     private final BoardFreeLikeService boardFreeLikeService;
 
-    public BoardFreeController(BoardFreeService boardFreeService,Comment_FService comment_fService,BoardFreeLikeService boardFreeLikeService){
+    public BoardFreeController(BoardFreeService boardFreeService, Comment_FService comment_fService, BoardFreeLikeService boardFreeLikeService) {
         this.boardFreeService = boardFreeService;
         this.comment_fService = comment_fService;
         this.boardFreeLikeService = boardFreeLikeService;
@@ -46,7 +44,7 @@ public class BoardFreeController {
 
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
 
-        int pageSize = 10; // 한 페이지에 표시할 게시글 수
+        int pageSize = 10;
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("id").descending());
 
         Page<BoardFree> boardFreePage;
@@ -76,37 +74,31 @@ public class BoardFreeController {
         return "guestbook/boardfree_list";
     }
 
-
     @GetMapping("/{id}")
     public String getBoardFreeDetails(@PathVariable Long id, Model model, HttpSession session) {
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
         BoardFree boardFree = boardFreeService.getBoardFreeById(id);
         Long likeCount = boardFreeLikeService.countLikes(id);
 
-        // 로그인한 사용자의 ID를 가져와서 추천 여부 확인
         boolean hasLiked = false;
         if (loggedInUser != null) {
-            // getId()가 Long 타입이라면 직접 사용
             Long userId = Long.valueOf(loggedInUser.getId());
             hasLiked = boardFreeLikeService.hasLiked(userId, id);
         }
 
-        // Comment_FService를 통해 댓글 리스트를 가져옵니다.
         List<Comment_F> comments = comment_fService.getCommentsByBoardFreeId(id);
 
         model.addAttribute("boardFree", boardFree);
-        model.addAttribute("comments", comments); // 댓글 리스트를 모델에 추가합니다.
+        model.addAttribute("comments", comments);
         model.addAttribute("loggedInUser", loggedInUser);
         model.addAttribute("likeCount", likeCount);
-        model.addAttribute("hasLiked", hasLiked); // 추천 여부를 모델에 추가합니다.
+        model.addAttribute("hasLiked", hasLiked);
 
         return "guestbook/boardfree_view";
     }
 
-
-
     @GetMapping("/create")
-    public String createBoardFreeForm(Model model,HttpSession session) {
+    public String createBoardFreeForm(Model model, HttpSession session) {
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
         model.addAttribute("boardFree", new BoardFree());
         model.addAttribute("loggedInUser", loggedInUser);
@@ -121,7 +113,6 @@ public class BoardFreeController {
         }
         boardFree.setWriter(loggedInUser.getNickname());
         boardFree.setWriter_num(loggedInUser.getId());
-
         boardFree.setDate(LocalDateTime.now());
         boardFreeService.createBoardFree(boardFree);
         return "redirect:/boardfree";
@@ -165,48 +156,31 @@ public class BoardFreeController {
 
     @PostMapping("/delete")
     public String deleteBoardFree(@RequestParam Long id) {
+        comment_fService.deleteCommentsBybfcBfid(id.toString());
         boardFreeService.deleteBoardFree(id);
         return "redirect:/boardfree";
     }
 
     @PostMapping("/{id}/comments")
     public String addComment(
-
             @PathVariable("id") Long boardFreeId,
             @RequestParam("content") String content,
             HttpSession session,
             RedirectAttributes redirectAttributes) {
 
-        // Get the logged-in user
-        String writerNum = (String) session.getAttribute("userNum");
-        String writer = (String) session.getAttribute("userName");
-
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
-        try {
-
-            writerNum = String.valueOf(Long.valueOf(loggedInUser.getId()));
-            writer = String.valueOf((loggedInUser.getNickname()));
-        } catch (NumberFormatException e) {
-            redirectAttributes.addFlashAttribute("error", "잘못된 사용자 ID 형식입니다.");
-            return "redirect:/" + boardFreeId;
-        }
-
-        if (writerNum == null || writer == null) {
+        if (loggedInUser == null) {
             redirectAttributes.addFlashAttribute("error", "로그인 후 댓글을 작성할 수 있습니다.");
             return "redirect:/Member/loginpage";
         }
 
-        // Create a new comment entity
         Comment_F comment_f = new Comment_F();
         comment_f.setBfcBfid(boardFreeId.toString());
-        comment_f.setBfcWriternum(writerNum);
-        comment_f.setBfcWriter(writer);
+        comment_f.setBfcWriternum(String.valueOf(loggedInUser.getId()));
+        comment_f.setBfcWriter(loggedInUser.getNickname());
         comment_f.setBfcContent(content);
 
-        // Save the comment
         try {
-            System.out.println("debug - " + content);
-            System.out.println("debug - " + writerNum);
             comment_fService.addComment(comment_f);
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "댓글 작성 중 오류가 발생했습니다.");
@@ -216,9 +190,10 @@ public class BoardFreeController {
         redirectAttributes.addFlashAttribute("message", "댓글이 등록되었습니다.");
         return "redirect:/boardfree/" + boardFreeId;
     }
+
     @PostMapping("/{id}/deletecomments/{commentId}")
     public String deleteComment(
-            @PathVariable("id") Long boardFreeId,  // boardFreeId 수정
+            @PathVariable("id") Long boardFreeId,
             @PathVariable("commentId") Long commentId,
             RedirectAttributes redirectAttributes,
             HttpSession session) {
@@ -265,13 +240,12 @@ public class BoardFreeController {
         return "redirect:/boardfree/" + boardFreeId;
     }
 
-
     @PostMapping("/{id}/like")
     public String likePost(@PathVariable("id") Long id, HttpSession session, RedirectAttributes redirectAttributes, Model model) {
         Member loggedInUser = (Member) session.getAttribute("loggedInUser");
 
         if (loggedInUser == null) {
-            return "redirect:/Member/loginpage"; // 로그인이 필요할 경우 리다이렉트
+            return "redirect:/Member/loginpage";
         }
 
         Long memberNum = Long.valueOf(loggedInUser.getId());
@@ -284,21 +258,8 @@ public class BoardFreeController {
             redirectAttributes.addFlashAttribute("message", "추천이 취소되었습니다.");
         }
 
-        model.addAttribute("isLiked", isLiked); // 추천 상태를 뷰로 전달
+        model.addAttribute("isLiked", isLiked);
 
-        return "redirect:/boardfree/" + id; // 리다이렉트 URL이 정확한지 확인
+        return "redirect:/boardfree/" + id;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

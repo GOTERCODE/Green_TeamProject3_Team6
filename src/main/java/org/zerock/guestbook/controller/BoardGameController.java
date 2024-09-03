@@ -256,10 +256,20 @@ public class BoardGameController {
 
     @PostMapping("/guestbook/boardgames/delete")
     public String deleteBoardGame(@RequestParam Long id, RedirectAttributes redirectAttributes) {
-        boardGameService.deleteBoardGame(id);
-        redirectAttributes.addFlashAttribute("message", "BoardGame has been deleted successfully!");
+        try {
+            // 게시글에 달린 댓글 삭제
+            commentService.deleteCommentsByBoardGameId(id);
+
+            // 게시글 삭제
+            boardGameService.deleteBoardGame(id);
+
+            redirectAttributes.addFlashAttribute("message", "게시글과 관련된 댓글이 삭제되었습니다.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "게시글 삭제 중 오류가 발생했습니다.");
+        }
         return "redirect:/guestbook/boardgames";
     }
+
 
     private Sort getSortOrder(String sortOrder) {
         switch (sortOrder) {

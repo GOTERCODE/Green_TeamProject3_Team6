@@ -1,37 +1,17 @@
 package org.zerock.guestbook.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.zerock.guestbook.entity.Comment;
-import org.zerock.guestbook.repository.CommentRepository;
 
 import java.util.List;
-import java.util.Optional;
 
-@Service
-public class CommentService {
-    @Autowired
-    private CommentRepository commentRepository;
-    private BoardGameService boardGameService;
+public interface CommentService {
+    void addComment(Comment comment);
 
-    public void addComment(Comment comment) {
-        commentRepository.save(comment);
-    }
+    List<Comment> getCommentsByBoardGameId(Long boardGameId);
 
-    public List<Comment> getCommentsByBoardGameId(Long boardGameId) {
-        return commentRepository.findByBgcBgid(boardGameId.toString());
-    }
+    void updateComment(Long commentId, String content);
 
-    public void updateComment(Long commentId, String content) {
-        Optional<Comment> optionalComment = commentRepository.findById(commentId);
-        if (optionalComment.isPresent()) {
-            Comment comment = optionalComment.get();
-            comment.setBgcContent(content);
-            commentRepository.save(comment);
-        }
-    }
+    void deleteComment(Long commentId);
 
-    public void deleteComment(Long commentId) {
-        commentRepository.deleteById(commentId);
-    }
+    void deleteCommentsByBoardGameId(Long boardGameId);  // 인터페이스에서 정의
 }
