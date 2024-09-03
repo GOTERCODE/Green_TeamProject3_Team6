@@ -40,9 +40,11 @@
        display: flex;
        height: 100%;
        background: url('/images/login_bg.png') no-repeat center center fixed;
-       background-size: contain;
-       background-color: black; /* 배경색을 추가하여 여백이 생길 경우 색상을 지정 */
+       background-size: contain; /* 이미지를 화면에 맞게 조정하되 비율 유지 */
+       background-color: gray; /* 배경색을 추가하여 여백이 생길 경우 색상을 지정 */
    }
+
+
 
 
     .cont_centrar {

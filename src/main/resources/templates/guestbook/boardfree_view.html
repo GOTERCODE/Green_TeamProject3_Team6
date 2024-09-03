@@ -171,7 +171,7 @@
             <div class="container-content">
                 <h1 class="game-title" th:text="${boardFree.title}">제목</h1>
                 <p class="game-writer" th:text="'작성자 : '+ ${boardFree.writer}" align="right">작성자</p>
-                <p class="game-date" th:text="'작성자 : '+ ${boardFree.date}" align="right">작성일</p>
+                <p class="game-date" th:text="'작성일 : '+ ${boardFree.date}" align="right">작성일</p>
                 <br>
                 <!-- Summernote에서 작성된 내용을 HTML로 안전하게 출력 -->
                 <div th:utext="${boardFree.content}">내용이 여기에 출력됩니다.</div>
