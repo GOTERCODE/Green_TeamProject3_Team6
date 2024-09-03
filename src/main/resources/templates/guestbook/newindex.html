@@ -244,6 +244,13 @@
     text-decoration: none;
 
 }
+                .logo {
+    display: flex; /* Flexbox 사용 */
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    height: 15vh; /* 전체 화면 높이 */
+    /* 부모 요소의 크기를 조정하려면 필요에 따라 width와 height를 설정 */
+}
 
     </style>
 </head>
@@ -251,7 +258,12 @@
 <body>
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
     <th:block th:fragment="content">
-        <h1 class="mt-4" align="center">Play Pundit</h1>
+        <br>
+        <a th:href="@{/guestbook/}">
+            <div class="logo">
+                <img th:src="@{../images/PP.png}" style="width:15%;">
+            </div>
+        </a>
 
         <!-- 슬라이드 -->
         <div class="container-fluid" style="margin-top: 3rem; margin-bottom: 3rem;">
