@@ -252,6 +252,24 @@
     /* 부모 요소의 크기를 조정하려면 필요에 따라 width와 height를 설정 */
 }
 
+
+          /* Delete Button Styles */
+    .delete-button {
+        position: absolute; /* Position absolute to place it within the image container */
+        bottom: 10px; /* Adjust bottom margin as needed */
+        right: 10px; /* Adjust right margin as needed */
+        z-index: 10; /* Ensure button is above the image */
+        background-color: rgba(255, 0, 0, 0.7); /* Semi-transparent background color */
+        border: none;
+        color: white;
+        cursor: pointer;
+        padding: 5px 10px;
+    }
+
+    .delete-button:hover {
+        background-color: rgba(255, 0, 0, 1); /* Full red background on hover */
+    }
+
     </style>
 </head>
 
@@ -268,12 +286,19 @@
         <!-- 슬라이드 -->
         <div class="container-fluid" style="margin-top: 3rem; margin-bottom: 3rem;">
             <div class="swiper-container">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide"><img src="https://cdna.artstation.com/p/assets/images/images/011/687/244/large/hamnevegen-ron2.jpg?1530861550"></div>
-                    <div class="swiper-slide"><img src="https://wallpapers.com/images/high/pubg-banner-2048-x-1152-background-t9uinvbt4bsr71qv.webp"></div>
-                    <div class="swiper-slide"><img src="https://cdn2.steamgriddb.com/hero_thumb/33e25ce2b801662e46a7b801301d5b94.jpg"></div>
-                    <div class="swiper-slide"><img src="https://cdn1.codashop.com/S/content/common/images/mno/LoL_banner_640x241.png"></div>
-                    <div class="swiper-slide"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQC72ueoHpL1Cv9yC3eUXiS-D1QO8RqmihsJw&s"></div>
+                <div class="swiper-wrapper" id="swiper-wrapper">
+                    <!-- Swiper 슬라이드에 이미지 추가 -->
+                    <th:block th:each="image : ${images}">
+                        <div class="swiper-slide">
+                            <div class="image-container">
+                                <img th:src="${image.url}" alt="Image">
+                                <!-- 삭제 버튼 추가 -->
+                                <div th:if="${loggedInUser != null and loggedInUser.isAdmin}">
+                                <button type="button" class="btn btn-danger btn-sm delete-button" th:data-id="${image.id}">Delete(Admin)</button>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
                 </div>
 
                 <!-- 네비게이션 -->
@@ -283,6 +308,20 @@
                 <!-- 페이징 -->
                 <div class="swiper-pagination"></div>
             </div>
+        </div>
+
+
+        <div th:if="${loggedInUser != null and loggedInUser.isAdmin}">
+        <div class="container-fluid" style="margin-top: 3rem; margin-bottom: 3rem;">
+            <h2>Add New Image (Admin)</h2>
+            <form th:action="@{/images/add}" method="post">
+                <div class="form-group">
+                    <label for="url">Image URL:</label>
+                    <input type="text" id="url" name="url" class="form-control" required />
+                </div>
+                <button type="submit" class="btn btn-primary">Add Image</button>
+            </form>
+        </div>
         </div>
 
         <!-- 본문 -->
@@ -440,6 +479,34 @@
                  disableOnInteraction: false, // Continue autoplay after user interactions
              }
          });
+
+
+    // 삭제 버튼 클릭 시 이벤트 리스너 추가
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.delete-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const imageId = this.getAttribute('data-id');
+
+                // AJAX 요청을 통해 서버에 삭제 요청 보내기
+                fetch(`/images/delete?id=${imageId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                }).then(response => {
+                    if (response.ok) {
+                        // 삭제 성공 시 슬라이드에서 이미지 제거
+                        this.closest('.swiper-slide').remove();
+                    } else {
+                        alert('삭제 실패');
+                    }
+                }).catch(error => {
+                    console.error('Error:', error);
+                    alert('삭제 실패');
+                });
+            });
+        });
+    });
 </script>
 </body>
 

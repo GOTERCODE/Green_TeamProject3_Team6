@@ -6,13 +6,15 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.zerock.guestbook.dto.GuestbookDTO;
 import org.zerock.guestbook.dto.PageRequestDTO;
+import org.zerock.guestbook.entity.Images;
 import org.zerock.guestbook.service.GuestbookService;
 import org.zerock.guestbook.entity.Member;
 import org.zerock.guestbook.service.NewsService;
 import org.zerock.guestbook.service.BoardFreeService;
+import org.zerock.guestbook.service.ImagesService;
+
+import java.awt.*;
 import java.util.List;
 
 @Controller
@@ -24,7 +26,7 @@ public class GuestbookController {
     private final GuestbookService service;
     private final NewsService newsService;
     private final BoardFreeService boardFreeService;
-
+    private final ImagesService imagesService;
 
     @GetMapping("/")
     public String index() {
@@ -47,6 +49,9 @@ public class GuestbookController {
         model.addAttribute("latestNews", newsService.getLatestNews());
         model.addAttribute("top5Posts", boardFreeService.getTop5BoardFree());
 
+        // 이미지 정보를 가져와서 모델에 추가
+        List<Images> images = imagesService.getAllImages();
+        model.addAttribute("images", images);
 
         return "guestbook/newindex"; // Thymeleaf 템플릿 이름
     }

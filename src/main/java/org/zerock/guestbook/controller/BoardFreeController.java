@@ -71,6 +71,9 @@ public class BoardFreeController {
         model.addAttribute("keyword", keyword);
         model.addAttribute("searchType", searchType);
 
+
+
+
         return "guestbook/boardfree_list";
     }
 
