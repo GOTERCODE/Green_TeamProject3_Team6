@@ -175,7 +175,7 @@
                     <div class="comment-list">
                         <p><strong th:text="${comment.bgcWriter}">작성자</strong> <span th:text="${#dates.format(comment.bgcDate, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
 
-                        <div th:if="${loggedInUser != null and (loggedInUser.id == comment.bgcWriternum or loggedInUser.isAdmin)}">
+
                             <div class="comment-text" th:text="${comment.bgcContent}"></div><br>
                             <form class="comment-form" th:action="@{/guestbook/boardgames/{id}/comments/edit/{commentId}(id=${boardGame.id}, commentId=${comment.bgcId})}" method="post" style="display: none;">
                                 <div class="form-group">
@@ -184,7 +184,7 @@
                                 <button type="submit" class="btn btn-primary" style="background-color: black; color: white;">등록</button>
                                 <button type="button" class="btn btn-secondary" onclick="cancelEdit(this);" style="background-color: gray; color: white;">취소</button>
                             </form>
-
+                        <div th:if="${loggedInUser != null and (loggedInUser.id == comment.bgcWriternum or loggedInUser.isAdmin)}">
                             <button class="btn btn-primary" onclick="startEdit(this);" style="background-color: black; color: white;">수정</button>
                             <form th:action="@{/guestbook/boardgames/{id}/comments/{commentId}/delete(id=${boardGame.id}, commentId=${comment.bgcId})}" method="post" style="display: inline;">
                                 <input type="hidden" name="_method" value="delete"/>
