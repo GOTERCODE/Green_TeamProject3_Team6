@@ -5,17 +5,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.zerock.guestbook.entity.BoardFree;
 import org.springframework.transaction.annotation.Transactional;
 import org.zerock.guestbook.entity.Comment_F;
 
 @Repository
-public interface BoardFreeRepository2 extends CrudRepository<BoardFree, Long> {
+public interface BfCommentRepository extends CrudRepository<Comment_F, Long> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE BoardFree bf SET bf.writer = :newNick WHERE bf.writer = :oldNick")
-    void updateWriter(@Param("oldNick") String oldNick, @Param("newNick") String newNick);
-
+    @Query("UPDATE Comment_F bc SET bc.bfcWriter = :newNick WHERE bc.bfcWriter = :oldNick" )
+    void updateWriter2(@Param("oldNick" ) String oldNick, @Param("newNick" ) String newNick);
 }
-

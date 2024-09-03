@@ -16,4 +16,10 @@ public interface UserBoardGameRepository extends JpaRepository<BoardGameTest, St
         @Query("SELECT b FROM Comment_F b WHERE LOWER(b.bfcWriter) = LOWER(:writer)")
         List<Comment_F> findByWriterIgnoreCase2(@Param("writer") String writer);
 
+        @Query("SELECT bf FROM BoardGameTest bf " +
+                "JOIN B_F_like bfl ON bf.id = bfl.writer " +
+                "JOIN Member m ON bfl.id = m.id " +
+                "WHERE LOWER(m.nickname) = LOWER(:writer)")
+        List<BoardGameTest> findByWriterIgnoreCase3(@Param("writer") String writer);
+
 }

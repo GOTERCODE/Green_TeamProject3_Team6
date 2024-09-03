@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.zerock.guestbook.entity.BoardFree;
 import org.zerock.guestbook.entity.Member;
-import org.zerock.guestbook.repository.BoardFreeRepository;
-import org.zerock.guestbook.repository.BoardFreeRepository2;
-import org.zerock.guestbook.repository.MemberRepository;
-import org.zerock.guestbook.repository.MemberRepository_Register;
+import org.zerock.guestbook.repository.*;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -23,8 +20,10 @@ public class MemberService {
     private BoardFreeRepository2 boardFreeRepository2;
 
     @Autowired
-    private MemberRepository_Register memberRepository_register;
+    private BfCommentRepository bfCommentRepository;
 
+    @Autowired
+    private MemberRepository_Register memberRepository_register;
 
 
     public Member login(String username, String password) {
@@ -185,10 +184,10 @@ public class MemberService {
 
     public void updateBoard(String oldNick, String newNick) {
         boardFreeRepository2.updateWriter(oldNick, newNick);
+        bfCommentRepository.updateWriter2(oldNick, newNick);
     }
 
     public Member like_serch(String username) {
         return memberRepository.findByUsername2(username);
     }
-
 }

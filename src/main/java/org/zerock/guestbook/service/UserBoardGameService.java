@@ -24,4 +24,8 @@ public class UserBoardGameService {
         return userboardgameRepository.findByWriterIgnoreCase2(username);
     }
 
+    public List<BoardGameTest> findByUsername3(String username) {
+        return userboardgameRepository.findByWriterIgnoreCase3(username);
+    }
+
 }

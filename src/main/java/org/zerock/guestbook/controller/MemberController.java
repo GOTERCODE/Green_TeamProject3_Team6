@@ -112,9 +112,9 @@ public class MemberController {
             model.addAttribute("boardGames", boardFree);
             List<Comment_F> bf_comment = userboardgameservice.findByUsername2(userserchid);
             model.addAttribute("bf_comment", bf_comment);
-            Member member_num = memberService.like_serch(userserchid);
-            // 이거 하려다가 너무 불러오는게 많아서 일단 중지
-                // 현재 페이지로 유지
+            List<BoardGameTest> boardfreelike = userboardgameservice.findByUsername3(userserchid);
+            model.addAttribute("boardfreelike", boardfreelike);
+
             return "/guestbook/UserSerch";
         }catch(Exception e){
             e.printStackTrace();
@@ -133,17 +133,21 @@ public class MemberController {
                                 HttpSession session) {
         try {
             Member loggedInUser = (Member) session.getAttribute("loggedInUser");
-            System.out.println(loggedInUser.getNickname());
             String oldnick = loggedInUser.getNickname();
             String currentPassword = loggedInUser.getPassword();
-            System.out.println(currentPassword);
-            if(password == null || password.isEmpty() || password2 == null || password2.isEmpty()) {
-                Member updatedMember = memberService.updateMember2(email, nickname, username, currentPassword);
-                // 세션에 현재 사용자 정보 갱신
-                session.setAttribute("loggedInUser", updatedMember);
-            }else{
-                Member updatedMember = memberService.updateMember(email, nickname, username, password);
-                session.setAttribute("loggedInUser", updatedMember);
+
+            try{
+                if(password == null || password.isEmpty() || password2 == null || password2.isEmpty()) {
+                    Member updatedMember = memberService.updateMember2(email, nickname, username, currentPassword);
+                    // 세션에 현재 사용자 정보 갱신
+                    session.setAttribute("loggedInUser", updatedMember);
+                }else{
+                    Member updatedMember = memberService.updateMember(email, nickname, username, password);
+                    session.setAttribute("loggedInUser", updatedMember);
+                }
+            }catch(Exception e){
+                redirectAttributes.addFlashAttribute("updateError", e.getMessage());
+                return "redirect:/guestbook/newindex";
             }
             memberService.updateBoard(oldnick, nickname);
             redirectAttributes.addFlashAttribute("updateSuccess", "회원정보가 성공적으로 수정되었습니다.");
